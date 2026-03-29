@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  height: 100%;
+  overflow-x: hidden;
+  color: #4b5563;
+  font-weight: 400;
+  background-color: #fafafd;
+  font-family: 'Poppins', sans-serif;
+}
+
+[data-bs-theme="dark"] body {
+  background-color: #0f172a;
+  color: #d1d5db;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.Edunex-app-wrapper {
+  position: relative;
+}
+
+.single-menu-item .ReactCollapse--collapse,
+.accordion .ReactCollapse--collapse,
+.ReactCollapse--collapse {
+  transition: height 400ms;
+}
+
+.space-xy> :not([hidden]) {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.space-xy-6>* {
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+html[dir="rtl"] {
+  .recharts-wrapper {
+    direction: rtl;
+  }
+
+  .recharts-yAxis {
+    .recharts-text {
+      text-anchor: start;
+    }
+  }
+}
+
+.Edunex-app {
+  .leaflet-control {
+    z-index: 0 !important;
+  }
+
+  .leaflet-control-container {
+    z-index: 555 !important;
+    position: relative;
+  }
+
+  .recharts-curve.recharts-tooltip-cursor {
+    display: none;
+  }
+
+  .recharts-wrapper.bar-chart {
+    .recharts-tooltip-cursor {
+      fill: transparent;
+    }
+  }
+
+  .recharts-tooltip-wrapper {
+    border: none !important;
+  }
+}
+
+@import "components/table.scss";
+@import "components/map.scss";
+@import "components/progress";
+@import "components/tippy";
+@import "components/swiper";
+@import "components/alert";
+@import "components/card";
+@import "components/auth";
+@import "components/timeline";
+@import "components/button";
+@import "components/badge";
+@import "components/typography";
+@import "components/form";
+@import "components/input-group";
+@import "components/react-select";
+@import "components/pagination";
+@import "components/breadcrumbs";
+@import "layout/header";
+@import "layout/footer";
+@import "layout/sidebar";
+@import "layout/settings";
+@import "utility/mix";
+@import "utility/loading";
+@import "utility/css-animation";
+@import "utility/calander";
+@import "utility/full-calender";
+@import "components/print.scss";
+
+
+.Toastify__toast {
+  font-family: "Poppins", sans-serif !important;
+  border-radius: 8px !important;
+}
+
+.poppins {
+  font-family: "Poppins", sans-serif !important;
+}
