@@ -13,9 +13,9 @@ const Multilevel = ({ activeMultiMenu, j, subItem }) => {
                   <div
                     className={`${
                       isActive
-                        ? " text-indigo-500 dark:text-white "
+                        ? " text-primary dark:text-white "
                         : "text-gray-600 dark:text-gray-300"
-                    } text-sm flex space-x-3 items-center transition-all duration-150`}
+                    } text-[13px] flex space-x-3 items-center transition-all duration-150`}
                   >
                     <span
                       className={`${

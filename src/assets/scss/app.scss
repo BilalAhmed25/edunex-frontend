@@ -9,11 +9,31 @@ body {
   font-weight: 400;
   background-color: #fafafd;
   font-family: 'Poppins', sans-serif;
+  font-size: 13px;
 }
 
-[data-bs-theme="dark"] body {
-  background-color: #0f172a;
-  color: #d1d5db;
+body.dark {
+  background-color: #000000;
+  color: #eff3f4;
+
+  .app-header,
+  .sidebar-wrapper,
+  .card {
+     background-color: #111111 !important;
+     border-color: #2f3336 !important;
+  }
+
+  .bg-white {
+    background-color: #111111 !important;
+  }
+
+  .text-slate-900, .text-gray-900, .text-dark {
+    color: #eff3f4 !important;
+  }
+
+  .border, .border-b, .border-r, .border-l, .divide-y > *, .divide-x > * {
+    border-color: #2f3336 !important;
+  }
 }
 
 html,

@@ -16,21 +16,11 @@
 }
 
 .btn-primary {
-    background-color: #0177D7;
-    @apply text-white;
-
-    &:hover {
-        background-color: #0165B8;
-    }
+    @apply bg-primary text-white hover:bg-primary-dark;
 }
 
 .btn-secondary {
-    background-color: #0177D7;
-    @apply text-white;
-
-    &:hover {
-        background-color: #0165B8;
-    }
+    @apply bg-secondary text-white hover:bg-secondary-dark;
 }
 
 .btn-success {
@@ -67,45 +57,27 @@
 }
 
 .btn-outline-primary {
-    background: transparent;
-    color: #0177D7;
-    border: 1px solid #0177D7;
-
-    &:hover {
-        color: #fff;
-        background-color: #0177D7;
-    }
+    @apply bg-transparent text-primary border border-primary hover:text-white hover:bg-primary;
 
     &.active {
-        background-color: #0177D7;
-        @apply text-white;
+        @apply bg-primary text-white;
     }
 }
 
 [aria-expanded="true"]>.btn-outline-primary {
-    background-color: #0177D7;
-    @apply text-white;
+    @apply bg-primary text-white;
 }
 
 .btn-outline-secondary {
-    background: transparent;
-    color: #0177D7;
-    border: 1px solid #0177D7;
-
-    &:hover {
-        color: #fff;
-        background-color: #0177D7;
-    }
+    @apply bg-transparent text-secondary border border-secondary hover:text-white hover:bg-secondary;
 
     &.active {
-        background-color: #0177D7;
-        @apply text-white;
+        @apply bg-secondary text-white;
     }
 }
 
 [aria-expanded="true"]>.btn-outline-secondary {
-    background-color: #0177D7;
-    @apply text-white;
+    @apply bg-secondary text-white;
 }
 
 .btn-outline-success {
@@ -177,23 +149,13 @@
 
 .btn-primary {
     &.light {
-        color: #0177D7;
-        background-color: rgba(1, 119, 215, 0.1);
-
-        &:hover {
-            background-color: rgba(1, 119, 215, 0.18);
-        }
+        @apply text-primary bg-primary/[0.1] hover:bg-primary/[0.18];
     }
 }
 
 .btn-secondary {
     &.light {
-        color: #0177D7;
-        background-color: rgba(1, 119, 215, 0.1);
-
-        &:hover {
-            background-color: rgba(1, 119, 215, 0.18);
-        }
+        @apply text-secondary bg-secondary/[0.1] hover:bg-secondary/[0.18];
     }
 }
 
@@ -282,8 +244,7 @@
     @apply h-7 w-7 text-base flex flex-col items-center justify-center border border-gray-200 dark:border-gray-500 rounded;
 
     &:hover {
-        background-color: rgba(1, 119, 215, 0.15);
-        color: #0177D7;
+        @apply bg-primary/[0.15] text-primary;
     }
 }
 

@@ -44,7 +44,7 @@ const Submenu = ({ activeSubmenu, item, i }) => {
                         {subItem?.submenu ? (
                             <div>
                                 <div
-                                    className="has-multilevel-menu text-sm flex space-x-3 items-center transition-all duration-150  cursor-pointer"
+                                    className="has-multilevel-menu text-[13px] flex space-x-3 items-center transition-all duration-150  cursor-pointer"
                                     onClick={() => toggleMultiMenu(j)}
                                 >
                                     <span className="flex-none h-2 w-2 rounded-full border  inline-block bg-gray-600 dark:bg-white"></span>
@@ -74,7 +74,7 @@ const Submenu = ({ activeSubmenu, item, i }) => {
                                             className={`${isActive
                                                 ? " active-child dark:text-white "
                                                 : "text-gray-600 dark:text-gray-300"
-                                                } text-sm flex space-x-3 items-center transition-all duration-150`}
+                                                } text-[13px] flex space-x-3 items-center transition-all duration-150`}
                                         >
                                             {/* <span
                                                 className={`${isActive
@@ -102,7 +102,7 @@ const Submenu = ({ activeSubmenu, item, i }) => {
             </ul>
             <style>
                 {`.active-child {
-                    color: #0165B8;
+                    color: #4F46E5;
                 }`}
             </style>
         </Collapse>

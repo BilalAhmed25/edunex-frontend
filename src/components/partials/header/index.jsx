@@ -43,9 +43,9 @@ const Header = ({ className = "custom-class" }) => {
                     {
                         // 1. Removed pt-6 to ensure it starts exactly at the top
                         // 2. Added w-full to ensure edge-to-edge background
-                        "bg-white dark:bg-gray-800 shadow-base w-full": sticky,
+                        "bg-white dark:bg-[#111111] shadow-base w-full border-b dark:border-[#2f3336]": sticky,
                         "bg-transparent w-full": !sticky && menuType === "vertical",
-                        "horizontal_menu bg-white dark:bg-gray-800 shadow-base w-full":
+                        "horizontal_menu bg-white dark:bg-[#111111] shadow-base w-full border-b dark:border-[#2f3336]":
                             menuType === "horizontal" && width > breakpoints.xl,
                         "vertical_menu w-full": menuType === "vertical",
                         "py-3": sticky, // Standard height when scrolling

@@ -7,17 +7,17 @@
 .nav-shadow {
   background: linear-gradient(
     rgb(255, 255, 255) 5%,
-    rgba(255, 255, 255, 75%) 45%,
-    rgba(255, 255, 255, 20%) 80%,
+    rgba(255, 255, 255, 0.75) 45%,
+    rgba(255, 255, 255, 0.2) 80%,
     transparent
   );
 }
 .dark {
   .nav-shadow {
     background: linear-gradient(
-      rgba(#1e293b, 100%) 5%,
-      rgba(#1e293b, 75%) 45%,
-      rgba(#1e293b, 20%) 80%,
+      rgba(#000000, 1) 5%,
+      rgba(#000000, 0.75) 45%,
+      rgba(#000000, 0.2) 80%,
       transparent
     );
   }
@@ -55,7 +55,7 @@
     @apply text-gray-400 dark:text-gray-300 text-xs  font-medium uppercase mb-4 mt-4 pl-8;
   }
   > .menu-link {
-    @apply flex text-gray-600 font-medium dark:text-gray-300 text-sm capitalize px-6 py-3  cursor-pointer;
+    @apply flex text-gray-600 font-medium dark:text-gray-300 text-[13px] capitalize px-6 py-3  cursor-pointer;
   }
   .menu-icon {
     @apply icon-box inline-flex items-center  text-2xl ltr:mr-[15px] rtl:ml-[15px];
@@ -96,7 +96,7 @@
     }
 
     ul.sub-menu {
-      @apply ml-4 absolute left-full top-0 w-[230px] bg-white shadow-dropdown rounded-[4px] dark:bg-gray-800 z-[999] px-4 pt-3 transition-all duration-150 invisible opacity-0;
+      @apply ml-4 absolute left-full top-0 w-[230px] bg-white shadow-dropdown rounded-xl dark:bg-[#16181c] border dark:border-[#2f3336] z-[999] px-4 pt-3 transition-all duration-150 invisible opacity-0;
       display: block !important;
     }
     &:hover {
@@ -119,7 +119,7 @@
     top: 0;
     height: 0;
     width: 4px;
-    background-color: #0177D7;
+    background-color: #4F46E5;
     transition: height 0.2s;
   }
   &.parent_active {
@@ -130,32 +130,32 @@
 }
 .item-has-children {
   .parent_active {
-    background-color: rgba(1, 119, 215, 0.1);
-    @apply dark:bg-gray-400 dark:bg-opacity-[15%];
+    background-color: rgba(79, 70, 229, 0.08);
+    @apply dark:bg-[#4F46E5]/[0.08];
     .icon-box,
     .menu-icon,
     .text-box {
-      color: #0177D7;
-      @apply dark:text-gray-300;
+      color: #4F46E5;
+      @apply dark:text-[#eff3f4];
     }
     .menu-arrow {
-      color: #0177D7;
-      @apply dark:text-gray-300;
+      color: #4F46E5;
+      @apply dark:text-[#eff3f4];
     }
   }
 }
 .menu-item-active {
   .menu-link {
-    background-color: rgba(1, 119, 215, 0.1);
-    @apply dark:bg-gray-400 dark:bg-opacity-[15%];
+    background-color: rgba(79, 70, 229, 0.1);
+    @apply dark:bg-[#4F46E5]/[0.15];
     &::after {
       height: 100%;
     }
     .icon-box,
     .menu-icon,
     .text-box {
-      color: #0177D7;
-      @apply dark:text-gray-300;
+      color: #4F46E5;
+      @apply dark:text-[#eff3f4];
     }
   }
   .menu-badge {

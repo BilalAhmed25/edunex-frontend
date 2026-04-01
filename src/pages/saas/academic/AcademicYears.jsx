@@ -6,6 +6,7 @@ import Modal from "@/components/ui/Modal";
 import Textinput from "@/components/ui/Textinput";
 import Checkbox from "@/components/ui/Checkbox";
 import DataTable from "@/components/ui/DataTable";
+import PageHeader from "@/components/ui/PageHeader";
 import SkeletonTable from "@/components/skeleton/Table";
 import { toast } from "react-toastify";
 
@@ -109,29 +110,26 @@ const AcademicYears = () => {
 
     return (
         <div className="space-y-6">
-            <div className="bg-white p-4 rounded-xl border flex justify-between items-center">
-                <div>
-                    <h4 className="card-title text-2xl font-bold poppins text-dark dark:text-white">Academic Sessions</h4>
-                    <p className="text-sm text-muted poppins mt-1">Manage institutional academic years and active sessions.</p>
-                </div>
-                <Button
-                    text="Add New Session"
-                    icon="heroicons-outline:plus"
-                    className="btn-primary poppins px-6"
-                    onClick={() => setIsOpen(true)}
-                />
-            </div>
+            <PageHeader 
+                icon="ph:calendar-blank"
+                title="Academic Sessions"
+                description="Manage institutional academic years and active sessions."
+                buttonText="Add New Session"
+                onButtonClick={() => setIsOpen(true)}
+            />
 
             {loading ? (
-                <div className="card p-6 border dark:border-gray-700">
+                <div className="card p-6 border dark:border-[#2f3336] bg-white dark:bg-[#111111]">
                     <SkeletonTable count={data.length || 5} />
                 </div>
             ) : (
-                <DataTable
-                    columns={columns}
-                    data={data}
-                    pageSize={10}
-                />
+                <div className="card border dark:border-[#2f3336] rounded-xl overflow-hidden bg-white dark:bg-[#111111] shadow-sm">
+                    <DataTable
+                        columns={columns}
+                        data={data}
+                        pageSize={10}
+                    />
+                </div>
             )}
 
             <Modal title="Create Academic Session" activeModal={isOpen} onClose={() => setIsOpen(false)}>

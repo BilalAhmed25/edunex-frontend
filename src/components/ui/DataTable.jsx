@@ -20,7 +20,7 @@ const GlobalFilter = ({ filter, setFilter }) => {
                 value={value || ""}
                 onChange={onChange}
                 placeholder="Search everything..."
-                className="block w-full rounded-xl border-0 py-2.5 ps-10 pe-3 text-slate-900 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary-500 bg-white dark:bg-slate-900 transition-all text-sm"
+                className="block w-full rounded-xl border-0 py-2.5 ps-10 pe-3 text-slate-900 ring-1 ring-inset ring-slate-200 dark:ring-[#2f3336] placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary-500 bg-white dark:bg-[#111111] transition-all text-[13px]"
             />
         </div>
     );
@@ -52,10 +52,10 @@ const DataTable = ({
     const { globalFilter, pageIndex, pageSize } = state;
 
     return (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden transition-all">
+        <div className="bg-white dark:bg-[#16181c] rounded-2xl overflow-hidden transition-all">
             {/* Header Section */}
             {(title || showSearch || actionButton) && (
-                <div className="p-6 border-b border-slate-100 dark:border-slate-700 md:flex justify-between items-center space-y-4 md:space-y-0">
+                <div className="p-6 border-b border-slate-100 dark:border-[#2f3336] md:flex justify-between items-center space-y-4 md:space-y-0">
 
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Show</span>
@@ -81,13 +81,13 @@ const DataTable = ({
             {/* Table Body */}
             <div className="overflow-x-auto">
                 <table className="min-w-full border-collapse" {...getTableProps()}>
-                    <thead className="bg-slate-50/50 dark:bg-slate-900/40">
+                    <thead className="bg-slate-100/50 dark:bg-[#1f2128]/80 shadow-sm">
                         {headerGroups.map((headerGroup) => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
                                 {headerGroup.headers.map((column) => (
                                     <th
                                         {...column.getHeaderProps(column.getSortByToggleProps())}
-                                        className="px-6 py-4 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider select-none group border-b border-slate-100 dark:border-slate-700"
+                                        className="px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest select-none group border-b border-slate-200 dark:border-[#2f3336]"
                                     >
                                         <div className="flex items-center gap-2">
                                             {column.render("Header")}
@@ -106,13 +106,13 @@ const DataTable = ({
                             </tr>
                         ))}
                     </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-700" {...getTableBodyProps()}>
+                    <tbody className="divide-y divide-slate-100 dark:divide-[#2f3336]" {...getTableBodyProps()}>
                         {page.map((row) => {
                             prepareRow(row);
                             return (
-                                <tr {...row.getRowProps()} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/40 transition-colors">
+                                <tr {...row.getRowProps()} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors">
                                     {row.cells.map((cell) => (
-                                        <td {...cell.getCellProps()} className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300 align-middle">
+                                        <td {...cell.getCellProps()} className="px-6 py-3 text-[13px] text-slate-600 dark:text-slate-300 align-middle">
                                             {cell.render("Cell")}
                                         </td>
                                     ))}
@@ -124,11 +124,11 @@ const DataTable = ({
             </div>
 
             {/* Pagination & Row Control Footer */}
-            <div className="px-6 pt-5 pb-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 space-y-4 lg:space-y-0 lg:flex lg:items-center lg:justify-between">
+            <div className="px-6 pt-5 pb-4 bg-white dark:bg-[#16181c] border-t border-slate-100 dark:border-[#2f3336] space-y-4 lg:space-y-0 lg:flex lg:items-center lg:justify-between">
 
                 {/* Left: Row Count Dropdown */}
                 <div className="flex items-center gap-3">
-                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                    <p className="text-[13px] text-slate-500 dark:text-slate-400 font-medium">
                         Total <span className="text-slate-800 dark:text-slate-200">{data.length}</span> entries
                     </p>
                 </div>
@@ -136,15 +136,15 @@ const DataTable = ({
                 {/* Right: Navigation Controls */}
                 <div className="flex flex-wrap items-center gap-4">
                     {/* Page Numbers Info */}
-                    <div className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                    <div className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 dark:bg-[#111111] rounded-lg">
                         <span className="text-xs font-bold text-slate-400 uppercase">Page</span>
-                        <span className="text-sm font-bold text-primary-600 dark:text-primary-400">{pageIndex + 1}</span>
+                        <span className="text-[13px] font-bold text-primary-600 dark:text-primary-400">{pageIndex + 1}</span>
                         <span className="text-xs text-slate-300">of</span>
-                        <span className="text-sm font-bold text-slate-500">{pageOptions.length}</span>
+                        <span className="text-[13px] font-bold text-slate-500">{pageOptions.length}</span>
                     </div>
 
                     {/* Navigation Buttons */}
-                    <div className="flex items-center bg-slate-50 dark:bg-slate-900 p-1 rounded-lg">
+                    <div className="flex items-center bg-slate-50 dark:bg-[#111111] p-1 rounded-lg">
                         <button
                             className={`p-2 rounded-lg transition-all ${!canPreviousPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
                             onClick={() => gotoPage(0)}

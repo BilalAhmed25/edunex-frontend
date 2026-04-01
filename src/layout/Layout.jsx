@@ -15,7 +15,10 @@ import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import Loading from "@/components/Loading";
 import { motion, AnimatePresence } from "framer-motion";
+import useDarkmode from "@/hooks/useDarkMode";
+
 const Layout = () => {
+    const [isDark] = useDarkmode();
     const { width, breakpoints } = useWidth();
     const [collapsed] = useSidebar();
     const navigate = useNavigate();

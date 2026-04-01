@@ -1,21 +1,21 @@
 h1 {
-  @apply text-6xl font-semibold text-gray-900 dark:text-gray-300;
+  @apply text-4xl font-semibold text-gray-900 dark:text-[#eff3f4];
 }
 h2 {
-  @apply text-5xl font-semibold text-gray-900 dark:text-gray-300;
+  @apply text-3xl font-semibold text-gray-900 dark:text-[#eff3f4];
 }
 
 h3 {
-  @apply text-4xl font-medium text-gray-900 dark:text-gray-300;
+  @apply text-2xl font-medium text-gray-900 dark:text-[#eff3f4];
 }
 h4 {
-  @apply text-3xl font-medium text-gray-900 dark:text-gray-300;
+  @apply text-xl font-medium text-gray-900 dark:text-[#eff3f4];
 }
 h5 {
-  @apply text-2xl font-medium text-gray-900 dark:text-gray-300;
+  @apply text-lg font-medium text-gray-900 dark:text-[#eff3f4];
 }
 h6 {
-  @apply text-xl leading-[20px] font-medium text-gray-900 dark:text-gray-300;
+  @apply text-sm leading-[20px] font-medium text-gray-900 dark:text-[#eff3f4];
 }
 
 .display-1 {
