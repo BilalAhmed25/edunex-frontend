@@ -54,12 +54,19 @@ const Students = () => {
     });
 
     const [concessionData, setConcessionData] = useState({ amount: "", notes: "" });
+    const [filters, setFilters] = useState({ yearID: "", classID: "", sectionID: "" });
+    const [filterSections, setFilterSections] = useState([]);
 
     const fetchData = async () => {
         try {
             setLoading(true);
+            const queryParams = new URLSearchParams();
+            if (filters.yearID) queryParams.append("yearID", filters.yearID);
+            if (filters.classID) queryParams.append("classID", filters.classID);
+            if (filters.sectionID) queryParams.append("sectionID", filters.sectionID);
+
             const [stdRes, clsRes, sessRes] = await Promise.all([
-                get("/users/students"),
+                get(`/users/students?${queryParams.toString()}`),
                 get("/academic/classes"),
                 get("/academic/years")
             ]);
@@ -73,7 +80,7 @@ const Students = () => {
         }
     };
 
-    useEffect(() => { fetchData(); }, []);
+    useEffect(() => { fetchData(); }, [filters]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -97,7 +104,7 @@ const Students = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        
+
         // Validation logic
         if (!formData.firstName?.trim()) return toast.error("First Name is required");
         if (!formData.lastName?.trim()) return toast.error("Last Name is required");
@@ -290,6 +297,35 @@ const Students = () => {
                 onButtonClick={() => { resetForm(); setIsOpen(true); }}
             />
 
+            {/* Academic Filter Bar */}
+            <div className="bg-white dark:bg-[#111111] p-4 rounded-2xl border dark:border-[#2f3336] shadow-sm flex flex-wrap gap-3 items-center transition-all">
+                <div className="flex-1 min-w-[180px]">
+                    <Select options={sessions} value={sessions.find(s => s.value === filters.yearID)} onChange={(s) => setFilters(p => ({ ...p, yearID: s?.value || "" }))} isClearable label="Session" className="poppins" />
+                </div>
+                <div className="flex-1 min-w-[180px]">
+                    <Select options={classes} value={classes.find(c => c.value === filters.classID)} onChange={(s) => {
+                        setFilters(p => ({ ...p, classID: s?.value || "", sectionID: "" }));
+                        if (s) {
+                            const cls = classes.find(c => c.value === s.value);
+                            const classSections = cls?.sections ? (typeof cls.sections === 'string' ? JSON.parse(cls.sections) : cls.sections) : [];
+                            setFilterSections(classSections.map(sec => ({ value: sec.ID, label: sec.Name })));
+                        } else {
+                            setFilterSections([]);
+                        }
+                    }} isClearable label="Class" className="poppins" />
+                </div>
+                <div className="flex-1 min-w-[180px]">
+                    <Select options={filterSections} value={filterSections.find(s => s.value === filters.sectionID)} onChange={(s) => setFilters(p => ({ ...p, sectionID: s?.value || "" }))} isClearable label="Section" className="poppins" />
+                </div>
+                <Button
+                    text="Reset"
+                    icon="ph:arrow-counter-clockwise"
+                    className="btn-outline-secondary btn-sm h-[38px] px-5 poppins font-bold flex-shrink-0"
+                    onClick={() => { setFilters({ yearID: "", classID: "", sectionID: "" }); setFilterSections([]); }}
+
+                />
+            </div>
+
             <div className="bg-white dark:bg-[#111111] rounded-2xl border dark:border-[#2f3336] shadow-sm overflow-hidden transition-all">
                 {loading ? <div className="p-10"><SkeletonTable count={7} /></div> : (
                     <DataTable columns={columns} data={students} pageSize={10} className="poppins" />
@@ -297,63 +333,122 @@ const Students = () => {
             </div>
 
             {/* Admission Modal */}
-            <Modal title={isEditMode ? `Edit Student: ${formData.firstName}` : "Student Admission Form"} activeModal={isOpen} onClose={() => setIsOpen(false)} className="max-w-7xl">
-                <form onSubmit={onSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        {/* Profile Photo Section */}
-                        <div className="md:col-span-1 flex flex-col items-center space-y-3 bg-slate-50 dark:bg-slate-800/20 p-4 rounded-xl border dark:border-slate-700">
-                            <div className="h-32 w-28 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 overflow-hidden relative group">
-                                {formData.photo ? (
-                                    <img src={formData.photo} alt="Preview" className="h-full w-full object-cover" />
-                                ) : (
-                                    <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 text-[10px] text-center px-2">
-                                        <Icon icon="ph:user-focus-bold" className="w-8 h-8 mb-1" />
-                                        Passport Size Photo
+            <Modal
+                title={isEditMode ? `Edit Student Profile: ${formData.firstName}` : "New Student Admission"}
+                activeModal={isOpen}
+                onClose={() => setIsOpen(false)}
+                className="max-w-7xl overflow-hidden rounded-3xl"
+            >
+                <form onSubmit={onSubmit} className="space-y-8 p-1">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                        {/* LEFT COLUMN: Profile Summary & Photo */}
+                        <div className="lg:col-span-1 space-y-6">
+                            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/40 dark:to-slate-800/20 p-6 rounded-3xl border dark:border-slate-700/50 flex flex-col items-center">
+                                <div className="h-40 w-36 rounded-2xl border-4 border-white dark:border-slate-700 shadow-xl overflow-hidden relative group transition-transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-200 dark:bg-slate-700">
+                                    {formData.photo ? (
+                                        <img src={formData.photo} alt="Preview" className="h-full w-full object-cover" />
+                                    ) : (
+                                        <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-[10px] text-center px-4 font-bold uppercase tracking-wider">
+                                            <Icon icon="ph:user-circle-plus-duotone" className="w-16 h-16 mb-2 opacity-50" />
+                                            Upload Photo
+                                        </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/10 transition-colors pointer-events-none"></div>
+                                    <input type="file" accept="image/*" onChange={handlePhotoChange} className="absolute inset-0 opacity-0 cursor-pointer" title="Upload passport size photo" />
+                                </div>
+                                <div className="mt-4 text-center">
+                                    <div className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em]">Passport Photo</div>
+                                    <div className="text-[10px] text-slate-400 mt-1 font-medium italic">Requirement: 35 x 45 mm</div>
+                                </div>
+                                <div className="w-full mt-8 pt-8 border-t border-slate-200 dark:border-slate-700/50 space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase">System ID</span>
+                                        <span className="text-[11px] font-mono font-bold text-primary-500">{isEditMode ? `#${editId}` : "NEW"}</span>
                                     </div>
-                                )}
-                                <input type="file" accept="image/*" onChange={handlePhotoChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase">Status</span>
+                                        <span className="px-2 py-0.5 bg-success-50 dark:bg-success-500/10 text-success-600 text-[9px] font-bold rounded uppercase">Active</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="text-[10px] text-slate-500 text-center font-medium">Click to upload photo<br />(Crop to 35x45mm)</div>
                         </div>
 
-                        {/* Basic Details */}
-                        <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <Textinput name="firstName" label="First Name" placeholder="Student First Name" value={formData.firstName} onChange={handleChange} required />
-                            <Textinput name="lastName" label="Last Name" placeholder="Student Last Name" value={formData.lastName} onChange={handleChange} required />
-                            <Textinput type="date" name="dob" label="Date of Birth" value={formData.dob} onChange={handleChange} />
-                            <Select label="Gender" options={[{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }, { value: 'Other', label: 'Other' }]} value={formData.gender ? { value: formData.gender, label: formData.gender } : null} onChange={(s) => setFormData(p => ({ ...p, gender: s.value }))} />
-                            <Select label="Blood Group" options={['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map(b => ({ value: b, label: b }))} value={formData.bloodGroup ? { value: formData.bloodGroup, label: formData.bloodGroup } : null} onChange={(s) => setFormData(p => ({ ...p, bloodGroup: s.value }))} />
-                        </div>
+                        {/* RIGHT COLUMN: Form Data */}
+                        <div className="lg:col-span-3 space-y-8">
+                            {/* SECTION 1: PERSONAL DETAILS */}
+                            <div className="space-y-4">
+                                <div className="flex items-center space-x-3 pb-2 border-b dark:border-slate-700/50">
+                                    <div className="h-9 w-9 rounded-xl bg-primary-500/10 flex items-center justify-center text-primary-500">
+                                        <Icon icon="ph:user-bold" className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Personal Journey</h4>
+                                        <p className="text-[10px] text-slate-400 font-medium">Official identity and demographic information of the student.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
+                                    <Textinput name="firstName" label="First Name" placeholder="Student's legal first name" value={formData.firstName} onChange={handleChange} required className="poppins" />
+                                    <Textinput name="lastName" label="Last Name" placeholder="Legal last name" value={formData.lastName} onChange={handleChange} required className="poppins" />
+                                    <Textinput type="date" name="dob" label="Date of Birth" value={formData.dob} onChange={handleChange} className="poppins" />
+                                    <Select label="Gender" options={[{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }, { value: 'Other', label: 'Other' }]} value={formData.gender ? { value: formData.gender, label: formData.gender } : null} onChange={(s) => setFormData(p => ({ ...p, gender: s.value }))} className="poppins" />
+                                    <Select label="Blood Group" options={['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map(b => ({ value: b, label: b }))} value={formData.bloodGroup ? { value: formData.bloodGroup, label: formData.bloodGroup } : null} onChange={(s) => setFormData(p => ({ ...p, bloodGroup: s.value }))} className="poppins" />
+                                    <Textinput name="phone" label="Contact (Personal)" placeholder="Personal contact if any" value={formData.phone} onChange={handleChange} className="poppins" />
+                                </div>
+                            </div>
 
-                        <div className="col-span-full border-t dark:border-slate-700 pt-4">
-                            <h4 className="text-[11px] font-bold uppercase text-slate-400 tracking-widest pl-1">Academic Assignment</h4>
-                        </div>
+                            {/* SECTION 2: ACADEMIC ASSIGNMENT */}
+                            <div className="space-y-4 bg-slate-50/50 dark:bg-slate-800/10 p-6 rounded-3xl border dark:border-slate-700/50">
+                                <div className="flex items-center space-x-3 pb-2">
+                                    <div className="h-9 w-9 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+                                        <Icon icon="ph:chalkboard-teacher-bold" className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Academic Mapping</h4>
+                                        <p className="text-[10px] text-slate-400 font-medium">Assignment to current academic session and class structure.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 pt-2">
+                                    <Select label="Admission Year" options={sessions} value={sessions.find(s => s.value === formData.academicYearID)} onChange={(s) => setFormData(p => ({ ...p, academicYearID: s.value }))} className="poppins" />
+                                    <Select label="Target Class" options={classes} value={classes.find(c => c.value === formData.classID)} onChange={handleClassChange} className="poppins" />
+                                    <Select label="Section" options={sections} value={sections.find(s => s.value === formData.sectionID)} onChange={(s) => setFormData(p => ({ ...p, sectionID: s.value }))} className="poppins" />
+                                    <Textinput name="admissionNumber" label="Admission No" placeholder="Manual override if required" value={formData.admissionNumber} onChange={handleChange} className="poppins font-bold text-primary-500" />
+                                    <Textinput name="rollNumber" label="Roll Number" placeholder="Auto-suggested" value={formData.rollNumber} onChange={handleChange} className="poppins" />
+                                    <Textinput type="date" name="admissionDate" label="Admission Date" value={formData.admissionDate} onChange={handleChange} className="poppins" />
+                                </div>
+                            </div>
 
-                        <div className="md:col-span-1">
-                            <Select label="Admission Year" options={sessions} value={sessions.find(s => s.value === formData.academicYearID)} onChange={(s) => setFormData(p => ({ ...p, academicYearID: s.value }))} />
+                            {/* SECTION 3: GUARDIAN & CONTACT INFO */}
+                            <div className="space-y-4 lg:pb-6">
+                                <div className="flex items-center space-x-3 pb-2 border-b dark:border-slate-700/50">
+                                    <div className="h-9 w-9 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                                        <Icon icon="ph:users-three-bold" className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Guardian & Governance</h4>
+                                        <p className="text-[10px] text-slate-400 font-medium">Primary contact for emergency and regular communications.</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
+                                    <Textinput name="parentName" label="Guardian Name" placeholder="Full name as per ID card" value={formData.parentName} onChange={handleChange} required className="poppins" />
+                                    <Select label="Relation" options={['Father', 'Mother', 'Brother', 'Sister', 'Uncle', 'Other'].map(r => ({ value: r, label: r }))} value={formData.parentRelation ? { value: formData.parentRelation, label: formData.parentRelation } : null} onChange={(s) => setFormData(p => ({ ...p, parentRelation: s.value }))} className="poppins" />
+                                    <Textinput name="parentPhone" label="Primary Contact" placeholder="+92 XXX XXXXXXX" value={formData.parentPhone} onChange={handleChange} required className="poppins font-bold" />
+                                    <Textinput type="email" name="parentEmail" label="Guardian Email" placeholder="parent@institution.edu" value={formData.parentEmail} onChange={handleChange} className="poppins" />
+                                    <Textinput name="parentOccupation" label="Occupation" placeholder="e.g. Educationist" value={formData.parentOccupation} onChange={handleChange} className="poppins" />
+                                    <Textinput name="address" label="Home Residence" placeholder="Secondary contact / emergency phone" value={formData.address} onChange={handleChange} classGroup="md:col-span-3" className="poppins" />
+                                </div>
+                            </div>
                         </div>
-                        <div className="md:col-span-1">
-                            <Select label="Target Class" options={classes} value={classes.find(c => c.value === formData.classID)} onChange={handleClassChange} />
-                        </div>
-                        <div className="md:col-span-1">
-                            <Select label="Section" options={sections} value={sections.find(s => s.value === formData.sectionID)} onChange={(s) => setFormData(p => ({ ...p, sectionID: s.value }))} />
-                        </div>
-
-                        <div className="col-span-full border-t dark:border-slate-700 pt-4">
-                            <h4 className="text-[11px] font-bold uppercase text-slate-400 tracking-widest pl-1">Parent & Contact Info</h4>
-                        </div>
-
-                        <Textinput name="parentName" label="Guardian Name" placeholder="Father or Mother Name" value={formData.parentName} onChange={handleChange} />
-                        <Textinput name="parentPhone" label="Guardian Phone" placeholder="+92 XXX XXXXXXX" value={formData.parentPhone} onChange={handleChange} />
-                        <Textinput type="email" name="parentEmail" label="Guardian Email" placeholder="parent@edunex.edu" value={formData.parentEmail} onChange={handleChange} />
-                        <Select label="Relation" options={['Father', 'Mother', 'Brother', 'Sister', 'Uncle', 'Other'].map(r => ({ value: r, label: r }))} value={formData.parentRelation ? { value: formData.parentRelation, label: formData.parentRelation } : null} onChange={(s) => setFormData(p => ({ ...p, parentRelation: s.value }))} />
-                        <Textinput name="address" label="Home Address" placeholder="Street, Area, City" value={formData.address} onChange={handleChange} classGroup="md:col-span-3" />
-                        <Textinput name="phone" label="Student Phone (Optional)" placeholder="+92 XXX XXXXXXX" value={formData.phone} onChange={handleChange} />
                     </div>
 
-                    <div className="pt-4 border-t dark:border-slate-700 text-right space-x-3">
-                        <Button type="button" text="Cancel" className="btn-light" onClick={() => setIsOpen(false)} />
-                        <Button type="submit" text={submitting ? "Please wait..." : (isEditMode ? "Save Changes" : "Confirm Admission")} className="btn-primary px-10" disabled={submitting} />
+                    <div className="pt-8 border-t dark:border-slate-700 flex justify-end items-center space-x-4">
+                        <span className="text-[10px] text-slate-400 font-medium italic hidden md:block">* All data is encrypted and strictly used for academic administration.</span>
+                        <Button type="button" text="Cancel" className="btn-light px-8 poppins font-bold tracking-wider text-[11px]" onClick={() => setIsOpen(false)} />
+                        <Button
+                            type="submit"
+                            text={submitting ? "Please wait..." : (isEditMode ? "Propagate Changes" : "Confirm Enrollment")}
+                            className="bg-primary-500 hover:bg-primary-600 text-white px-12 rounded-xl poppins font-bold tracking-widest text-[12px] shadow-lg shadow-primary-500/25 transition-all active:scale-95"
+                            disabled={submitting}
+                        />
                     </div>
                 </form>
             </Modal>
@@ -418,7 +513,7 @@ const Students = () => {
                     </div>
                 </div>
             </Modal>
-        </div>
+        </div >
     );
 };
 

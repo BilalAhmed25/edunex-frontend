@@ -17,6 +17,7 @@ const Subjects         = lazy(() => import("./pages/saas/academic/Subjects"));
 // ── Users ──────────────────────────────────────────────────────────────────
 const Staff     = lazy(() => import("./pages/saas/users/Staff"));
 const Students  = lazy(() => import("./pages/saas/users/Students"));
+const Promotions= lazy(() => import("./pages/saas/users/Promotions"));
 
 // ── Attendance ─────────────────────────────────────────────────────────────
 const StudentAttendance = lazy(() => import("./pages/saas/attendance/StudentAttendance"));
@@ -78,6 +79,7 @@ function App() {
           {/* Users */}
           <Route path="users/staff"    element={<Staff />} />
           <Route path="users/students" element={<Students />} />
+          <Route path="users/promotions" element={<Promotions />} />
 
           {/* Attendance */}
           <Route path="attendance/student" element={<StudentAttendance />} />

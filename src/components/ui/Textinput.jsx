@@ -40,7 +40,7 @@ const Textinput = ({
     const leadingIcon = icon || (prepend && React.isValidElement(prepend) && prepend.type === Icon ? prepend.props.icon : null);
 
     return (
-        <div className={`mb-3 ${classGroup}`}>
+        <div className={`${classGroup}`}>
             <div className="position-relative">
                 <div
                     className={`form-floating edunex-floating 
@@ -62,7 +62,7 @@ const Textinput = ({
                         placeholder={effectivePlaceholder}
                         readOnly={readonly}
                         disabled={disabled}
-                        className={`form-control ${error ? "is-invalid" : ""} ${validate ? "is-valid" : ""} ${className}`}
+                        className={`form-control text-[13px] poppins pt-4 ${error ? "is-invalid" : ""} ${validate ? "is-valid" : ""} ${className}`}
                         onChange={onChange}
                         {...(isMask ? { options } : {})}
                         {...(register && name ? register(name) : {})} // Minimal react-hook-form support
@@ -70,7 +70,7 @@ const Textinput = ({
                     />
 
                     {label && (
-                        <label htmlFor={inputId} className="text-muted text-sm" style={{ marginTop: '1px' }}>
+                        <label htmlFor={inputId} className="text-slate-500 dark:text-slate-400 text-[12px] transition-all duration-200" style={{ marginTop: '2px' }}>
                             {label}
                         </label>
                     )}

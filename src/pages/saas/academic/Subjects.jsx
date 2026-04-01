@@ -55,7 +55,7 @@ const Subjects = () => {
             Header: "Status",
             accessor: "IsActive",
             Cell: ({ cell: { value, row } }) => (
-                <button 
+                <button
                     onClick={() => handleToggleStatus(row.original)}
                     className="cursor-pointer hover:opacity-80 transition-opacity"
                 >
@@ -172,11 +172,13 @@ const Subjects = () => {
 
     const handleAssignClick = async (subject) => {
         setSelectedSubject(subject);
+        setAssignClasses([]); // Clear existing first
         setIsAssignOpen(true);
         try {
             const res = await get(`/academic/class-subjects?subjectID=${subject.ID}`);
             if (res?.data) {
                 const assignedIds = res.data.map(a => a.ClassID);
+                // Ensure we match specifically against class values
                 setAssignClasses(classes.filter(c => assignedIds.includes(c.value)));
             }
         } catch (err) {
@@ -186,24 +188,14 @@ const Subjects = () => {
 
     const handleSaveAssignments = async () => {
         try {
-            // Since our backend endpoint is POST /api/class-subjects which syncs by classID,
-            // we need to consider if we want to sync by subjectID instead.
-            // Actually, the current backend endpoint handles syncing by classID.
-            // Let's add a backend endpoint for syncing by subjectID or just loop it.
-            // Better to have a robust backend endpoint.
-            
-            // For now, let's assume we can loop or better, update backend.
-            // Wait, I just added /class-subjects which deletes by ClassID.
-            // If I want to sync assignments for a SUBJECT, I need another endpoint.
-            
-            // I'll update the backend to handle subject-based sync too.
-            // Or I can just call the class-based one for each selected class? No, that's wrong.
-            
-            // Let's update `academicRoutes.js` first to handle Subject-based sync.
-            toast.info("Updating assignments...");
-            // ... will come back here
+            await post('/academic/subject-classes', {
+                subjectID: selectedSubject.ID,
+                classIDs: assignClasses.map(c => c.value)
+            });
+            toast.success("Assignments updated successfully");
+            setIsAssignOpen(false);
         } catch (err) {
-            toast.error("Failed to save assignments");
+            toast.error("Failed to update assignments");
         }
     };
 
@@ -233,7 +225,7 @@ const Subjects = () => {
 
     return (
         <div className="space-y-6">
-            <PageHeader 
+            <PageHeader
                 icon="ph:books"
                 title="Academic Subjects"
                 description="Manage global subject registry and their class assignments."
@@ -256,12 +248,13 @@ const Subjects = () => {
                 </div>
             )}
 
-            <Modal 
-                title={isEditMode ? "Edit Subject" : "Create Subject"} 
-                activeModal={isOpen} 
+            <Modal
+                title={isEditMode ? "Edit Subject" : "Create Subject"}
+                activeModal={isOpen}
                 onClose={() => setIsOpen(false)}
+                className="max-w-xl"
             >
-                <form onSubmit={onSubmit} className="space-y-5 py-2">
+                <form onSubmit={onSubmit} className="space-y-4 py-2">
                     <Textinput
                         name="name"
                         label="Subject Name"
@@ -279,20 +272,20 @@ const Subjects = () => {
                         onChange={handleChange}
                         className="poppins font-mono"
                     />
-                    <div className="flex items-center space-x-3 pt-2">
-                        <label className="text-sm font-medium text-slate-600 dark:text-slate-300 poppins">Active Status</label>
-                        <input 
-                            type="checkbox" 
+                    <div className="flex items-center space-x-3 pt-1">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 poppins">Active Status</label>
+                        <input
+                            type="checkbox"
                             name="isActive"
                             checked={formData.isActive}
                             onChange={(e) => setFormData(prev => ({ ...prev, isActive: e.target.checked }))}
                             className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
                         />
                     </div>
-                    <Button 
-                        type="submit" 
-                        className="btn-primary block w-full text-center mt-6 py-3 font-bold uppercase tracking-wider" 
-                        text={isEditMode ? "Update Subject" : "Create Subject"} 
+                    <Button
+                        type="submit"
+                        className="btn-primary block w-full text-center mt-6 py-3 font-bold uppercase tracking-wider text-[12px] rounded-xl"
+                        text={isEditMode ? "Update Subject" : "Create Subject"}
                     />
                 </form>
             </Modal>
@@ -302,44 +295,35 @@ const Subjects = () => {
                 title={`Assign Subject - ${selectedSubject?.Name}`}
                 activeModal={isAssignOpen}
                 onClose={() => setIsAssignOpen(false)}
+                className="max-w-2xl"
             >
-                <div className="space-y-6 py-2">
-                    <div className="alert bg-primary-50 text-primary-600 p-4 rounded-xl text-sm poppins flex items-start gap-3">
-                        <Icon icon="heroicons-outline:information-circle" className="w-5 h-5 flex-shrink-0" />
-                        Assigning a subject to a class makes it available for section teacher allocations.
+                <div className="space-y-4">
+                    <div className="bg-primary-50 dark:bg-primary-900/10 text-primary-600 dark:text-primary-400 p-3 rounded-xl text-[12px] poppins flex items-start gap-3 border border-primary-100 dark:border-primary-800/30 font-medium leading-relaxed mb-3">
+                        <Icon icon="ph:info-bold" className="w-5 h-5 flex-shrink-0" />
+                        Assigning a subject to a class registers it within that academic track, enabling section-level teacher allocations and timetable integration.
                     </div>
-                    
-                    <div>
+
+                    <div className="mt-2">
                         <MultiSelect
-                            label="Select Classes"
+                            label="Select Participating Classes"
                             options={classes}
                             value={assignClasses}
                             onChange={setAssignClasses}
                             placeholder="Select classes..."
+                            className="poppins text-[13px]"
                         />
                     </div>
 
-                    <div className="pt-4 border-t flex justify-end gap-3">
-                        <Button 
-                            text="Cancel" 
-                            className="btn-outline-secondary btn-sm poppins px-6" 
-                            onClick={() => setIsAssignOpen(false)} 
+                    <div className="pt-6 border-t dark:border-slate-700 flex justify-end gap-3 mt-4">
+                        <Button
+                            text="Cancel"
+                            className="btn-light poppins px-8 font-bold text-[11px] uppercase tracking-wider"
+                            onClick={() => setIsAssignOpen(false)}
                         />
-                        <Button 
-                            text="Save Assignments" 
-                            className="btn-primary btn-sm poppins px-6" 
-                            onClick={async () => {
-                                try {
-                                    await post('/academic/subject-classes', {
-                                        subjectID: selectedSubject.ID,
-                                        classIDs: assignClasses.map(c => c.value)
-                                    });
-                                    toast.success("Assignments updated successfully");
-                                    setIsAssignOpen(false);
-                                } catch (err) {
-                                    toast.error("Failed to update assignments");
-                                }
-                            }} 
+                        <Button
+                            text="Synchronize Assignments"
+                            className="btn-primary poppins px-10 font-bold text-[11px] uppercase tracking-wider h-[40px] rounded-xl"
+                            onClick={handleSaveAssignments}
                         />
                     </div>
                 </div>

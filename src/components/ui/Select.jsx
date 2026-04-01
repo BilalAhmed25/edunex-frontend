@@ -83,7 +83,7 @@ const Select = ({
     };
 
     return (
-        <div className="mb-4 group relative">
+        <div className="group relative">
             <div className="relative flex flex-col justify-end min-h-[58px]">
                 {label && (
                     <label className="absolute top-2 left-3 z-10 text-[11px] tracking-widest text-slate-400 dark:text-slate-500 transition-all duration-200">
