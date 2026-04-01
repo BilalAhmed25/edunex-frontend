@@ -13,7 +13,7 @@
   background-color: #fff;
   transition: all 0.3s ease-in-out;
   border: 1px solid #e1e9f1;
-  border-radius: 12px !important;
+  border-radius: 8px !important;
   min-height: 56px;
   overflow: hidden;
 
@@ -61,19 +61,38 @@
   }
 }
 
-[data-bs-theme="dark"] {
+body.dark {
   .edunex-input-group,
   .edunex-floating {
-    background-color: #1e293b;
-    border-color: #334155;
+    background-color: #111111 !important;
+    border-color: #2f3336 !important;
 
     .form-control,
-    .form-select {
-      color: #f1f5f9;
+    .form-select,
+    .form-floating label {
+      color: #eff3f4 !important;
     }
     
     .input-group-text {
         color: #94a3b8;
+    }
+
+    &::placeholder {
+      color: #64748b !important;
+    }
+
+    .form-control::placeholder {
+        color: #64748b !important;
+    }
+  }
+
+  .form-control {
+    background-color: #111111;
+    color: #eff3f4;
+    border-color: #2f3336;
+    &:focus {
+      background-color: #111111;
+      color: #ffffff;
     }
   }
 }

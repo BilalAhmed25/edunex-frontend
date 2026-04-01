@@ -54,11 +54,6 @@ export const masterNavigation = [
         childlink: "users/students",
         id: "2.2.2",
       },
-      {
-        childtitle: "Parents",
-        childlink: "users/parents",
-        id: "2.2.3",
-      },
     ],
   },
   {

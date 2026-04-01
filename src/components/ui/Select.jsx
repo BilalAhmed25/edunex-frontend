@@ -1,165 +1,113 @@
-import React, { Fragment } from "react";
-import Icon from "@/components/ui/Icon";
+import React from "react";
+import ReactSelect from "react-select";
+
 const Select = ({
-  label,
-  placeholder = "Select Option",
-  classLabel = "",
-  className = "",
-  classGroup = "",
-  register,
-  name,
-  readonly,
-  value,
-  error,
-  icon,
-  disabled,
-  id,
-  horizontal,
-  validate,
-  description,
-  onChange,
-  options,
-  defaultValue,
-  size,
-  multiple,
-  children,
-  ...rest
+    label,
+    options,
+    value,
+    onChange,
+    isMulti = false,
+    placeholder = "Select...",
+    error,
+    description,
+    ...rest
 }) => {
-  options = options || Array(3).fill("option");
-  return (
-    <div
-      className={`textfiled-wrapper  ${error ? "is-error" : ""}  ${
-        horizontal ? "flex w-full items-center" : ""
-      }  ${validate ? "is-valid" : ""} `}
-    >
-      <div className={`relative w-full ${horizontal ? "flex-1" : ""}`}>
-        {/* Leading Icon */}
-        {icon && (
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl text-gray-400">
-            <Icon icon={icon} />
-          </span>
-        )}
-        
-        {name && (
-          <select
-            onChange={onChange}
-            {...register(name)}
-            {...rest}
-            multiple={multiple}
-            className={`${
-              error ? " is-error" : " "
-            } text-control min-h-[56px] pt-6 pb-2 px-4 ${icon ? "pl-12" : ""} rounded-xl peer appearance-none ${className}  `}
-            placeholder={placeholder}
-            readOnly={readonly}
-            disabled={disabled}
-            id={id}
-            value={value}
-            size={size}
-            defaultValue={defaultValue}
-          >
-            {children ? (
-              children
-            ) : (
-              <Fragment>
-                <option value="" disabled>
-                  {placeholder}
-                </option>
-                {options.map((option, i) => (
-                  <Fragment key={i}>
-                    {option.value && option.label ? (
-                      <option key={i} value={option.value}>
-                         {option.label}
-                      </option>
-                    ) : (
-                      <option key={i} value={option}>
-                        {option}
-                      </option>
-                    )}
-                  </Fragment>
-                ))}
-              </Fragment>
-            )}
-          </select>
-        )}
-        {!name && (
-          <select
-            onChange={onChange}
-            multiple={multiple}
-            className={`${
-              error ? " is-error" : " "
-            } text-control min-h-[56px] pt-6 pb-2 px-4 ${icon ? "pl-12" : ""} rounded-xl peer appearance-none ${className}  `}
-            placeholder={placeholder}
-            readOnly={readonly}
-            disabled={disabled}
-            id={id}
-            value={value}
-            size={size}
-            defaultValue={defaultValue}
-          >
-            {children ? (
-              children
-            ) : (
-              <Fragment>
-                <option value="" disabled>
-                  {placeholder}
-                </option>
-                {options.map((option, i) => (
-                  <Fragment key={i}>
-                    {option.value && option.label ? (
-                      <option key={i} value={option.value}>
-                        {option.label}
-                      </option>
-                    ) : (
-                      <option key={i} value={option}>
-                        {option}
-                      </option>
-                    )}
-                  </Fragment>
-                ))}
-              </Fragment>
-            )}
-          </select>
-        )}
+    const customStyles = {
+        control: (base, state) => ({
+            ...base,
+            minHeight: '58px',
+            borderRadius: '8px',
+            border: state.isFocused ? '1px solid #4F46E5 !important' : '1px solid #e2e8f0 !important',
+            boxShadow: state.isFocused ? '0 0 0 1px #4F46E5 shadow-sm' : 'none',
+            backgroundColor: '#ffffff', // Explicit white for light theme
+            transition: 'all 0.2s ease',
+            '&:hover': {
+                borderColor: '#cbd5e1 !important'
+            }
+        }),
+        singleValue: (base) => ({
+            ...base,
+            color: '#1e293b',
+            fontSize: '13px',
+            fontWeight: '500',
+            paddingTop: '12px' // Push down to make room for absolute label if needed
+        }),
+        valueContainer: (base) => ({
+            ...base,
+            padding: '16px 12px 6px 8px'
+        }),
+        placeholder: (base) => ({
+            ...base,
+            fontSize: '13px',
+            color: '#94a3b8',
+            paddingTop: '12px' // Align with value
+        }),
+        menu: (base) => ({
+            ...base,
+            backgroundColor: '#ffffff',
+            borderRadius: '12px',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            padding: '6px',
+            border: '1px solid #f1f5f9',
+            zIndex: 9999
+        }),
+        option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isSelected ? '#4F46E5' : state.isFocused ? '#f8fafc' : 'transparent',
+            color: state.isSelected ? '#ffffff' : '#334155',
+            fontSize: '13px',
+            fontWeight: state.isSelected ? '600' : '500',
+            padding: '10px 12px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            margin: '2px 0'
+        }),
+        multiValue: (base) => ({
+            ...base,
+            backgroundColor: '#f1f5f9',
+            borderRadius: '6px',
+            marginTop: '12px'
+        }),
+        multiValueLabel: (base) => ({
+            ...base,
+            fontSize: '11px',
+            fontWeight: '600',
+            color: '#475569'
+        }),
+        dropdownIndicator: (base) => ({
+            ...base,
+            color: '#94a3b8',
+            '&:hover': { color: '#64748b' }
+        }),
+        indicatorSeparator: () => ({ display: 'none' })
+    };
 
-        {/* Internal Floating Label (Fixed at top for Select) */}
-        {label && (
-          <label
-            htmlFor={id}
-            className={`absolute text-[10px] font-semibold text-gray-400 duration-300 transform top-4 z-10 origin-[0] ltr:left-4 rtl:right-4 ${icon ? "ltr:left-12 rtl:right-12" : ""} capitalize pointer-events-none ${classLabel}`}
-          >
-            {label}
-          </label>
-        )}
-
-        {/* Trailing icons */}
-        <div className="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2  space-x-1 rtl:space-x-reverse">
-          <span className=" relative -right-2 inline-block text-gray-900 dark:text-gray-300 pointer-events-none">
-            <Icon icon="heroicons:chevron-down" />
-          </span>
-          {error && (
-            <span className="text-red-500">
-              <Icon icon="ph:info-fill" />
-            </span>
-          )}
-          {validate && (
-            <span className="text-green-500">
-              <Icon icon="ph:check-circle-fill" />
-            </span>
-          )}
+    return (
+        <div className="mb-4 group relative">
+            <div className="relative flex flex-col justify-end min-h-[58px]">
+                {label && (
+                    <label className="absolute top-2 left-3 z-10 text-[11px] tracking-widest text-slate-400 dark:text-slate-500 transition-all duration-200">
+                        {label}
+                    </label>
+                )}
+                <ReactSelect
+                    options={options}
+                    value={value}
+                    onChange={onChange}
+                    isMulti={isMulti}
+                    placeholder={placeholder}
+                    styles={customStyles}
+                    classNamePrefix="edunex-select"
+                    className="edunex-select-container poppins h-full"
+                    {...rest}
+                />
+            </div>
+            {error && <div className="text-danger-500 text-[11px] mt-1.5 font-bold flex items-center gap-1">
+                <span className="w-1 h-1 bg-danger-500 rounded-full" /> {error}
+            </div>}
+            {description && <div className="text-slate-400 text-[10px] mt-1.5 poppins font-medium italic opacity-80">{description}</div>}
         </div>
-      </div>
-      {/* error and success message*/}
-      {error && (
-        <div className="mt-2 text-red-600 block text-sm">{error.message}</div>
-      )}
-      {/* validated and success message*/}
-      {validate && (
-        <div className="mt-2 text-green-600 block text-sm">{validate}</div>
-      )}
-      {/* only description */}
-      {description && <span className="input-help">{description}</span>}
-    </div>
-  );
+    );
 };
 
 export default Select;

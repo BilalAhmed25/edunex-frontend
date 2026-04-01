@@ -107,7 +107,7 @@ const DataTable = ({
                         ))}
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-[#2f3336]" {...getTableBodyProps()}>
-                        {page.map((row) => {
+                        {page.length > 0 ? page.map((row) => {
                             prepareRow(row);
                             return (
                                 <tr {...row.getRowProps()} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors">
@@ -118,67 +118,77 @@ const DataTable = ({
                                     ))}
                                 </tr>
                             );
-                        })}
+                        }) : (
+                            <tr>
+                                <td colSpan={columns.length} className="px-6 py-20 text-center">
+                                    <div className="flex flex-col items-center justify-center space-y-3 opacity-40">
+                                        <Icon icon="ph:database-light" className="text-6xl text-slate-300 dark:text-slate-600" />
+                                        <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                                            {globalFilter ? "No matches found for your search" : "No results found"}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
 
             {/* Pagination & Row Control Footer */}
-            <div className="px-6 pt-5 pb-4 bg-white dark:bg-[#16181c] border-t border-slate-100 dark:border-[#2f3336] space-y-4 lg:space-y-0 lg:flex lg:items-center lg:justify-between">
-
-                {/* Left: Row Count Dropdown */}
-                <div className="flex items-center gap-3">
-                    <p className="text-[13px] text-slate-500 dark:text-slate-400 font-medium">
-                        Total <span className="text-slate-800 dark:text-slate-200">{data.length}</span> entries
-                    </p>
-                </div>
-
-                {/* Right: Navigation Controls */}
-                <div className="flex flex-wrap items-center gap-4">
-                    {/* Page Numbers Info */}
-                    <div className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 dark:bg-[#111111] rounded-lg">
-                        <span className="text-xs font-bold text-slate-400 uppercase">Page</span>
-                        <span className="text-[13px] font-bold text-primary-600 dark:text-primary-400">{pageIndex + 1}</span>
-                        <span className="text-xs text-slate-300">of</span>
-                        <span className="text-[13px] font-bold text-slate-500">{pageOptions.length}</span>
+            {data.length > 0 && (
+                <div className="px-6 pt-5 pb-4 bg-white dark:bg-[#16181c] border-t border-slate-100 dark:border-[#2f3336] space-y-4 lg:space-y-0 lg:flex lg:items-center lg:justify-between">
+                    {/* Left: Row Count Dropdown */}
+                    <div className="flex items-center gap-3">
+                        <p className="text-[13px] text-slate-500 dark:text-slate-400 font-medium">
+                            Total <span className="text-slate-800 dark:text-slate-200">{data.length}</span> entries
+                        </p>
                     </div>
 
-                    {/* Navigation Buttons */}
-                    <div className="flex items-center bg-slate-50 dark:bg-[#111111] p-1 rounded-lg">
-                        <button
-                            className={`p-2 rounded-lg transition-all ${!canPreviousPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
-                            onClick={() => gotoPage(0)}
-                            disabled={!canPreviousPage}
-                        >
-                            <Icon icon="ph:caret-double-left-bold" className="text-lg" />
-                        </button>
-                        <button
-                            className={`p-2 rounded-lg transition-all ${!canPreviousPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
-                            onClick={() => previousPage()}
-                            disabled={!canPreviousPage}
-                        >
-                            <Icon icon="ph:caret-left-bold" className="text-lg" />
-                        </button>
+                    {/* Right: Navigation Controls */}
+                    <div className="flex flex-wrap items-center gap-4">
+                        {/* Page Numbers Info */}
+                        <div className="flex items-center gap-2 px-3 py-2.5 bg-slate-50 dark:bg-[#111111] rounded-lg">
+                            <span className="text-xs font-bold text-slate-400 uppercase">Page</span>
+                            <span className="text-[13px] font-bold text-primary-600 dark:text-primary-400">{pageIndex + 1}</span>
+                            <span className="text-xs text-slate-300">of</span>
+                            <span className="text-[13px] font-bold text-slate-500">{pageOptions.length}</span>
+                        </div>
 
-                        <div className="w-[1px] h-4 bg-slate-200 dark:bg-slate-700 mx-1"></div>
-
-                        <button
-                            className={`p-2 rounded-lg transition-all ${!canNextPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
-                            onClick={() => nextPage()}
-                            disabled={!canNextPage}
-                        >
-                            <Icon icon="ph:caret-right-bold" className="text-lg" />
-                        </button>
-                        <button
-                            className={`p-2 rounded-lg transition-all ${!canNextPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
-                            onClick={() => gotoPage(pageOptions.length - 1)}
-                            disabled={!canNextPage}
-                        >
-                            <Icon icon="ph:caret-double-right-bold" className="text-lg" />
-                        </button>
+                        {/* Navigation Buttons */}
+                        <div className="flex items-center bg-slate-50 dark:bg-[#111111] p-1 rounded-lg">
+                            <button
+                                className={`p-2 rounded-lg transition-all ${!canPreviousPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
+                                onClick={() => gotoPage(0)}
+                                disabled={!canPreviousPage}
+                            >
+                                <Icon icon="ph:caret-double-left-bold" className="text-lg" />
+                            </button>
+                            <button
+                                className={`p-2 rounded-lg transition-all ${!canPreviousPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
+                                onClick={() => previousPage()}
+                                disabled={!canPreviousPage}
+                            >
+                                <Icon icon="ph:caret-left-bold" className="text-lg" />
+                            </button>
+                            <div className="w-[1px] h-4 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+                            <button
+                                className={`p-2 rounded-lg transition-all ${!canNextPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
+                                onClick={() => nextPage()}
+                                disabled={!canNextPage}
+                            >
+                                <Icon icon="ph:caret-right-bold" className="text-lg" />
+                            </button>
+                            <button
+                                className={`p-2 rounded-lg transition-all ${!canNextPage ? "text-slate-300 dark:text-slate-700 cursor-not-allowed" : "text-slate-600 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-sm"}`}
+                                onClick={() => gotoPage(pageOptions.length - 1)}
+                                disabled={!canNextPage}
+                            >
+                                <Icon icon="ph:caret-double-right-bold" className="text-lg" />
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

@@ -28,7 +28,7 @@ const Textinput = ({
     ...rest
 }) => {
     const [showPassword, setShowPassword] = useState(false);
-    
+
     // Determine input component and ID
     const InputComponent = isMask ? Cleave : "input";
     const inputId = id || name;
@@ -78,13 +78,13 @@ const Textinput = ({
                     {/* Trailing Elements */}
                     <div className="position-absolute end-0 top-50 translate-middle-y me-3 d-flex align-items-center gap-2 z-2">
                         {hasicon && type === "password" && (
-                            <span 
-                                className="cursor-pointer text-muted" 
+                            <span
+                                className="cursor-pointer text-muted"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
-                                <Icon 
-                                    icon={showPassword ? "heroicons-outline:eye" : "heroicons-outline:eye-off"} 
-                                    style={{ fontSize: "1.25rem" }} 
+                                <Icon
+                                    icon={showPassword ? "heroicons-outline:eye" : "heroicons-outline:eye-off"}
+                                    style={{ fontSize: "1.25rem" }}
                                 />
                             </span>
                         )}

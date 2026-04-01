@@ -36,7 +36,45 @@ body.dark {
   }
 }
 
-html,
+/* Custom Select Component Styles (For dark mode support) */
+body.dark {
+  .edunex-select__control {
+    background-color: #16181c !important;
+    border-color: #2f3336 !important;
+    color: #ffffff !important;
+  }
+  .edunex-select__menu {
+    background-color: #16181c !important;
+    border: 1px solid #2f3336 !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4) !important;
+  }
+  .edunex-select__option {
+    background-color: transparent;
+    color: #cbd5e1 !important;
+    &:hover {
+      background-color: #1d1f23 !important;
+    }
+  }
+  .edunex-select__option--is-focused {
+    background-color: #1d1f23 !important;
+  }
+  .edunex-select__option--is-selected {
+    background-color: #4F46E5 !important;
+    color: #ffffff !important;
+  }
+  .edunex-select__single-value {
+    color: #ffffff !important;
+  }
+  .edunex-select__input-container {
+    color: #ffffff !important;
+  }
+  .edunex-select__multi-value {
+    background-color: #1d1f23 !important;
+  }
+  .edunex-select__multi-value__label {
+    color: #cbd5e1 !important;
+  }
+}
 body {
   height: 100%;
 }

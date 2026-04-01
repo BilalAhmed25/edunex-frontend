@@ -5,7 +5,7 @@ import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 import Textinput from "@/components/ui/Textinput";
 import Icon from "@/components/ui/Icon";
-import Select from "react-select";
+import MultiSelect from "@/components/ui/MultiSelect";
 import { toast } from "react-toastify";
 import PageHeader from "@/components/ui/PageHeader";
 import GridSkeleton from "@/components/skeleton/Grid";
@@ -92,7 +92,7 @@ const ClassesSections = () => {
         try {
             currentSubjects = typeof cls.subjects === 'string' ? JSON.parse(cls.subjects) : (cls.subjects || []);
         } catch (e) { currentSubjects = []; }
-        
+
         setSelectedSubjects(currentSubjects.map(s => ({ value: s.ID, label: s.Name })));
         setIsSubjectsOpen(true);
     };
@@ -231,7 +231,7 @@ const ClassesSections = () => {
 
     return (
         <div className="space-y-6">
-            <PageHeader 
+            <PageHeader
                 icon="ph:users-three"
                 title="Academic Setup"
                 description="Configure classes, sections, and subject mapping."
@@ -255,9 +255,9 @@ const ClassesSections = () => {
                         try {
                             parsedSections = typeof cls.sections === 'string' ? JSON.parse(cls.sections) : (cls.sections || []);
                             parsedSubjects = typeof cls.subjects === 'string' ? JSON.parse(cls.subjects) : (cls.subjects || []);
-                        } catch (e) { 
-                            parsedSections = parsedSections.length ? parsedSections : []; 
-                            parsedSubjects = parsedSubjects.length ? parsedSubjects : []; 
+                        } catch (e) {
+                            parsedSections = parsedSections.length ? parsedSections : [];
+                            parsedSubjects = parsedSubjects.length ? parsedSubjects : [];
                         }
 
                         return (
@@ -353,18 +353,15 @@ const ClassesSections = () => {
                         className="poppins"
                     />
                     <div>
-                        <label className="form-label mb-2 block poppins">Associated Faculties</label>
-                        <Select
-                            isMulti
+                        <MultiSelect
+                            label="Associated Faculties"
                             options={faculties}
                             onChange={setSelectedFaculties}
                             value={selectedFaculties}
                             isSearchable
-                            className="react-select poppins"
-                            classNamePrefix="select"
                             placeholder="Select faculties..."
+                            description="Assign faculties to this level for report card categorization."
                         />
-                        <p className="text-[10px] text-muted mt-1.5 poppins">Assign faculties to this level for report card categorization.</p>
                     </div>
                     <Button type="submit" className="btn-primary block w-full text-center mt-6" text={isEditMode ? "Update Class" : "Save Class"} />
                 </form>
@@ -450,17 +447,14 @@ const ClassesSections = () => {
             >
                 <div className="space-y-6 py-2">
                     <div>
-                        <label className="form-label mb-2 block poppins">Assign Subjects to this Class</label>
-                        <Select
-                            isMulti
+                        <MultiSelect
+                            label="Assign Subjects to this Class"
                             options={allSubjects}
                             value={selectedSubjects}
                             onChange={setSelectedSubjects}
                             placeholder="Search and select subjects..."
-                            className="react-select poppins"
-                            classNamePrefix="select"
+                            description="These subjects will be available for all sections of this class."
                         />
-                        <p className="text-[10px] text-muted mt-2 poppins">These subjects will be available for all sections of this class.</p>
                     </div>
 
                     <div className="pt-4 border-t flex justify-end gap-3">

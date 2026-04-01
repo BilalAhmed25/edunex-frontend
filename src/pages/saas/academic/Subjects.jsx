@@ -8,7 +8,7 @@ import DataTable from "@/components/ui/DataTable";
 import SkeletonTable from "@/components/skeleton/Table";
 import Icon from "@/components/ui/Icon";
 import { toast } from "react-toastify";
-import Select from "react-select";
+import MultiSelect from "@/components/ui/MultiSelect";
 import PageHeader from "@/components/ui/PageHeader";
 
 const Subjects = () => {
@@ -310,15 +310,12 @@ const Subjects = () => {
                     </div>
                     
                     <div>
-                        <label className="form-label mb-2 block poppins font-bold text-slate-700">Select Classes</label>
-                        <Select
-                            isMulti
+                        <MultiSelect
+                            label="Select Classes"
                             options={classes}
                             value={assignClasses}
                             onChange={setAssignClasses}
                             placeholder="Select classes..."
-                            className="react-select poppins"
-                            classNamePrefix="select"
                         />
                     </div>
 
