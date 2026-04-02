@@ -267,6 +267,7 @@ const FeeStructures = () => {
                             value={academicYears.find(y => y.value === (filterYearID ? parseInt(filterYearID) : null))}
                             onChange={(opt) => setFilterYearID(opt ? opt.value : "")}
                             placeholder="Select Session..."
+                            icon="ph:calendar-blank-duotone"
                         />
                     </div>
                     <div className="text-[11px] text-slate-400 poppins font-medium mt-5">
@@ -310,6 +311,7 @@ const FeeStructures = () => {
                             onChange={(opt) => setFormData(p => ({ ...p, academicYearID: opt ? opt.value : "" }))}
                             placeholder="Search Year..."
                             required
+                            icon="ph:calendar-bold"
                         />
                         <Select
                             name="classID"
@@ -319,6 +321,7 @@ const FeeStructures = () => {
                             onChange={(opt) => setFormData(p => ({ ...p, classID: opt ? opt.value : "" }))}
                             placeholder="Search Class..."
                             required
+                            icon="ph:chalkboard-bold"
                         />
                     </div>
                     
@@ -329,22 +332,21 @@ const FeeStructures = () => {
                         value={formData.feeType}
                         onChange={handleChange}
                         required
+                        icon="ph:tag-bold"
                     />
-                    
-                    <div className="relative">
-                        <Textinput
-                            name="amount"
-                            label="Standard Amount (Rs.)"
-                            type="number"
-                            placeholder="0.00"
-                            step="0.01"
-                            value={formData.amount}
-                            onChange={handleChange}
-                            required
-                            className="font-bold text-lg pl-12"
-                        />
-                        <div className="absolute left-3 bottom-[14px] text-slate-400 font-bold poppins text-[15px]">Rs.</div>
-                    </div>
+
+                    <Textinput
+                        name="amount"
+                        label="Standard Amount (Rs.)"
+                        type="number"
+                        placeholder="0.00"
+                        step="0.01"
+                        value={formData.amount}
+                        onChange={handleChange}
+                        required
+                        className="text-lg"
+                        icon="ph:money-bold"
+                    />
 
                     <div className="pt-4 flex items-center justify-end space-x-3 border-t dark:border-slate-800">
                         <Button

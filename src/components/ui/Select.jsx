@@ -1,5 +1,6 @@
 import React from "react";
 import ReactSelect from "react-select";
+import Icon from "@/components/ui/Icon";
 
 const Select = ({
     label,
@@ -10,16 +11,17 @@ const Select = ({
     placeholder = "Select...",
     error,
     description,
+    icon,
     ...rest
 }) => {
     const customStyles = {
         control: (base, state) => ({
             ...base,
             minHeight: '58px',
-            borderRadius: '8px',
+            borderRadius: '12px', // Slightly more rounded for premium feel
             border: state.isFocused ? '1px solid #4F46E5 !important' : '1px solid #e2e8f0 !important',
             boxShadow: state.isFocused ? '0 0 0 1px #4F46E5 shadow-sm' : 'none',
-            backgroundColor: '#ffffff', // Explicit white for light theme
+            backgroundColor: 'transparent',
             transition: 'all 0.2s ease',
             '&:hover': {
                 borderColor: '#cbd5e1 !important'
@@ -27,24 +29,27 @@ const Select = ({
         }),
         singleValue: (base) => ({
             ...base,
-            color: '#1e293b',
+            color: 'inherit',
             fontSize: '13px',
-            fontWeight: '500',
-            paddingTop: '12px' // Push down to make room for absolute label if needed
+            paddingTop: '16px',
+            marginLeft: '0px'
         }),
         valueContainer: (base) => ({
             ...base,
-            padding: '16px 12px 6px 8px'
+            // padding: '12px 12px 0px 10px',
+            paddingLeft: icon ? '44px' : '12px'
         }),
         placeholder: (base) => ({
             ...base,
             fontSize: '13px',
             color: '#94a3b8',
-            paddingTop: '12px' // Align with value
+            paddingTop: '14px',
+            // paddingLeft: icon ? '32px' : '0px'
+            marginLeft: '0px'
         }),
         menu: (base) => ({
             ...base,
-            backgroundColor: '#ffffff',
+            backgroundColor: 'var(--select-menu-bg, #ffffff)',
             borderRadius: '12px',
             boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
             padding: '6px',
@@ -84,12 +89,19 @@ const Select = ({
 
     return (
         <div className="group relative">
-            <div className="relative flex flex-col justify-end min-h-[58px]">
+            <div className={`relative min-h-[58px] border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-[#111111] text-slate-700 dark:text-slate-100`}>
                 {label && (
-                    <label className="absolute top-2 left-3 z-10 text-[11px] tracking-widest text-slate-400 dark:text-slate-500 transition-all duration-200">
+                    <label className={`absolute top-2 z-10 text-[10px] text-slate-500 dark:text-slate-600 transition-all duration-200 pointer-events-none ${icon ? 'left-11' : 'left-3'}`}>
                         {label}
                     </label>
                 )}
+
+                {icon && (
+                    <div className="absolute left-3.5 bottom-[14px] top-[18px] text-slate-400 dark:text-slate-500 z-20 pointer-events-none">
+                        <Icon icon={icon} className="w-5 h-5" />
+                    </div>
+                )}
+
                 <ReactSelect
                     options={options}
                     value={value}
@@ -98,14 +110,14 @@ const Select = ({
                     placeholder={placeholder}
                     styles={customStyles}
                     classNamePrefix="edunex-select"
-                    className="edunex-select-container poppins h-full"
+                    className="edunex-select-container poppins h-full no-border"
                     {...rest}
                 />
             </div>
-            {error && <div className="text-danger-500 text-[11px] mt-1.5 font-bold flex items-center gap-1">
-                <span className="w-1 h-1 bg-danger-500 rounded-full" /> {error}
+            {error && <div className="text-danger-500 text-[11px] mt-1.5 font-bold flex items-center gap-1 pl-1">
+                <Icon icon="ph:info-fill" className="w-3.5 h-3.5" /> {error}
             </div>}
-            {description && <div className="text-slate-400 text-[10px] mt-1.5 poppins font-medium italic opacity-80">{description}</div>}
+            {description && <div className="text-slate-400 text-[10px] mt-1.5 poppins font-medium italic opacity-80 pl-1">{description}</div>}
         </div>
     );
 };

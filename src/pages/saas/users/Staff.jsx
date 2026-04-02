@@ -315,6 +315,7 @@ const Staff = () => {
                                 value={salaryData.amount}
                                 onChange={(e) => setSalaryData({ ...salaryData, amount: e.target.value })}
                                 required
+                                icon="ph:money-bold"
                             />
                             <Textinput
                                 label="History Notes"
@@ -322,6 +323,7 @@ const Staff = () => {
                                 classGroup="mb-0"
                                 value={salaryData.notes}
                                 onChange={(e) => setSalaryData({ ...salaryData, notes: e.target.value })}
+                                icon="ph:note-pencil-bold"
                             />
                         </div>
                         <Button type="submit" text="Confirm Salary Update" className="btn-primary w-full btn-sm font-bold" />
@@ -351,20 +353,20 @@ const Staff = () => {
             <Modal title={isEditMode ? `Edit Profile: ${formData.firstName}` : "Onboard New Staff Member"} activeModal={isOpen} onClose={() => { setIsOpen(false); resetForm(); }} className="max-w-5xl">
                 <form onSubmit={onSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-1">
-                        <Textinput name="firstName" label="First Name" placeholder="John" value={formData.firstName} onChange={handleChange} required />
-                        <Textinput name="lastName" label="Last Name" placeholder="Smith" value={formData.lastName} onChange={handleChange} required />
-                        <Textinput type="date" name="joiningDate" label="Joining Date" value={formData.joiningDate} onChange={handleChange} />
+                        <Textinput name="firstName" label="First Name" placeholder="John" value={formData.firstName} onChange={handleChange} required icon="ph:user-bold" />
+                        <Textinput name="lastName" label="Last Name" placeholder="Smith" value={formData.lastName} onChange={handleChange} required icon="ph:user-bold" />
+                        <Textinput type="date" name="joiningDate" label="Joining Date" value={formData.joiningDate} onChange={handleChange} icon="ph:calendar-plus-bold" />
 
                         <div className="col-span-full border-t dark:border-slate-700 pt-3">
                             <h4 className="text-[11px] font-bold uppercase text-slate-400 tracking-widest">Account & Access</h4>
                         </div>
 
                         <div className="md:col-span-1">
-                            <Textinput type="email" name="email" label="Email Address" placeholder="staff@edunex.edu" value={formData.email} onChange={handleChange} required />
+                            <Textinput type="email" name="email" label="Email Address" placeholder="staff@edunex.edu" value={formData.email} onChange={handleChange} required icon="ph:envelope-bold" />
                         </div>
                         {!isEditMode && (
                             <div className="md:col-span-1">
-                                <Textinput type="password" name="password" label="Temporary Password" value={formData.password} onChange={handleChange} required />
+                                <Textinput type="password" name="password" label="Temporary Password" value={formData.password} onChange={handleChange} required icon="ph:lock-key-bold" />
                             </div>
                         )}
                         <div className={isEditMode ? "md:col-span-2" : "md:col-span-1"}>
@@ -374,6 +376,7 @@ const Staff = () => {
                                 onChange={setSelectedRole}
                                 value={selectedRole}
                                 placeholder="Select a role..."
+                                icon="ph:shield-bold"
                             />
                         </div>
 
@@ -382,10 +385,10 @@ const Staff = () => {
                         </div>
 
                         <div className="md:col-span-1">
-                            <Textinput name="department" label="Department" placeholder="e.g. Science, Accounts" value={formData.department} onChange={handleChange} />
+                            <Textinput name="department" label="Department" placeholder="e.g. Science, Accounts" value={formData.department} onChange={handleChange} icon="ph:buildings-bold" />
                         </div>
                         <div className="md:col-span-1">
-                            <Textinput name="designation" label="Designation" placeholder="e.g. Senior Lecturer" value={formData.designation} onChange={handleChange} />
+                            <Textinput name="designation" label="Designation" placeholder="e.g. Senior Lecturer" value={formData.designation} onChange={handleChange} icon="ph:briefcase-bold" />
                         </div>
                     </div>
 

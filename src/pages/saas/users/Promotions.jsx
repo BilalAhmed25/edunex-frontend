@@ -160,18 +160,21 @@ const Promotions = () => {
                             options={years} 
                             value={years.find(y => y.value === source.year)} 
                             onChange={(s) => setSource(p => ({ ...p, year: s.value }))}
+                            icon="ph:calendar-blank-bold"
                         />
                         <Select 
                             label="Class" 
                             options={classes} 
                             value={classes.find(c => c.value === source.class)} 
                             onChange={(s) => setSource(p => ({ ...p, class: s.value, section: "" }))}
+                            icon="ph:chalkboard-bold"
                         />
                         <Select 
                             label="Section" 
                             options={sourceSections} 
                             value={sourceSections.find(s => s.value === source.section)} 
                             onChange={(s) => setSource(p => ({ ...p, section: s.value }))}
+                            icon="ph:layout-bold"
                         />
                     </div>
                     <div className="mt-6 flex justify-end">
@@ -192,18 +195,21 @@ const Promotions = () => {
                             options={years} 
                             value={years.find(y => y.value === target.year)} 
                             onChange={(s) => setTarget(p => ({ ...p, year: s.value }))}
+                            icon="ph:calendar-plus-bold"
                         />
                         <Select 
                             label="Target Class" 
                             options={classes} 
                             value={classes.find(c => c.value === target.class)} 
                             onChange={(s) => setTarget(p => ({ ...p, class: s.value, section: "" }))}
+                            icon="ph:chalkboard-teacher-bold"
                         />
                         <Select 
                             label="Target Section" 
                             options={targetSections} 
                             value={targetSections.find(s => s.value === target.section)} 
                             onChange={(s) => setTarget(p => ({ ...p, section: s.value }))}
+                            icon="ph:layout-bold"
                         />
                     </div>
                     <div className="mt-6 flex justify-end">

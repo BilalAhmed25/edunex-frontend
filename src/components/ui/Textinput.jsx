@@ -49,8 +49,8 @@ const Textinput = ({
                 >
                     {/* Leading Element */}
                     {(leadingIcon || prepend) && (
-                        <span className="position-absolute start-0 top-50 translate-middle-y ms-3 text-muted fs-5 z-2">
-                            {leadingIcon ? <Icon icon={leadingIcon} /> : prepend}
+                        <span className="position-absolute start-0 top-50 translate-middle-y ms-3.5 text-slate-400 dark:text-slate-500 z-2 flex items-center pointer-events-none">
+                            {leadingIcon ? <Icon icon={leadingIcon} className="w-5 h-5" /> : prepend}
                         </span>
                     )}
 
@@ -62,11 +62,12 @@ const Textinput = ({
                         placeholder={effectivePlaceholder}
                         readOnly={readonly}
                         disabled={disabled}
-                        className={`form-control text-[13px] poppins pt-4 ${error ? "is-invalid" : ""} ${validate ? "is-valid" : ""} ${className}`}
+                        className={`form-control text-[12px] poppins text-slate-700 dark:text-slate-100 ${error ? "is-invalid" : ""} ${validate ? "is-valid" : ""} ${className}`}
                         onChange={onChange}
                         {...(isMask ? { options } : {})}
                         {...(register && name ? register(name) : {})} // Minimal react-hook-form support
                         {...rest}
+                        style={{ fontSize: '13px' }}
                     />
 
                     {label && (

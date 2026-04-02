@@ -263,6 +263,7 @@ const Subjects = () => {
                         onChange={handleChange}
                         required
                         className="poppins"
+                        icon="ph:book-bold"
                     />
                     <Textinput
                         name="code"
@@ -271,6 +272,7 @@ const Subjects = () => {
                         value={formData.code}
                         onChange={handleChange}
                         className="poppins font-mono"
+                        icon="ph:hash-bold"
                     />
                     <div className="flex items-center space-x-3 pt-1">
                         <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 poppins">Active Status</label>
