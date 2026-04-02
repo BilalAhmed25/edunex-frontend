@@ -44,7 +44,7 @@ const GeneralLedger = () => {
         {
             Header: "Transaction Date",
             accessor: "Date",
-            Cell: ({ value }) => <span className="font-bold text-slate-700 dark:text-slate-200">{moment(value).format('DD MMM YYYY')}</span>
+            Cell: ({ value }) => <span className="text-slate-700 dark:text-slate-200">{moment(value).format('DD MMM YYYY')}</span>
         },
         {
             Header: "Reference",
@@ -59,13 +59,13 @@ const GeneralLedger = () => {
         {
             Header: "Statement Memo",
             accessor: "Description",
-            Cell: ({ value }) => <span className="text-[12px] text-slate-500 italic max-w-[400px] truncate block">{value}</span>
+            Cell: ({ value }) => <span className="text-[12px] text-slate-500 max-w-[400px] truncate block">{value}</span>
         },
         {
             Header: "Accounting Type",
             accessor: "Type",
             Cell: ({ value }) => (
-                <div className={`flex items-center gap-2 px-3 py-1 rounded-full w-fit ${value === 'Income' ? 'bg-success-50 text-success-600' : 'bg-rose-50 text-rose-600'}`}>
+                <div className={`flex items-center gap-2 px-3 py-1 rounded-full w-fit ${value === 'Income' ? 'bg-green-50 dark:bg-green-500/10 text-success-600 dark:text-success-500' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-500'}`}>
                     <Icon icon={value === 'Income' ? 'ph:arrow-down-left-bold' : 'ph:arrow-up-right-bold'} className="w-3 h-3" />
                     <span className="text-[10px] font-black uppercase tracking-widest">{value === 'Income' ? 'Credit' : 'Debit'}</span>
                 </div>
@@ -89,7 +89,7 @@ const GeneralLedger = () => {
                 title="General Ledger"
                 description="Comprehensive financial record aggregating institutional collections and expenditures."
             >
-                 <Button
+                <Button
                     text="Print Audit Statement"
                     className="btn-primary px-6 rounded-lg font-bold uppercase tracking-wider text-[10px] h-11"
                     icon="ph:printer-bold"
@@ -101,7 +101,7 @@ const GeneralLedger = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card className="border dark:border-[#2f3336]" bodyClass="p-4">
                     <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-2xl bg-success-50 dark:bg-success-900/20 flex items-center justify-center text-success-600">
+                        <div className="h-12 w-12 rounded-2xl bg-green-50 dark:bg-green-500/20 flex items-center justify-center text-success-600 dark:text-success-400">
                             <Icon icon="ph:trend-up-bold" className="w-6 h-6" />
                         </div>
                         <div>
@@ -112,7 +112,7 @@ const GeneralLedger = () => {
                 </Card>
                 <Card className="border dark:border-[#2f3336]" bodyClass="p-4">
                     <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-2xl bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center text-rose-600">
+                        <div className="h-12 w-12 rounded-2xl bg-rose-50 dark:bg-rose-500/20 flex items-center justify-center text-rose-600 dark:text-rose-400">
                             <Icon icon="ph:trend-down-bold" className="w-6 h-6" />
                         </div>
                         <div>
@@ -121,10 +121,10 @@ const GeneralLedger = () => {
                         </div>
                     </div>
                 </Card>
-                <Card className={`border dark:border-[#2f3336] ${stats.balance >= 0 ? 'bg-success-50/10' : 'bg-rose-50/10'}`} bodyClass="p-4">
+                <Card className={`border dark:border-[#2f3336] ${stats.balance >= 0 ? 'bg-green-50/10 dark:bg-green-500/5' : 'bg-rose-50/10 dark:bg-rose-500/5'}`} bodyClass="p-4">
                     <div className="flex items-center gap-4">
-                        <div className={`h-12 w-12 rounded-2xl flex items-center justify-center ${stats.balance >= 0 ? 'bg-success-600 text-white' : 'bg-rose-600 text-white'}`}>
-                            <Icon icon={stats.balance >= 0 ? "ph:scales-bold" : "ph:warning-circle-bold"} className="w-6 h-6" />
+                        <div className={`h-12 w-12 rounded-2xl flex items-center justify-center ${stats.balance >= 0 ? 'bg-green-50 dark:bg-green-500/20 text-success-600 dark:text-success-400' : 'bg-rose-50 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400'}`}>
+                            <Icon icon={stats.balance >= 0 ? "ph:wallet-bold" : "ph:warning-circle-bold"} className="w-6 h-6" />
                         </div>
                         <div>
                             <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Net Fiscal Balance</div>
@@ -142,6 +142,7 @@ const GeneralLedger = () => {
                         <div className="flex items-center gap-3">
                             <Textinput
                                 type="date"
+                                label="Start Date"
                                 value={dateRange.start}
                                 onChange={(e) => setDateRange(p => ({ ...p, start: e.target.value }))}
                                 className="poppins"
@@ -150,6 +151,7 @@ const GeneralLedger = () => {
                             <Icon icon="ph:arrows-left-right-bold" className="text-slate-300 w-3 h-3" />
                             <Textinput
                                 type="date"
+                                label="End Date"
                                 value={dateRange.end}
                                 onChange={(e) => setDateRange(p => ({ ...p, end: e.target.value }))}
                                 className="poppins"
