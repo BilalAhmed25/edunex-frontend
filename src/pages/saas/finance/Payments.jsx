@@ -197,7 +197,7 @@ const Payments = () => {
                 <div className="flex items-center gap-6 pr-2">
                     <div className="flex flex-col text-right">
                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">Verified Total Outflow</span>
-                        <span className="text-lg font-black text-rose-500 italic">Rs. {expenses.reduce((acc, curr) => acc + parseFloat(curr.Amount), 0).toLocaleString()}</span>
+                        <span className="text-lg font-black text-rose-500">Rs. {expenses.reduce((acc, curr) => acc + parseFloat(curr.Amount), 0).toLocaleString()}</span>
                     </div>
                 </div>
             </div>

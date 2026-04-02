@@ -105,6 +105,11 @@ export const masterNavigation = [
         childlink: "finance/payments",
         id: "2.4.4",
       },
+      {
+        childtitle: "General Ledger",
+        childlink: "finance/general-ledger",
+        id: "2.4.5",
+      },
     ],
   },
   {

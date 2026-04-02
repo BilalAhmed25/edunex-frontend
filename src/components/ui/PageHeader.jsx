@@ -29,7 +29,7 @@ const PageHeader = ({
                         {title}
                     </h2>
                     {description && (
-                        <p className="text-[13px] font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap overflow-hidden text-ellipsis max-w-[300px] md:max-w-none opacity-80">
+                        <p className="text-[13px] text-slate-500 dark:text-slate-400 whitespace-nowrap overflow-hidden text-ellipsis max-w-[300px] md:max-w-none opacity-80">
                             {description}
                         </p>
                     )}
