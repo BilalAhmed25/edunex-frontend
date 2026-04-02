@@ -101,7 +101,7 @@ export const masterNavigation = [
         id: "2.4.3",
       },
       {
-        childtitle: "Payments",
+        childtitle: "Expenses",
         childlink: "finance/payments",
         id: "2.4.4",
       },
