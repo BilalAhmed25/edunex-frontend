@@ -80,7 +80,7 @@ export const masterNavigation = [
     ],
   },
   {
-    title: "Finance & Fees",
+    title: "Accounts",
     icon: "ph:wallet",
     link: "#",
     id: 2.4,

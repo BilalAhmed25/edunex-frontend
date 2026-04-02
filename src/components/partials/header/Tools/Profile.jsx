@@ -78,11 +78,10 @@ const Profile = ({ sticky }) => {
             {({ active }) => (
               <div
                 onClick={() => item.action()}
-                className={`${
-                  active
+                className={`${active
                     ? " text-indigo-500 "
                     : "text-gray-600 dark:text-gray-300"
-                } block transition-all duration-150 group     `}
+                  } block transition-all duration-150 group     `}
               >
                 <div className={`block cursor-pointer px-4 `}>
                   <div className="flex items-center space-x-3 rtl:space-x-reverse ">
@@ -91,9 +90,8 @@ const Profile = ({ sticky }) => {
                        ${item.status === "cyan" ? "bg-cyan-500 " : ""} 
                        ${item.status === "blue" ? "bg-indigo-500 " : ""} 
                       ${item.status === "red" ? "bg-red-500 " : ""} 
-                      ${item.status === "green" ? "bg-green-500 " : ""}${
-                        item.status === "yellow" ? "bg-yellow-500 " : ""
-                      }
+                      ${item.status === "green" ? "bg-green-500 " : ""}${item.status === "yellow" ? "bg-yellow-500 " : ""
+                        }
                       `}
                     >
                       <Icon icon={item.icon} />

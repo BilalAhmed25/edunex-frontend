@@ -10,8 +10,8 @@ import useMobileMenu from "@/hooks/useMobileMenu";
 import Icon from "@/components/ui/Icon";
 
 // import images
-import MobileLogo from "@/assets/images/logo/logo-c.svg";
-import MobileLogoWhite from "@/assets/images/logo/logo-c-white.svg";
+import MobileLogo from "@/assets/images/logo/Edunex-Square-Logo.png";
+import MobileLogoWhite from "@/assets/images/logo/Edunex-Square-Logo.png";
 import svgRabitImage from "@/assets/images/svg/rabit.svg";
 const MobileMenu = ({ className = "custom-class" }) => {
   const scrollableNodeRef = useRef();
@@ -49,6 +49,7 @@ const MobileMenu = ({ className = "custom-class" }) => {
                 <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   Edunex
                 </h1>
+                <p className="text-[10px] text-gray-400 font-medium -mt-1 leading-none block">Your digital partner</p>
               </div>
             </div>
           </Link>

@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useDarkMode from "@/hooks/useDarkMode";
 
-import MainLogo from "@/assets/images/logo/logo.svg";
-import LogoWhite from "@/assets/images/logo/logo-white.svg";
+import MainLogo from "@/assets/images/logo/Edunex-Logo.png";
+import LogoWhite from "@/assets/images/logo/Edunex-Logo.png";
 const MobileLogo = () => {
   const [isDark] = useDarkMode();
   return (

@@ -5,7 +5,7 @@ import Social from "./common/social";
 import useDarkMode from "@/hooks/useDarkMode";
 
 // image import
-import Logo from "@/assets/images/logo/logo-c.svg";
+import Logo from "@/assets/images/logo/Edunex-Square-Logo.png";
 
 const login = () => {
     const [isDark] = useDarkMode();

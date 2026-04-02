@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ForgotPass from "./common/forgot-pass";
 import useDarkMode from "@/hooks/useDarkMode";
-import Logo from "@/assets/images/logo/logo-c.svg";
+import Logo from "@/assets/images/logo/Edunex-Square-Logo.png";
 import VectorsImage from "@/assets/images/vectors-image/vectors-1.svg";
 
 const ForgotPass2 = () => {

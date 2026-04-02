@@ -6,8 +6,8 @@ import InvoiceTable from "./InvoiceTable";
 import userDarkMode from "@/hooks/useDarkMode";
 
 // import images
-import MainLogo from "@/assets/images/logo/logo-c.svg";
-import LogoWhite from "@/assets/images/logo/logo-white.svg";
+import MainLogo from "@/assets/images/logo/Edunex-Logo.png";
+import LogoWhite from "@/assets/images/logo/Edunex-Logo.png";
 
 const InvoicePreviewPage = () => {
   const printPage = () => {

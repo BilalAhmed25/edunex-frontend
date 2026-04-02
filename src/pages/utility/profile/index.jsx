@@ -58,10 +58,9 @@ const ProfilePage = () => {
                   <li
                     key={item.label}
                     className={`
-                      ${
-                        item.label === selectedTab.label
-                          ? "bg-indigo-500 text-white"
-                          : ""
+                      ${item.label === selectedTab.label
+                        ? "bg-indigo-500 text-white"
+                        : ""
                       }
                         flex space-x-3 rtl:space-x-reverse px-3 py-2 rounded-md hover:bg-indigo-500/10 hover:text-indigo-500 capitalize  cursor-pointer`}
                     onClick={() => setSelectedTab(item)}

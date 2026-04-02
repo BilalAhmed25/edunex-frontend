@@ -5,7 +5,7 @@ import RegForm from "./common/reg-from";
 import Social from "./common/social";
 // image import
 
-import Logo from "@/assets/images/logo/logo-c.svg";
+import Logo from "@/assets/images/logo/Edunex-Square-Logo.png";
 
 const register = () => {
   const [isDark] = useDarkMode();
