@@ -26,6 +26,7 @@ const StaffAttendance   = lazy(() => import("./pages/saas/attendance/StaffAttend
 // ── Finance ────────────────────────────────────────────────────────────────
 const FeeStructures = lazy(() => import("./pages/saas/finance/FeeStructures"));
 const Invoices      = lazy(() => import("./pages/saas/finance/Invoices"));
+const Collections   = lazy(() => import("./pages/saas/finance/Collections"));
 const Payments      = lazy(() => import("./pages/saas/finance/Payments"));
 
 // ── Settings ───────────────────────────────────────────────────────────────
@@ -88,6 +89,7 @@ function App() {
           {/* Finance */}
           <Route path="finance/fees"     element={<FeeStructures />} />
           <Route path="finance/invoices" element={<Invoices />} />
+          <Route path="finance/collections" element={<Collections />} />
           <Route path="finance/payments" element={<Payments />} />
 
           {/* Settings */}

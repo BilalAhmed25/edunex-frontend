@@ -96,9 +96,14 @@ export const masterNavigation = [
         id: "2.4.2",
       },
       {
+        childtitle: "Collections",
+        childlink: "finance/collections",
+        id: "2.4.3",
+      },
+      {
         childtitle: "Payments",
         childlink: "finance/payments",
-        id: "2.4.3",
+        id: "2.4.4",
       },
     ],
   },

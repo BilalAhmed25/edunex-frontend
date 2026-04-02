@@ -34,16 +34,16 @@ const FeeStructures = () => {
     const pivotedData = useMemo(() => {
         const groups = {};
         const allFeeTypes = new Set();
-        
-        const filtered = filterYearID 
+
+        const filtered = filterYearID
             ? data.filter(item => item.AcademicYearID === parseInt(filterYearID))
             : data;
 
         filtered.forEach(item => {
             const key = `${item.ClassID}_${item.AcademicYearID}`;
             if (!groups[key]) {
-                groups[key] = { 
-                    classID: item.ClassID, 
+                groups[key] = {
+                    classID: item.ClassID,
                     className: item.ClassName,
                     academicYearID: item.AcademicYearID,
                     academicYearName: item.AcademicYearName
@@ -53,9 +53,9 @@ const FeeStructures = () => {
             allFeeTypes.add(item.FeeType);
         });
 
-        return { 
-            rows: Object.values(groups), 
-            feeTypes: Array.from(allFeeTypes).sort() 
+        return {
+            rows: Object.values(groups),
+            feeTypes: Array.from(allFeeTypes).sort()
         };
     }, [data, filterYearID]);
 
@@ -85,9 +85,9 @@ const FeeStructures = () => {
                             {parseFloat(value.Amount).toLocaleString()}
                         </div>
                         <div className="absolute -top-8 left-0 invisible group-hover:visible bg-slate-900 border border-slate-700 text-white text-[9px] px-2 py-1 rounded-md poppins whitespace-nowrap z-50 shadow-2xl opacity-0 group-hover:opacity-100 transition-all translate-y-1 group-hover:translate-y-0">
-                           <span className="flex items-center gap-1">
-                               <Icon icon="heroicons-outline:pencil" className="w-3 h-3" /> Click to Edit
-                           </span>
+                            <span className="flex items-center gap-1">
+                                <Icon icon="heroicons-outline:pencil" className="w-3 h-3" /> Click to Edit
+                            </span>
                         </div>
                     </div>
                 ) : <span className="text-slate-300 dark:text-slate-700 poppins text-[12px]">--</span>
@@ -101,10 +101,10 @@ const FeeStructures = () => {
                     <button
                         onClick={() => {
                             resetForm();
-                            setFormData(prev => ({ 
-                                ...prev, 
+                            setFormData(prev => ({
+                                ...prev,
                                 academicYearID: row.original.academicYearID,
-                                classID: row.original.classID 
+                                classID: row.original.classID
                             }));
                             setIsOpen(true);
                         }}
@@ -147,11 +147,11 @@ const FeeStructures = () => {
                 get("/academic/years"),
                 get("/academic/classes")
             ]);
-            
+
             if (yearsRes?.data) {
                 const yearOpts = yearsRes.data.map(y => ({ value: y.ID, label: y.Name }));
                 setAcademicYears(yearOpts);
-                
+
                 const activeYear = yearsRes.data.find(y => y.IsActive);
                 if (activeYear && !isEditMode && !formData.academicYearID) {
                     setFormData(prev => ({ ...prev, academicYearID: activeYear.ID }));
@@ -192,7 +192,7 @@ const FeeStructures = () => {
 
     const handleDeleteClassFees = async (row) => {
         if (!window.confirm(`Delete all fee structures for class ${row.className} in session ${row.academicYearName}?`)) return;
-        
+
         try {
             // Find all IDs to delete
             const idsToDelete = pivotedData.feeTypes
@@ -231,7 +231,7 @@ const FeeStructures = () => {
     };
 
     const resetForm = () => {
-        setFormData(prev => ({ 
+        setFormData(prev => ({
             ...prev,
             feeType: "",
             amount: ""
@@ -247,15 +247,15 @@ const FeeStructures = () => {
                 title="Fee Structures"
                 description="Consolidate and define fee components across different academic tracks."
                 buttonText="Add Fee Structure"
-                onButtonClick={() => { 
+                onButtonClick={() => {
                     resetForm();
-                    setIsOpen(true); 
+                    setIsOpen(true);
                 }}
             />
 
             {/* Filter Section */}
-            <div className="card p-4 border dark:border-[#2f3336] bg-white dark:bg-[#111111] rounded-xl shadow-sm">
-                <div className="flex items-center gap-4">
+            <div className="card p-2 border dark:border-[#2f3336] bg-white dark:bg-[#111111] rounded-xl shadow-none px-4">
+                <div className="flex items-center justify-between gap-4">
                     <div className="w-[300px]">
                         <Select
                             name="filterYear"
@@ -270,18 +270,18 @@ const FeeStructures = () => {
                             icon="ph:calendar-blank-duotone"
                         />
                     </div>
-                    <div className="text-[11px] text-slate-400 poppins font-medium mt-5">
-                       Showing {pivotedData.rows.length} class profiles across {pivotedData.feeTypes.length} billing entities.
+                    <div className="text-[12px] text-slate-400 poppins self-end" style={{ marginBottom: '20px' }}>
+                        Showing <span className="text-primary-500">{pivotedData.rows.length}</span> class profiles across <span className="text-primary-500">{pivotedData.feeTypes.length}</span> billing entities.
                     </div>
                 </div>
             </div>
 
             {loading ? (
-                <div className="card p-6 border dark:border-[#2f3336] bg-white dark:bg-[#111111] rounded-xl shadow-sm">
+                <div className="card p-6 border dark:border-[#2f3336] bg-white dark:bg-[#111111] rounded-xl shadow-none">
                     <SkeletonTable count={5} />
                 </div>
             ) : (
-                <div className="card border dark:border-[#2f3336] rounded-xl overflow-hidden bg-white dark:bg-[#111111] shadow-sm">
+                <div className="card border dark:border-[#2f3336] rounded-xl overflow-hidden bg-white dark:bg-[#111111] shadow-none">
                     <DataTable
                         columns={columns}
                         data={pivotedData.rows}
@@ -324,7 +324,7 @@ const FeeStructures = () => {
                             icon="ph:chalkboard-bold"
                         />
                     </div>
-                    
+
                     <Textinput
                         name="feeType"
                         label="Fee Type / Entity Title"
