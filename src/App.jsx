@@ -32,6 +32,7 @@ const GeneralLedger = lazy(() => import("./pages/saas/finance/GeneralLedger"));
 
 // ── Settings ───────────────────────────────────────────────────────────────
 const SchoolProfile = lazy(() => import("./pages/saas/settings/SchoolProfile"));
+const UserProfile   = lazy(() => import("./pages/saas/settings/UserProfile"));
 const Roles         = lazy(() => import("./pages/saas/settings/Roles"));
 
 // ── Teacher ────────────────────────────────────────────────────────────────
@@ -96,6 +97,7 @@ function App() {
 
           {/* Settings */}
           <Route path="settings/profile" element={<SchoolProfile />} />
+          <Route path="user-profile"   element={<UserProfile />} />
           <Route path="settings/roles"   element={<Roles />} />
 
           {/* Teacher */}
