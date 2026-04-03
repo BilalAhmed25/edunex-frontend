@@ -38,7 +38,7 @@ const Sidebar = () => {
         <div className={isSemiDark ? "dark" : ""}>
             <div
                 className={clsx(
-                    " sidebar-wrapper bg-white dark:bg-[#111111] border-r dark:border-[#2f3336] shadow-base  ",
+                    " sidebar-wrapper bg-white dark:bg-[#111111] border-r dark:border-[#2f3336]  ",
                     {
                         "w-[72px] close_sidebar": collapsed,
                         "w-[280px]": !collapsed,
@@ -54,7 +54,7 @@ const Sidebar = () => {
             >
                 <SidebarLogo menuHover={menuHover} />
                 <div
-                    className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${scroll ? " opacity-100" : " opacity-0"
+                    className={`h-[60px]  absolute top-[80px] z-[1] w-full transition-all duration-200 pointer-events-none ${scroll ? " opacity-100" : " opacity-0"
                         }`}
                 ></div>
 

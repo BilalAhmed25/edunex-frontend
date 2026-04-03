@@ -67,20 +67,17 @@ module.exports = {
         poppins: ["Poppins", "sans-serif"],
       },
       boxShadow: {
-        base: "0 2px 6px rgba(47, 43, 61,.14),0 0 transparent,0 0 transparent",
-        card: "0 4px 18px rgba(47, 43, 61,.1),0 0 transparent,0 0 transparent",
+        base: "none",
+        card: "none",
         inset: "inset -1px 0px 0px #E9EAF0;",
         inset2: "inset -1px 0px 0px #374151;",
-        base2:
-          "0px 2px 4px rgba(40, 41, 61, 0.04), 0px 8px 16px rgba(96, 97, 112, 0.16)",
-        base3: "16px 10px 40px rgba(15, 23, 42, 0.22)",
-        deep: "-2px 0px 8px rgba(0, 0, 0, 0.16)",
-        dropdown: "0px 4px 8px rgba(0, 0, 0, 0.08)",
-
-        testi: "0px 4px 24px rgba(0, 0, 0, 0.06)",
-        todo: "rgba(235 233 241, 0.6) 0px 3px 10px 0px",
-        checkbox:
-          "0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1)",
+        base2: "none",
+        base3: "none",
+        deep: "none",
+        dropdown: "none",
+        testi: "none",
+        todo: "none",
+        checkbox: "none",
       },
       keyframes: {
         zoom: {
