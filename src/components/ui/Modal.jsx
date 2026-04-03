@@ -59,7 +59,7 @@ const Modal = ({
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <div className={`fixed inset-0 bg-gray-900/70 backdrop-filter ${isBlur ? "backdrop-blur-sm" : ""} `} />
+                                    <div className="fixed inset-0 bg-white/50 dark:bg-black/60 backdrop-blur-md" />
                                 </Transition.Child>
                             )}
 
@@ -74,10 +74,10 @@ const Modal = ({
                                         leaveFrom={`opacity-100  ${leaveFrom}`}
                                         leaveTo={`opacity-0 ${enterFrom}`}
                                     >
-                                        <Dialog.Panel className={`w-full transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left align-middle shadow-base transition-all ${className}`}>
+                                        <Dialog.Panel className={`w-full transform overflow-hidden rounded-3xl bg-white dark:bg-[#111111] text-left align-middle shadow-2xl transition-all border dark:border-[#2f3336] ${className}`}>
                                             {title && (
-                                                <div className={`relative overflow-hidden py-4 text-gray-700 border-b border-gray-10 flex justify-between dark:text-gray-300`}>
-                                                    <h2 className="capitalize leading-6  font-medium text-base ">
+                                                <div className={`relative overflow-hidden py-5 px-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center`}>
+                                                    <h2 className="capitalize leading-6 font-bold text-lg text-slate-800 dark:text-slate-100 poppins">
                                                         {title}
                                                     </h2>
                                                     <button onClick={closeModal} className="text-[22px]">
@@ -115,10 +115,7 @@ const Modal = ({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <div
-                                className={`fixed inset-0 bg-gray-900/70 backdrop-filter   ${isBlur ? "backdrop-blur-sm" : ""
-                                    } `}
-                            />
+                            <div className="fixed inset-0 bg-white/30 dark:bg-black/60 backdrop-blur-sm" />
                         </Transition.Child>
 
                         <div className="fixed inset-0 overflow-y-auto">
@@ -132,10 +129,10 @@ const Modal = ({
                                     leaveFrom={`opacity-100  ${leaveFrom}`}
                                     leaveTo={`opacity-0 ${enterFrom}`}
                                 >
-                                    <Dialog.Panel className={`w-full transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left align-middle shadow-base transition-all ${className}`}>
+                                    <Dialog.Panel className={`w-full transform overflow-hidden rounded-3xl bg-white dark:bg-[#111111] text-left align-middle shadow-2xl border dark:border-[#2f3336] transition-all ${className}`}>
                                         {title && (
-                                            <div className={`relative overflow-hidden py-4 px-4 border-b border-gray-10 text-gray-700 flex justify-between dark:text-gray-300`}>
-                                                <h2 className="capitalize leading-6 font-semibold text-base text-muted">
+                                            <div className={`relative overflow-hidden py-4 px-8 border-b border-slate-100 dark:border-slate-700 text-slate-800 flex justify-between items-center`}>
+                                                <h2 className="capitalize leading-6 text-lg dark:text-slate-100 poppins">
                                                     {title}
                                                 </h2>
                                                 <button onClick={onClose} className="text-[22px]">

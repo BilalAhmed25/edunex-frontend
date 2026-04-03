@@ -340,53 +340,38 @@ const Students = () => {
                 className="max-w-7xl overflow-hidden rounded-3xl"
             >
                 <form onSubmit={onSubmit} className="space-y-8 p-1">
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                        {/* LEFT COLUMN: Profile Summary & Photo */}
-                        <div className="lg:col-span-1 space-y-6">
-                            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/40 dark:to-slate-800/20 p-6 rounded-3xl border dark:border-slate-700/50 flex flex-col items-center">
-                                <div className="h-40 w-36 rounded-2xl border-4 border-white dark:border-slate-700 shadow-xl overflow-hidden relative group transition-transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-200 dark:bg-slate-700">
-                                    {formData.photo ? (
-                                        <img src={formData.photo} alt="Preview" className="h-full w-full object-cover" />
-                                    ) : (
-                                        <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-[10px] text-center px-4 font-bold uppercase tracking-wider">
-                                            <Icon icon="ph:user-circle-plus-duotone" className="w-16 h-16 mb-2 opacity-50" />
-                                            Upload Photo
-                                        </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/10 transition-colors pointer-events-none"></div>
-                                    <input type="file" accept="image/*" onChange={handlePhotoChange} className="absolute inset-0 opacity-0 cursor-pointer" title="Upload passport size photo" />
+                    <div className="space-y-8">
+                        {/* SECTION 1: PERSONAL DETAILS */}
+                        <div className="space-y-4">
+                            <div className="flex items-center space-x-3 pb-2 border-b dark:border-slate-700/50">
+                                <div className="h-9 w-9 rounded-xl bg-primary-500/10 flex items-center justify-center text-primary-500">
+                                    <Icon icon="ph:user-bold" className="w-5 h-5" />
                                 </div>
-                                <div className="mt-4 text-center">
-                                    <div className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em]">Passport Photo</div>
-                                    <div className="text-[10px] text-slate-400 mt-1 font-medium italic">Requirement: 35 x 45 mm</div>
-                                </div>
-                                <div className="w-full mt-8 pt-8 border-t border-slate-200 dark:border-slate-700/50 space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase">System ID</span>
-                                        <span className="text-[11px] font-mono font-bold text-primary-500">{isEditMode ? `#${editId}` : "NEW"}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase">Status</span>
-                                        <span className="px-2 py-0.5 bg-success-50 dark:bg-success-500/10 text-success-600 text-[9px] font-bold rounded uppercase">Active</span>
-                                    </div>
+                                <div>
+                                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Personal Journey</h4>
+                                    <p className="text-[10px] text-slate-400 font-medium">Official identity and demographic information of the student.</p>
                                 </div>
                             </div>
-                        </div>
-
-                        {/* RIGHT COLUMN: Form Data */}
-                        <div className="lg:col-span-3 space-y-8">
-                            {/* SECTION 1: PERSONAL DETAILS */}
-                            <div className="space-y-4">
-                                <div className="flex items-center space-x-3 pb-2 border-b dark:border-slate-700/50">
-                                    <div className="h-9 w-9 rounded-xl bg-primary-500/10 flex items-center justify-center text-primary-500">
-                                        <Icon icon="ph:user-bold" className="w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Personal Journey</h4>
-                                        <p className="text-[10px] text-slate-400 font-medium">Official identity and demographic information of the student.</p>
+                            <div className="flex flex-col md:flex-row gap-6">
+                                {/* PHOTO UPLOAD - Auto Width */}
+                                <div className="flex-shrink-0">
+                                    <div className="flex flex-col items-center">
+                                        <div className="h-32 w-28 rounded-xl border-2 border-white dark:border-slate-700 shadow-lg overflow-hidden relative group transition-transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-200 dark:bg-slate-700">
+                                            {formData.photo ? (
+                                                <img src={formData.photo} alt="Preview" className="h-full w-full object-cover" />
+                                            ) : (
+                                                <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-[8px] text-center px-2 font-bold uppercase">
+                                                    <Icon icon="ph:user-circle-plus-duotone" className="w-10 h-10 mb-1 opacity-50" />
+                                                    Upload Photo
+                                                </div>
+                                            )}
+                                            <input type="file" accept="image/*" onChange={handlePhotoChange} className="absolute inset-0 opacity-0 cursor-pointer" title="Upload passport size photo" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
+
+                                {/* FORM FIELDS - Grow to fill */}
+                                <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-3">
                                     <Textinput name="firstName" label="First Name" placeholder="Student's legal first name" value={formData.firstName} onChange={handleChange} required className="poppins" icon="ph:user-bold" />
                                     <Textinput name="lastName" label="Last Name" placeholder="Legal last name" value={formData.lastName} onChange={handleChange} required className="poppins" icon="ph:user-bold" />
                                     <Textinput type="date" name="dob" label="Date of Birth" value={formData.dob} onChange={handleChange} className="poppins" icon="ph:calendar-bold" />
@@ -395,47 +380,47 @@ const Students = () => {
                                     <Textinput name="phone" label="Contact (Personal)" placeholder="Personal contact if any" value={formData.phone} onChange={handleChange} className="poppins" icon="ph:phone-bold" />
                                 </div>
                             </div>
+                        </div>
 
-                            {/* SECTION 2: ACADEMIC ASSIGNMENT */}
-                            <div className="space-y-4 bg-slate-50/50 dark:bg-slate-800/10 p-6 rounded-3xl border dark:border-slate-700/50">
-                                <div className="flex items-center space-x-3 pb-2">
-                                    <div className="h-9 w-9 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
-                                        <Icon icon="ph:chalkboard-teacher-bold" className="w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Academic Mapping</h4>
-                                        <p className="text-[10px] text-slate-400 font-medium">Assignment to current academic session and class structure.</p>
-                                    </div>
+                        {/* SECTION 2: ACADEMIC ASSIGNMENT */}
+                        <div className="space-y-4 bg-slate-50/50 dark:bg-slate-800/10 p-6 rounded-3xl border dark:border-slate-700/50">
+                            <div className="flex items-center space-x-3 pb-2">
+                                <div className="h-9 w-9 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+                                    <Icon icon="ph:chalkboard-teacher-bold" className="w-5 h-5" />
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 pt-2">
-                                    <Select label="Admission Year" options={sessions} value={sessions.find(s => s.value === formData.academicYearID)} onChange={(s) => setFormData(p => ({ ...p, academicYearID: s.value }))} className="poppins" icon="ph:calendar-bold" />
-                                    <Select label="Target Class" options={classes} value={classes.find(c => c.value === formData.classID)} onChange={handleClassChange} className="poppins" icon="ph:chalkboard-bold" />
-                                    <Select label="Section" options={sections} value={sections.find(s => s.value === formData.sectionID)} onChange={(s) => setFormData(p => ({ ...p, sectionID: s.value }))} className="poppins" icon="ph:layout-bold" />
-                                    <Textinput name="admissionNumber" label="Admission No" placeholder="Manual override if required" value={formData.admissionNumber} onChange={handleChange} className="poppins text-primary-500" icon="ph:identification-card-bold" />
-                                    <Textinput name="rollNumber" label="Roll Number" placeholder="Auto-suggested" value={formData.rollNumber} onChange={handleChange} className="poppins" icon="ph:hash-bold" />
-                                    <Textinput type="date" name="admissionDate" label="Admission Date" value={formData.admissionDate} onChange={handleChange} className="poppins" icon="ph:calendar-plus-bold" />
+                                <div>
+                                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Academic Mapping</h4>
+                                    <p className="text-[10px] text-slate-400 font-medium">Assignment to current academic session and class structure.</p>
                                 </div>
                             </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3 pt-2">
+                                <Select label="Admission Year" options={sessions} value={sessions.find(s => s.value === formData.academicYearID)} onChange={(s) => setFormData(p => ({ ...p, academicYearID: s.value }))} className="poppins" icon="ph:calendar-bold" />
+                                <Select label="Target Class" options={classes} value={classes.find(c => c.value === formData.classID)} onChange={handleClassChange} className="poppins" icon="ph:chalkboard-bold" />
+                                <Select label="Section" options={sections} value={sections.find(s => s.value === formData.sectionID)} onChange={(s) => setFormData(p => ({ ...p, sectionID: s.value }))} className="poppins" icon="ph:layout-bold" />
+                                <Textinput name="admissionNumber" label="Admission No" placeholder="Manual override if required" value={formData.admissionNumber} onChange={handleChange} className="poppins text-primary-500" icon="ph:identification-card-bold" />
+                                <Textinput name="rollNumber" label="Roll Number" placeholder="Auto-suggested" value={formData.rollNumber} onChange={handleChange} className="poppins" icon="ph:hash-bold" />
+                                <Textinput type="date" name="admissionDate" label="Admission Date" value={formData.admissionDate} onChange={handleChange} className="poppins" icon="ph:calendar-plus-bold" />
+                            </div>
+                        </div>
 
-                            {/* SECTION 3: GUARDIAN & CONTACT INFO */}
-                            <div className="space-y-4 lg:pb-6">
-                                <div className="flex items-center space-x-3 pb-2 border-b dark:border-slate-700/50">
-                                    <div className="h-9 w-9 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                                        <Icon icon="ph:users-three-bold" className="w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Guardian & Governance</h4>
-                                        <p className="text-[10px] text-slate-400 font-medium">Primary contact for emergency and regular communications.</p>
-                                    </div>
+                        {/* SECTION 3: GUARDIAN & CONTACT INFO */}
+                        <div className="space-y-4 lg:pb-6">
+                            <div className="flex items-center space-x-3 pb-2 border-b dark:border-slate-700/50">
+                                <div className="h-9 w-9 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+                                    <Icon icon="ph:users-three-bold" className="w-5 h-5" />
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
-                                    <Textinput name="parentName" label="Guardian Name" placeholder="Full name as per ID card" value={formData.parentName} onChange={handleChange} required className="poppins" icon="ph:user-circle-gear-bold" />
-                                    <Select label="Relation" options={['Father', 'Mother', 'Brother', 'Sister', 'Uncle', 'Other'].map(r => ({ value: r, label: r }))} value={formData.parentRelation ? { value: formData.parentRelation, label: formData.parentRelation } : null} onChange={(s) => setFormData(p => ({ ...p, parentRelation: s.value }))} className="poppins" icon="ph:users-three-bold" />
-                                    <Textinput name="parentPhone" label="Primary Contact" placeholder="+92 XXX XXXXXXX" value={formData.parentPhone} onChange={handleChange} required className="poppins" icon="ph:phone-bold" />
-                                    <Textinput type="email" name="parentEmail" label="Guardian Email" placeholder="parent@institution.edu" value={formData.parentEmail} onChange={handleChange} className="poppins" icon="ph:envelope-bold" />
-                                    <Textinput name="parentOccupation" label="Occupation" placeholder="e.g. Educationist" value={formData.parentOccupation} onChange={handleChange} className="poppins" icon="ph:briefcase-bold" />
-                                    <Textinput name="address" label="Home Residence" placeholder="Secondary contact / emergency phone" value={formData.address} onChange={handleChange} classGroup="md:col-span-3" className="poppins" icon="ph:map-pin-bold" />
+                                <div>
+                                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest">Guardian & Governance</h4>
+                                    <p className="text-[10px] text-slate-400 font-medium">Primary contact for emergency and regular communications.</p>
                                 </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
+                                <Textinput name="parentName" label="Guardian Name" placeholder="Full name as per ID card" value={formData.parentName} onChange={handleChange} required className="poppins" icon="ph:user-circle-gear-bold" />
+                                <Select label="Relation" options={['Father', 'Mother', 'Brother', 'Sister', 'Uncle', 'Other'].map(r => ({ value: r, label: r }))} value={formData.parentRelation ? { value: formData.parentRelation, label: formData.parentRelation } : null} onChange={(s) => setFormData(p => ({ ...p, parentRelation: s.value }))} className="poppins" icon="ph:users-three-bold" />
+                                <Textinput name="parentPhone" label="Primary Contact" placeholder="+92 XXX XXXXXXX" value={formData.parentPhone} onChange={handleChange} required className="poppins" icon="ph:phone-bold" />
+                                <Textinput type="email" name="parentEmail" label="Guardian Email" placeholder="parent@institution.edu" value={formData.parentEmail} onChange={handleChange} className="poppins" icon="ph:envelope-bold" />
+                                <Textinput name="parentOccupation" label="Occupation" placeholder="e.g. Educationist" value={formData.parentOccupation} onChange={handleChange} className="poppins" icon="ph:briefcase-bold" />
+                                <Textinput name="address" label="Home Residence" placeholder="Secondary contact / emergency phone" value={formData.address} onChange={handleChange} classGroup="md:col-span-3" className="poppins" icon="ph:map-pin-bold" />
                             </div>
                         </div>
                     </div>

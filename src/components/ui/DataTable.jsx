@@ -62,7 +62,7 @@ const DataTable = ({
                         <select
                             value={pageSize}
                             onChange={e => setPageSize(Number(e.target.value))}
-                            className="border rounded-lg text-sm font-medium text-slate-500 dark:text-slate-400 px-2 py-1 focus:ring-2 focus:ring-primary-500 cursor-pointer"
+                            className="bg-white dark:bg-[#111111] border border-slate-200 dark:border-[#2f3336] rounded-lg text-sm font-medium text-slate-500 dark:text-slate-400 px-2 py-1 focus:ring-2 focus:ring-primary-500 cursor-pointer outline-none transition-colors"
                         >
                             {[10, 25, 50, 100].map(size => (
                                 <option key={size} value={size}>{size}</option>
