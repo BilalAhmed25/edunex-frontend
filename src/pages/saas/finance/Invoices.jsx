@@ -11,6 +11,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import { toast } from "react-toastify";
 import moment from "moment";
 import FeeVoucher from "@/components/finance/FeeVoucher";
+import ReportViewer from "@/components/ui/ReportViewer";
 
 const Invoices = () => {
     const [loading, setLoading] = useState(false);
@@ -353,7 +354,7 @@ const Invoices = () => {
 
                             <Button
                                 text={loading ? "Generating..." : "Finalize & Issue Voucher"}
-                                className="btn-primary w-full mt-4 rounded-xl text-[13px]'"
+                                className="btn-primary w-full mt-4 rounded-xl text-[13px]"
                                 disabled={loading || !student || selectedFees.length === 0}
                                 onClick={handleGenerateVoucher}
                                 icon="ph:paper-plane-tilt-bold"
@@ -422,37 +423,15 @@ const Invoices = () => {
                 </div>
             </Modal>
 
-            {/* VOUCHER PREVIEW MODAL */}
-            <Modal
-                title="Electronic Fee Voucher"
-                activeModal={isPreviewOpen}
-                onClose={() => setIsPreviewOpen(false)}
-                className="max-w-4xl"
-            >
-                {activeVoucher && (
-                    <div className="p-2 space-y-6">
-                        <div className="space-y-4 print:space-y-0" id="printable-voucher">
-                            <FeeVoucher voucher={activeVoucher} copyTitle="Office Copy" />
-                            <FeeVoucher voucher={activeVoucher} copyTitle="Bank Copy" />
-                            <FeeVoucher voucher={activeVoucher} copyTitle="Student Copy" />
-                        </div>
-
-                        <div className="flex gap-4 pt-4">
-                            <Button
-                                text="Download PDF"
-                                className="btn-outline-secondary flex-1 py-3 font-bold uppercase tracking-wide text-[11px] rounded-xl"
-                                icon="ph:download-simple-bold"
-                            />
-                            <Button
-                                text="Print Voucher"
-                                className="btn-primary flex-1 py-3 font-bold uppercase tracking-wide text-[11px] rounded-xl shadow-lg shadow-primary-500/10"
-                                icon="ph:printer-bold"
-                                onClick={() => window.print()}
-                            />
-                        </div>
-                    </div>
-                )}
-            </Modal>
+            {/* VOUCHER PREVIEW REPORT VIEWER */}
+            {isPreviewOpen && activeVoucher && (
+                <ReportViewer
+                    title={`Official Invoice #${activeVoucher.VoucherNumber}`}
+                    onClose={() => setIsPreviewOpen(false)}
+                >
+                    <FeeVoucher voucher={activeVoucher} copyTitle="Student Copy" />
+                </ReportViewer>
+            )}
         </div>
     );
 };

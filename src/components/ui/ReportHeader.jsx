@@ -18,32 +18,24 @@ const ReportHeader = ({ className = "" }) => {
     }, []);
 
     return (
-        <div className={`px-3 py-2 border-b border-slate-200 dark:border-slate-700 flex items-center gap-8 ${className}`}>
+        <div className={`px-4 py-4 sm:px-6 sm:py-4 border-b border-slate-200 flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-center sm:text-left ${className}`}>
             {/* Logo */}
             <div className="flex-none">
                 <img
                     src={school?.LogoUrl || SchoolPlaceholder}
                     alt="Institutional Logo"
-                    className="h-20 w-auto object-contain"
+                    className="h-16 sm:h-20 w-auto object-contain"
                 />
             </div>
 
             {/* School Info Block */}
-            <div className="flex-1 text-center">
-                <h1 className="text-2xl font-black text-slate-800 dark:text-white uppercase leading-none mb-1">
+            <div className="flex-1 text-center sm:text-center">
+                <h1 className="text-xl sm:text-2xl font-black text-slate-800 uppercase leading-tight sm:leading-none mb-1.5 sm:mb-1">
                     {school?.Name || "Institutional Name"}
                 </h1>
-                <p className="text-[11px] text-slate-700 dark:text-slate-400 uppercase tracking-widest">
+                <p className="text-[10px] sm:text-[11px] text-slate-700 uppercase tracking-widest leading-relaxed max-w-sm sm:max-w-none mx-auto">
                     {school?.Address || "Institutional Street Address, City, Country"}
                 </p>
-                {/* <div className="flex items-center justify-center gap-4 mt-2">
-                    <div className="text-[10px] font-medium text-slate-400 flex items-center gap-1">
-                        <span className="font-bold">TEL:</span> {school?.Phone || "N/A"}
-                    </div>
-                    <div className="text-[10px] font-medium text-slate-400 flex items-center gap-1">
-                        <span className="font-bold">EMAIL:</span> {school?.Email || "N/A"}
-                    </div>
-                </div> */}
             </div>
         </div>
     );

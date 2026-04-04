@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import ReportHeader from "@/components/ui/ReportHeader";
 import FeeVoucher from "@/components/finance/FeeVoucher";
+import ReportViewer from "@/components/ui/ReportViewer";
 
 const Collections = () => {
     const [loading, setLoading] = useState(false);
@@ -294,37 +295,15 @@ const Collections = () => {
                 </div>
             </Modal>
 
-            {/* VOUCHER PREVIEW MODAL */}
-            <Modal
-                title="Voucher Retrieval"
-                activeModal={isPreviewOpen}
-                onClose={() => setIsPreviewOpen(false)}
-                className="max-w-4xl"
-            >
-                {activeVoucher && (
-                    <div className="p-2 space-y-6 text-slate-900 dark:text-slate-100 poppins">
-                        <div className="space-y-4 print:space-y-0" id="printable-voucher">
-                            <FeeVoucher voucher={activeVoucher} copyTitle="Office Copy" />
-                            <FeeVoucher voucher={activeVoucher} copyTitle="Bank Copy" />
-                            <FeeVoucher voucher={activeVoucher} copyTitle="Student Copy" />
-                        </div>
-
-                        <div className="flex gap-4 pt-4 no-print">
-                            <Button
-                                text="Download Record"
-                                className="btn-light flex-1 py-3 font-bold uppercase tracking-wide text-[10px] rounded-xl border-dashed"
-                                icon="ph:download-simple-bold"
-                            />
-                            <Button
-                                text="Print Official Copy"
-                                className="btn-primary flex-1 py-3 font-bold uppercase tracking-wide text-[10px] rounded-xl shadow-xl shadow-primary-500/20"
-                                icon="ph:printer-bold"
-                                onClick={() => window.print()}
-                            />
-                        </div>
-                    </div>
-                )}
-            </Modal>
+            {/* VOUCHER PREVIEW REPORT VIEWER */}
+            {isPreviewOpen && activeVoucher && (
+                <ReportViewer
+                    title={`Fee Voucher #${activeVoucher.VoucherNumber}`}
+                    onClose={() => setIsPreviewOpen(false)}
+                >
+                    <FeeVoucher voucher={activeVoucher} copyTitle="Office Copy" />
+                </ReportViewer>
+            )}
         </div>
     );
 };
