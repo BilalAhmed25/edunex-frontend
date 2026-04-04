@@ -34,7 +34,8 @@ const Staff = () => {
         employeeID: "",
         department: "",
         designation: "",
-        joiningDate: new Date().toISOString().split('T')[0]
+        joiningDate: new Date().toISOString().split('T')[0],
+        availability: []
     });
 
     const [salaryData, setSalaryData] = useState({
@@ -118,7 +119,8 @@ const Staff = () => {
             employeeID: staff.EmployeeID || "",
             department: staff.Department || "",
             designation: staff.Designation || "",
-            joiningDate: staff.JoiningDate ? staff.JoiningDate.split('T')[0] : ""
+            joiningDate: staff.JoiningDate ? staff.JoiningDate.split('T')[0] : "",
+            availability: staff.Availability ? (typeof staff.Availability === 'string' ? JSON.parse(staff.Availability) : staff.Availability) : []
         });
         setSelectedRole(roles.find(r => r.label === staff.RoleName));
         setIsEditMode(true);
@@ -259,6 +261,81 @@ const Staff = () => {
         }
     };
 
+    const StaffAvailabilityEditor = ({ value, onChange }) => {
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        
+        const addSlot = (day) => {
+            onChange([...value, { day, startTime: "08:00", endTime: "14:00" }]);
+        };
+
+        const removeSlot = (index) => {
+            const newVal = [...value];
+            newVal.splice(index, 1);
+            onChange(newVal);
+        };
+
+        const updateSlot = (index, field, val) => {
+            const newVal = [...value];
+            newVal[index] = { ...newVal[index], [field]: val };
+            onChange(newVal);
+        };
+
+        return (
+            <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {days.map(day => (
+                        <div key={day} className="bg-slate-50 dark:bg-slate-900/40 p-3 rounded-xl border dark:border-slate-800">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">{day}</span>
+                                <button 
+                                    type="button"
+                                    onClick={() => addSlot(day)}
+                                    className="text-[10px] bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-600 transition-colors flex items-center gap-1"
+                                >
+                                    <Icon icon="ph:plus-bold" /> Add Slot
+                                </button>
+                            </div>
+                            
+                            <div className="space-y-2">
+                                {value.filter(s => s.day === day).length === 0 ? (
+                                    <div className="text-[10px] text-slate-400 italic py-1 pl-1">No availability set</div>
+                                ) : (
+                                    value.map((slot, idx) => {
+                                        if (slot.day !== day) return null;
+                                        return (
+                                            <div key={idx} className="flex items-center gap-2 bg-white dark:bg-slate-800 p-2 rounded-lg border dark:border-slate-700 shadow-sm transition-all hover:border-primary-200">
+                                                <input 
+                                                    type="time" 
+                                                    className="bg-transparent text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none w-full"
+                                                    value={slot.startTime}
+                                                    onChange={(e) => updateSlot(idx, "startTime", e.target.value)}
+                                                />
+                                                <span className="text-slate-300">→</span>
+                                                <input 
+                                                    type="time" 
+                                                    className="bg-transparent text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none w-full"
+                                                    value={slot.endTime}
+                                                    onChange={(e) => updateSlot(idx, "endTime", e.target.value)}
+                                                />
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => removeSlot(idx)}
+                                                    className="text-red-400 hover:text-red-600 p-1"
+                                                >
+                                                    <Icon icon="ph:x-bold" />
+                                                </button>
+                                            </div>
+                                        );
+                                    })
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     const resetForm = () => {
         setFormData({
             firstName: "",
@@ -268,7 +345,8 @@ const Staff = () => {
             employeeID: "",
             department: "",
             designation: "",
-            joiningDate: new Date().toISOString().split('T')[0]
+            joiningDate: new Date().toISOString().split('T')[0],
+            availability: []
         });
         setSelectedRole(null);
         setIsEditMode(false);
@@ -389,6 +467,20 @@ const Staff = () => {
                         </div>
                         <div className="md:col-span-1">
                             <Textinput name="designation" label="Designation" placeholder="e.g. Senior Lecturer" value={formData.designation} onChange={handleChange} icon="ph:briefcase-bold" />
+                        </div>
+
+                        <div className="col-span-full border-t dark:border-slate-700 pt-3">
+                            <h4 className="text-[11px] font-bold uppercase text-slate-400 tracking-widest flex items-center justify-between">
+                                Teacher Availability (Weekly Schedule)
+                                <span className="text-[9px] lowercase font-normal italic text-slate-500 normal-case">Strictly enforced during timetabling</span>
+                            </h4>
+                        </div>
+                        
+                        <div className="col-span-full">
+                            <StaffAvailabilityEditor 
+                                value={formData.availability} 
+                                onChange={(val) => setFormData(prev => ({ ...prev, availability: val }))} 
+                            />
                         </div>
                     </div>
 

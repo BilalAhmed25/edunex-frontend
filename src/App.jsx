@@ -13,6 +13,9 @@ const Dashboard    = lazy(() => import("./pages/dashboard"));
 const AcademicYears    = lazy(() => import("./pages/saas/academic/AcademicYears"));
 const ClassesSections  = lazy(() => import("./pages/saas/academic/ClassesSections"));
 const Subjects         = lazy(() => import("./pages/saas/academic/Subjects"));
+const TimeSlotManager  = lazy(() => import("./pages/saas/academic/TimeSlotManager"));
+const AdminTeacherAssignments = lazy(() => import("./pages/saas/academic/TeacherAssignments"));
+const TimetableManager = lazy(() => import("./pages/saas/academic/TimetableManager"));
 
 // ── Users ──────────────────────────────────────────────────────────────────
 const Staff     = lazy(() => import("./pages/saas/users/Staff"));
@@ -79,6 +82,9 @@ function App() {
           <Route path="academic/years"   element={<AcademicYears />} />
           <Route path="academic/classes" element={<ClassesSections />} />
           <Route path="academic/subjects"element={<Subjects />} />
+          <Route path="academic/timeslots" element={<TimeSlotManager />} />
+          <Route path="academic/assignments" element={<AdminTeacherAssignments />} />
+          <Route path="academic/timetable" element={<TimetableManager />} />
 
           {/* Users */}
           <Route path="users/staff"    element={<Staff />} />

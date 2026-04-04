@@ -36,6 +36,21 @@ export const masterNavigation = [
         childlink: "academic/subjects",
         id: "2.1.3",
       },
+      {
+        childtitle: "Time Slots",
+        childlink: "academic/timeslots",
+        id: "2.1.4",
+      },
+      {
+        childtitle: "Teacher Assignments",
+        childlink: "academic/assignments",
+        id: "2.1.5",
+      },
+      {
+        childtitle: "Timetable Manager",
+        childlink: "academic/timetable",
+        id: "2.1.6",
+      },
     ],
   },
   {
