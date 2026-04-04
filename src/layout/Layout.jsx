@@ -16,19 +16,31 @@ import { useSelector } from "react-redux";
 import Loading from "@/components/Loading";
 import { motion, AnimatePresence } from "framer-motion";
 import useDarkmode from "@/hooks/useDarkMode";
+import { getModuleIdByPath, checkAccess } from "@/configs/navigation";
 
 const Layout = () => {
     const [isDark] = useDarkmode();
     const { width, breakpoints } = useWidth();
     const [collapsed] = useSidebar();
     const navigate = useNavigate();
+    const location = useLocation();
     const { isAuth, user } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (!isAuth || !user) {
             navigate("/");
+            return;
         }
-    }, [isAuth, navigate]);
+
+        // Access Check: check if the user has access to the current route
+        const moduleId = getModuleIdByPath(location.pathname);
+        // If its for module check (moduleId exists) and user doesn't have it in access list
+        if (moduleId && !checkAccess(moduleId, user?.Access)) {
+            // Redirect to dashboard or 404 if no access
+            // Special case: if we found a moduleId but user has NO access, block them
+            navigate("/404");
+        }
+    }, [isAuth, user, navigate, location.pathname]);
 
     // Guard: render nothing before redirect fires (prevents dashboard flash)
     if (!isAuth || !user) return null;
@@ -49,7 +61,6 @@ const Layout = () => {
     // mobile menu
     const [mobileMenu, setMobileMenu] = useMobileMenu();
     const nodeRef = useRef(null);
-    const location = useLocation();
 
     return (
         <>

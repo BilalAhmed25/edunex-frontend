@@ -188,9 +188,7 @@ export const getNavigationByAccess = (access) => {
         if (item.id && access.includes(String(item.id))) {
           return true;
         }
-        // If it's a header, we might want to show it if any of its subsequent items are visible.
-        // But for simplicity, let's assume even headers or parent items might have IDs.
-        // Or if it's a parent with children, check if any child is accessible.
+        // If it's a parent with children, check if any child is accessible.
         if (item.child) {
           const filteredChildren = filterMenu(item.child);
           if (filteredChildren.length > 0) {
@@ -204,4 +202,36 @@ export const getNavigationByAccess = (access) => {
   };
 
   return filterMenu(masterNavigation);
+};
+
+/**
+ * Helper to check if a specific moduleId is present in the user's access list.
+ */
+export const checkAccess = (moduleId, accessList) => {
+  if (!accessList || !Array.isArray(accessList)) return false;
+  return accessList.includes(String(moduleId));
+};
+
+/**
+ * Helper to find the module ID associated with a given URL path.
+ */
+export const getModuleIdByPath = (path) => {
+  if (!path || path === "/" || path === "dashboard") return "1.1";
+
+  const normPath = path.startsWith("/") ? path.slice(1) : path;
+
+  const findId = (menu) => {
+    for (const item of menu) {
+      if (item.link === normPath || item.childlink === normPath) {
+        return item.id;
+      }
+      if (item.child) {
+        const foundId = findId(item.child);
+        if (foundId) return foundId;
+      }
+    }
+    return null;
+  };
+
+  return findId(masterNavigation);
 };
