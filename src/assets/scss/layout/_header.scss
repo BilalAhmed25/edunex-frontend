@@ -1,3 +1,5 @@
+@use "menu" as *;
+
 .has-sticky-header {
    @apply top-0 sticky z-[999];
 
@@ -25,5 +27,3 @@
       mask: linear-gradient(black, black 18%, transparent 100%);
    }
 }
-
-@import "menu";
