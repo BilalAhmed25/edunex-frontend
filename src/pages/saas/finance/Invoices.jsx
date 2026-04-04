@@ -10,6 +10,7 @@ import Modal from "@/components/ui/Modal";
 import PageHeader from "@/components/ui/PageHeader";
 import { toast } from "react-toastify";
 import moment from "moment";
+import FeeVoucher from "@/components/finance/FeeVoucher";
 
 const Invoices = () => {
     const [loading, setLoading] = useState(false);
@@ -352,7 +353,7 @@ const Invoices = () => {
 
                             <Button
                                 text={loading ? "Generating..." : "Finalize & Issue Voucher"}
-                                className="btn-primary w-full mt-4 rounded-xl font-bold text-[13px] shadow-lg shadow-primary-500/10"
+                                className="btn-primary w-full mt-4 rounded-xl text-[13px]'"
                                 disabled={loading || !student || selectedFees.length === 0}
                                 onClick={handleGenerateVoucher}
                                 icon="ph:paper-plane-tilt-bold"
@@ -426,84 +427,14 @@ const Invoices = () => {
                 title="Electronic Fee Voucher"
                 activeModal={isPreviewOpen}
                 onClose={() => setIsPreviewOpen(false)}
-                className="max-w-2xl"
+                className="max-w-4xl"
             >
                 {activeVoucher && (
                     <div className="p-2 space-y-6">
-                        <div className="flex border boder-dashed dark:border-slate-700 p-8 rounded-3xl bg-slate-50/20 flex-col space-y-8" id="printable-voucher">
-                            {/* Header */}
-                            <div className="flex justify-between items-start pb-6 border-b-2 border-slate-200 dark:border-slate-800">
-                                <div>
-                                    <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">EDUNEX <span className="text-primary-500">FISCAL</span></h3>
-                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 italic">Official Fee Payment Advice</p>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-tight">Voucher Number</div>
-                                    <div className="text-lg font-black text-primary-500">{activeVoucher.VoucherNumber}</div>
-                                </div>
-                            </div>
-
-                            {/* Details Grid */}
-                            <div className="grid grid-cols-2 gap-12">
-                                <div className="space-y-4">
-                                    <div>
-                                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-1.5">Student Credentials</div>
-                                        <div className="text-sm font-bold text-slate-800 dark:text-slate-100">{activeVoucher.FirstName} {activeVoucher.LastName}</div>
-                                        <div className="text-[11px] text-slate-500 font-medium">{activeVoucher.AdmissionNumber} • {activeVoucher.ClassName}</div>
-                                    </div>
-                                    <div>
-                                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-1.5">Academic Session</div>
-                                        <div className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{activeVoucher.AcademicYearName}</div>
-                                    </div>
-                                </div>
-                                <div className="space-y-4 text-right">
-                                    <div>
-                                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-1.5">Issue Date</div>
-                                        <div className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{moment(activeVoucher.CreatedAt).format('MMMM DD, YYYY')}</div>
-                                    </div>
-                                    <div className="inline-block px-3 py-1 bg-warning-50 dark:bg-warning-500/10 text-warning-600 text-[10px] font-black rounded-lg uppercase border border-warning-200 dark:border-warning-800/30">
-                                        Status: {activeVoucher.Status}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Line Items */}
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border dark:border-slate-800 shadow-sm">
-                                <table className="w-full text-left text-sm">
-                                    <thead className="bg-slate-50 dark:bg-slate-800 border-b dark:border-slate-800">
-                                        <tr>
-                                            <th className="px-6 py-4 font-black uppercase text-[10px] text-slate-400 tracking-widest">Description / Fee Type</th>
-                                            <th className="px-6 py-4 font-black uppercase text-[10px] text-slate-400 tracking-widest text-right">Amount (Rs.)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y dark:divide-slate-800 font-medium text-slate-600 dark:text-slate-400">
-                                        {activeVoucher.items?.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td className="px-6 py-4">{item.FeeType} <span className="ml-2 text-[10px] px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-bold uppercase">{item.Month}</span></td>
-                                                <td className="px-6 py-4 text-right font-bold text-slate-700 dark:text-slate-200">{item.Amount}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <div className="bg-slate-50/50 dark:bg-slate-800/30 px-6 py-5 space-y-3">
-                                    <div className="flex justify-between items-center text-xs">
-                                        <span className="font-bold text-slate-400">SUBTOTAL</span>
-                                        <span className="font-bold text-slate-700 dark:text-slate-200">Rs. {activeVoucher.TotalAmount}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center text-xs">
-                                        <span className="font-bold text-slate-400 uppercase tracking-widest">Scholarship/Concession</span>
-                                        <span className="font-bold text-success-500">-Rs. {activeVoucher.ConcessionAmount}</span>
-                                    </div>
-                                    <div className="pt-3 border-t dark:border-slate-700 flex justify-between items-center">
-                                        <span className="text-sm font-black text-slate-900 dark:text-white uppercase">Net Payable Amount</span>
-                                        <span className="text-xl font-black text-primary-500 italic">Rs. {activeVoucher.PayableAmount}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="pt-4 flex flex-col items-center">
-                                <div className="text-[9px] text-slate-400 font-medium max-w-sm text-center">This is a computer generated voucher for the purpose of fee collection. Please deposit the amount at the institution's designated counter.</div>
-                            </div>
+                        <div className="space-y-4 print:space-y-0" id="printable-voucher">
+                            <FeeVoucher voucher={activeVoucher} copyTitle="Office Copy" />
+                            <FeeVoucher voucher={activeVoucher} copyTitle="Bank Copy" />
+                            <FeeVoucher voucher={activeVoucher} copyTitle="Student Copy" />
                         </div>
 
                         <div className="flex gap-4 pt-4">

@@ -96,7 +96,7 @@ const DataTable = ({
                                             >
                                                 <div className="flex items-center gap-2">
                                                     {column.render("Header")}
-                                                    <span className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <span className="flex flex-col ">
                                                         {column.isSorted ? (
                                                             column.isSortedDesc ?
                                                                 <Icon icon="ph:caret-down-fill" className="text-primary-500" /> :

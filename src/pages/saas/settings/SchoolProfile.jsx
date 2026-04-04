@@ -114,7 +114,7 @@ const SchoolProfile = () => {
                                         className="absolute inset-0 opacity-0 cursor-pointer z-10"
                                         disabled={submitting}
                                     />
-                                    <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center ">
                                         <Icon icon="ph:upload-simple-bold" className="text-white text-3xl mb-1" />
                                         <span className="text-[10px] text-white font-bold uppercase">Change Logo</span>
                                     </div>

@@ -326,7 +326,7 @@ const UserProfile = () => {
                             <div className="h-32 w-32 rounded-2xl overflow-hidden relative bg-slate-100 dark:bg-slate-800">
                                 <img src={editForm.photo || profileData?.Photo || UserAvatar} alt="Preview" className="h-full w-full object-cover" />
                                 <input type="file" accept="image/*" onChange={handlePhotoChange} className="absolute inset-0 opacity-0 cursor-pointer z-10" disabled={isSubmitting} />
-                                <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center ">
                                     <Icon icon="ph:camera-plus-bold" className="text-white text-3xl" />
                                     <span className="text-[10px] text-white font-semibold uppercase mt-1">Upload New</span>
                                 </div>
