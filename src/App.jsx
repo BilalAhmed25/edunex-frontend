@@ -74,7 +74,7 @@ function App() {
         <Route path="/*" element={<Layout />}>
 
           {/* Default redirect */}
-          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route index element={<Navigate to="/dashboard" replace />} />
 
           <Route path="dashboard" element={<Dashboard />} />
 

@@ -18,20 +18,26 @@ export default defineConfig({
     ],
 
     build: {
-        chunkSizeWarningLimit: 1000,
+        chunkSizeWarningLimit: 1500,
         rollupOptions: {
             output: {
                 manualChunks(id) {
                     if (id.includes("node_modules")) {
-                        // Group React core libs together for better interop
-                        if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom") || id.includes("@reduxjs/toolkit")) {
+                        // Consolidate ALL core React, Redux, Router and related libs to ensure they share interop context
+                        if (
+                            id.includes("react") ||
+                            id.includes("react-dom") ||
+                            id.includes("react-router-dom") ||
+                            id.includes("@reduxjs/toolkit") ||
+                            id.includes("react-redux") ||
+                            id.includes("immer") ||
+                            id.includes("react-is") ||
+                            id.includes("hoist-non-react-statics")
+                        ) {
                             return "vendor_core";
                         }
                         if (id.includes("moment")) {
                             return "vendor_moment";
-                        }
-                        if (id.includes("axios")) {
-                            return "vendor_api";
                         }
                         return "vendor";
                     }
@@ -40,6 +46,7 @@ export default defineConfig({
         },
         commonjsOptions: {
             transformMixedEsModules: true, // Handle mixed ESM/CJS code (like React + addons)
+            include: [/node_modules/],     // Ensure all dependencies are covered by CJS transformation
         },
     },
 });
