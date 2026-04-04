@@ -1,11 +1,12 @@
 import axios from "axios";
 
-// const API_URL = "http://localhost:3000";
-const API_URL = "https://edunex-api.creavics.com";
+const API_URL = "http://localhost:3000";
+// const API_URL = "https://edunex-api.creavics.com";
 
 const axiosApi = axios.create({
     baseURL: API_URL,
 });
+
 
 // const token = localStorage.getItem('authToken');
 // axiosApi.defaults.headers.common["Authorization"] = `Bearer ${token}`;

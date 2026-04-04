@@ -19,7 +19,7 @@ const GlobalFilter = ({ filter, setFilter }) => {
                 type="text"
                 value={value || ""}
                 onChange={onChange}
-                placeholder="Search everything..."
+                placeholder="Search..."
                 className="block w-full rounded-xl border border-slate-200 dark:border-[#2f3336] py-2.5 ps-10 pe-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-white dark:bg-[#111111] transition-all text-[13px] outline-none"
             />
         </div>
@@ -94,18 +94,18 @@ const DataTable = ({
                                                 {...headerProps}
                                                 className="px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest select-none group border-b border-slate-200 dark:border-[#2f3336]"
                                             >
-                                        <div className="flex items-center gap-2">
-                                            {column.render("Header")}
-                                            <span className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity">
-                                                {column.isSorted ? (
-                                                    column.isSortedDesc ?
-                                                        <Icon icon="ph:caret-down-fill" className="text-primary-500" /> :
-                                                        <Icon icon="ph:caret-up-fill" className="text-primary-500" />
-                                                ) : (
-                                                    <Icon icon="ph:caret-up-down" className="text-slate-300 dark:text-slate-600" />
-                                                )}
-                                            </span>
-                                        </div>
+                                                <div className="flex items-center gap-2">
+                                                    {column.render("Header")}
+                                                    <span className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        {column.isSorted ? (
+                                                            column.isSortedDesc ?
+                                                                <Icon icon="ph:caret-down-fill" className="text-primary-500" /> :
+                                                                <Icon icon="ph:caret-up-fill" className="text-primary-500" />
+                                                        ) : (
+                                                            <Icon icon="ph:caret-up-down" className="text-slate-300 dark:text-slate-600" />
+                                                        )}
+                                                    </span>
+                                                </div>
                                             </th>
                                         );
                                     })}

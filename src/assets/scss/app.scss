@@ -176,6 +176,10 @@ html[dir="rtl"] {
 }
 
 
+.Toastify__toast-container {
+  z-index: 999999 !important;
+}
+
 .Toastify__toast {
   font-family: "Poppins", sans-serif !important;
   border-radius: 8px !important;

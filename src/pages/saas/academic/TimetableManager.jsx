@@ -59,17 +59,21 @@ const TimetableManager = () => {
         if (!filters.classID) return;
         try {
             const res = await get("/academic/timetable", {
-                classID: filters.classID.value,
-                sectionID: filters.sectionID?.value
+                params: {
+                    classID: filters.classID.value,
+                    sectionID: filters.sectionID?.value
+                }
             });
             if (res?.data) setTimetable(res.data);
-            
+
             const assignRes = await get("/academic/assignments", {
-                classID: filters.classID.value,
-                sectionID: filters.sectionID?.value
+                params: {
+                    classID: filters.classID.value,
+                    sectionID: filters.sectionID?.value
+                }
             });
-            if (assignRes?.data) setAssignments(assignRes.data.map(a => ({ 
-                value: a.ID, 
+            if (assignRes?.data) setAssignments(assignRes.data.map(a => ({
+                value: a.ID,
                 label: `${a.SubjectName} - ${a.StaffName}`,
                 staffID: a.StaffID,
                 subjectID: a.SubjectID
@@ -85,7 +89,11 @@ const TimetableManager = () => {
     const handleClassChange = (val) => {
         setFilters({ ...filters, classID: val, sectionID: null });
         const cls = classes.find(c => c.value === val.value);
-        setSections(cls?.sections ? cls.sections.map(s => ({ value: s.ID, label: s.Name })) : []);
+        let classSections = cls?.sections || [];
+        if (typeof classSections === 'string') {
+            try { classSections = JSON.parse(classSections); } catch (e) { classSections = []; }
+        }
+        setSections(classSections && Array.isArray(classSections) ? classSections.map(s => ({ value: s.ID, label: s.Name })) : []);
     };
 
     const handleCellClick = (day, slot) => {
@@ -206,8 +214,8 @@ const TimetableManager = () => {
                                         {days.map(day => {
                                             const entry = getEntry(day.value, slot.ID);
                                             return (
-                                                <td 
-                                                    key={`${day.value}-${slot.ID}`} 
+                                                <td
+                                                    key={`${day.value}-${slot.ID}`}
                                                     className="p-3 border-b border-l dark:border-slate-800 dark:border-l-slate-800 relative group"
                                                 >
                                                     {slot.IsBreak ? (
@@ -223,7 +231,7 @@ const TimetableManager = () => {
                                                                 <Icon icon="ph:user-bold" className="w-2.5 h-2.5 text-primary-500" />
                                                                 {entry.StaffName.split(' ')[0]}
                                                             </div>
-                                                            <button 
+                                                            <button
                                                                 onClick={() => handleDelete(entry.ID)}
                                                                 className="absolute -top-1 -right-1 p-1.5 opacity-0 group-hover:opacity-100 transition-opacity text-danger-500 hover:scale-110"
                                                             >
@@ -231,11 +239,11 @@ const TimetableManager = () => {
                                                             </button>
                                                         </div>
                                                     ) : (
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleCellClick(day, slot)}
-                                                            className="w-full h-12 rounded border-2 border-dashed border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all flex items-center justify-center group/btn"
+                                                            className="w-full h-16 rounded-xl border-2 border-dashed border-slate-100 dark:border-slate-800/40 hover:border-primary-300 dark:hover:border-primary-900/50 hover:bg-primary-50/20 dark:hover:bg-primary-900/10 transition-all flex flex-col items-center justify-center group/btn space-y-1"
                                                         >
-                                                            <Icon icon="ph:plus-circle-bold" className="opacity-0 group-hover/btn:opacity-40 text-primary-500" />
+                                                            <Icon icon="ph:plus-circle-fill" className="text-lg text-slate-200 dark:text-slate-800 group-hover/btn:text-primary-500 transition-colors" />
                                                         </button>
                                                     )}
                                                 </td>
@@ -259,7 +267,7 @@ const TimetableManager = () => {
                     <div className="bg-primary-50 dark:bg-primary-900/20 p-3 rounded-lg border dark:border-primary-800 mb-2">
                         <div className="text-[10px] font-black uppercase text-primary-600 mb-1">Session Target</div>
                         <div className="text-sm font-bold text-slate-700 dark:text-slate-200">
-                             {filters.classID?.label} {filters.sectionID ? `(${filters.sectionID.label})` : ""}
+                            {filters.classID?.label} {filters.sectionID ? `(${filters.sectionID.label})` : ""}
                         </div>
                     </div>
 
@@ -280,7 +288,7 @@ const TimetableManager = () => {
 
                     <div className="pt-4 flex gap-2">
                         <Button type="button" text="Cancel" className="btn-light w-full" onClick={() => setIsAddOpen(false)} />
-                        <Button type="submit" text="Save Entry" className="btn-primary w-full" loading={submitting} disabled={assignments.length === 0} />
+                        <Button type="submit" text={submitting ? "Saving..." : "Save Entry"} className="btn-primary w-full" loading={submitting} disabled={assignments.length === 0} />
                     </div>
                 </form>
             </Modal>

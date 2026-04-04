@@ -22,6 +22,7 @@ const TimeSlotManager = () => {
         endTime: "09:00",
         isBreak: false
     });
+    const [schoolInfo, setSchoolInfo] = useState({ startTime: "08:00", endTime: "14:00" });
 
     const fetchData = async () => {
         try {
@@ -37,7 +38,23 @@ const TimeSlotManager = () => {
 
     useEffect(() => {
         fetchData();
+        fetchSchoolDefaults();
     }, []);
+
+    const fetchSchoolDefaults = async () => {
+        try {
+            const schoolRes = await get("/users/school/profile");
+            if (schoolRes?.data) {
+                const start = schoolRes.data.StartTime?.slice(0, 5) || "08:00";
+                // Default to first period being 1 hour from start
+                const end = schoolRes.data.EndTime?.slice(0, 5) || "09:00";
+                setSchoolInfo({ startTime: start, endTime: end });
+                setFormData(prev => ({ ...prev, startTime: start, endTime: "09:00" }));
+            }
+        } catch (err) {
+            console.error("Failed to load school defaults", err);
+        }
+    }
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -49,7 +66,7 @@ const TimeSlotManager = () => {
             setSubmitting(true);
             await post("/academic/timeslots", formData);
             toast.success("Time slot created");
-            setFormData({ slotName: "", startTime: "08:00", endTime: "09:00", isBreak: false });
+            setFormData({ slotName: "", startTime: formData.endTime, endTime: "", isBreak: false });
             fetchData();
         } catch (err) {
             toast.error("Failed to create slot");
@@ -95,9 +112,9 @@ const TimeSlotManager = () => {
             Header: "Type",
             accessor: "IsBreak",
             Cell: ({ value }) => (
-                <Badge 
-                    label={value ? "Break / Recess" : "Academic Period"} 
-                    className={value ? "badge-soft-warning font-bold" : "badge-soft-success font-bold"} 
+                <Badge
+                    label={value ? "Break / Recess" : "Academic Period"}
+                    className={value ? "badge-soft-warning font-bold" : "badge-soft-success font-bold"}
                 />
             )
         },
@@ -160,7 +177,7 @@ const TimeSlotManager = () => {
                             <Button
                                 type="submit"
                                 text="Save Time Slot"
-                                className="btn-primary w-full font-bold mt-2"
+                                className="btn-primary w-full mt-2"
                                 loading={submitting}
                             />
                         </form>

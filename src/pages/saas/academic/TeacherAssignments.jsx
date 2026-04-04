@@ -54,11 +54,11 @@ const TeacherAssignments = () => {
     const handleClassChange = (selected) => {
         setFormData({ ...formData, classID: selected, sectionID: null });
         const cls = classes.find(c => c.value === selected.value);
-        if (cls?.sections) {
-            setSections(cls.sections.map(s => ({ value: s.ID, label: s.Name })));
-        } else {
-            setSections([]);
+        let classSections = cls?.sections || [];
+        if (typeof classSections === "string") {
+            try { classSections = JSON.parse(classSections); } catch (e) { classSections = []; }
         }
+        setSections(classSections && Array.isArray(classSections) ? classSections.map(s => ({ value: s.ID, label: s.Name })) : []);
     };
 
     const onSubmit = async (e) => {
@@ -103,9 +103,9 @@ const TeacherAssignments = () => {
             Cell: ({ row }) => (
                 <div className="flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 font-bold text-xs uppercase">
-                        {row.original.StaffName.split(' ').map(n => n[0]).join('')}
+                        {row.original.StaffName ? row.original.StaffName.split(' ').map(n => n[0]).join('') : '?'}
                     </div>
-                    <span className="font-bold text-slate-700 dark:text-slate-200 uppercase text-[12px]">{row.original.StaffName}</span>
+                    <span className="font-bold text-slate-700 dark:text-slate-200 uppercase text-[12px]">{row.original.StaffName || 'N/A'}</span>
                 </div>
             )
         },
@@ -183,8 +183,8 @@ const TeacherAssignments = () => {
                             />
                             <Button
                                 type="submit"
-                                text="Create Assignment"
-                                className="btn-primary w-full font-bold mt-4"
+                                text="Assign"
+                                className="btn-primary w-full mt-4"
                                 loading={submitting}
                             />
                         </form>
@@ -193,7 +193,7 @@ const TeacherAssignments = () => {
 
                 <div className="lg:col-span-3">
                     <div className="bg-white dark:bg-[#111111] rounded-2xl border dark:border-[#2f3336] shadow-sm overflow-hidden min-h-[400px]">
-                        {loading ? (
+                        {!loading ? (
                             <div className="p-10"><SkeletonTable count={6} /></div>
                         ) : (
                             <DataTable
