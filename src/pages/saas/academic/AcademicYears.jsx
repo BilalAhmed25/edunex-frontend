@@ -56,8 +56,8 @@ const AcademicYears = () => {
             accessor: "IsActive",
             Cell: ({ cell: { value } }) => (
                 <Badge
-                    label={value ? "Current Active" : "Inactive"}
-                    className={value ? "bg-success-500/10 text-success-500 border-none" : "bg-warning-500/10 text-warning-500 border-none"}
+                    label={value ? "Current Active" : "Inactive Session"}
+                    className={value ? "badge-soft-success poppins font-bold px-3 py-1.5 rounded-lg border-0" : "badge-soft-warning poppins font-bold px-3 py-1.5 rounded-lg border-0"}
                 />
             )
         }

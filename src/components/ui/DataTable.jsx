@@ -20,7 +20,7 @@ const GlobalFilter = ({ filter, setFilter }) => {
                 value={value || ""}
                 onChange={onChange}
                 placeholder="Search everything..."
-                className="block w-full rounded-xl border-0 py-2.5 ps-10 pe-3 text-slate-900 ring-1 ring-inset ring-slate-200 dark:ring-[#2f3336] placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary-500 bg-white dark:bg-[#111111] transition-all text-[13px]"
+                className="block w-full rounded-xl border border-slate-200 dark:border-[#2f3336] py-2.5 ps-10 pe-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-white dark:bg-[#111111] transition-all text-[13px] outline-none"
             />
         </div>
     );
