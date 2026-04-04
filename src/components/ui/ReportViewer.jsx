@@ -38,7 +38,7 @@ const ReportViewer = ({ title = "Report Preview", onClose, children }) => {
 
         const element = reportRef.current;
         const opt = {
-            margin: 5,
+            margin: 0,
             filename: `${title.replace(/\s+/g, '_')}.pdf`,
             image: { type: 'jpeg', quality: 1 },
             html2canvas: {
@@ -46,7 +46,7 @@ const ReportViewer = ({ title = "Report Preview", onClose, children }) => {
                 useCORS: true,
                 logging: false,
                 letterRendering: true,
-                width: 794 // Fixed A4 width at 96 DPI
+                width: 840 // Fixed A4 width at 96 DPI
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
@@ -103,7 +103,7 @@ const ReportViewer = ({ title = "Report Preview", onClose, children }) => {
                         {/* The Report Container - Forced Light Mode */}
                         <div
                             ref={reportRef}
-                            className="bg-white shadow-2xl print:shadow-none"
+                            className="bg-white shadow-2xl print:shadow-none p-4"
                             id="document-to-process"
                         >
                             {children}

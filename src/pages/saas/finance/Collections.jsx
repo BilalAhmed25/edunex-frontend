@@ -20,6 +20,7 @@ const Collections = () => {
     const [vouchers, setVouchers] = useState([]);
     const [ledgerData, setLedgerData] = useState([]);
     const [isLedgerOpen, setIsLedgerOpen] = useState(false);
+    const [ledgerLoading, setLedgerLoading] = useState(false);
     const [dateRange, setDateRange] = useState({
         start: moment().startOf('month').format('YYYY-MM-DD'),
         end: moment().format('YYYY-MM-DD')
@@ -27,6 +28,7 @@ const Collections = () => {
 
     const [activeVoucher, setActiveVoucher] = useState(null);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [fetchingId, setFetchingId] = useState(null);
 
     const fetchVouchers = async () => {
         try {
@@ -42,11 +44,14 @@ const Collections = () => {
 
     const fetchLedger = async () => {
         try {
+            setLedgerLoading(true);
             const res = await get(`/finance/ledger?startDate=${dateRange.start}&endDate=${dateRange.end}`);
             setLedgerData(res.data);
             setIsLedgerOpen(true);
         } catch (err) {
             toast.error("Failed to generate ledger");
+        } finally {
+            setLedgerLoading(false);
         }
     };
 
@@ -118,15 +123,27 @@ const Collections = () => {
             Cell: ({ row }) => (
                 <div className="flex items-center gap-2">
                     <button
-                        className="h-8 w-8 bg-slate-100 hover:bg-primary-500 dark:bg-slate-800 hover:text-white transition-all rounded-lg flex items-center justify-center text-slate-500 shadow-sm"
+                        className="h-8 w-8 bg-slate-100 hover:bg-primary-500 dark:bg-slate-800 hover:text-white transition-all rounded-lg flex items-center justify-center text-slate-500"
                         onClick={async () => {
-                            const res = await get(`/finance/vouchers/${row.original.ID}`);
-                            setActiveVoucher(res.data);
-                            setIsPreviewOpen(true);
+                            setFetchingId(row.original.ID);
+                            try {
+                                const res = await get(`/finance/vouchers/${row.original.ID}`);
+                                setActiveVoucher(res.data);
+                                setIsPreviewOpen(true);
+                            } catch (err) {
+                                toast.error("Could not retrieve voucher");
+                            } finally {
+                                setFetchingId(null);
+                            }
                         }}
+                        disabled={fetchingId === row.original.ID}
                         title="Print Voucher"
                     >
-                        <Icon icon="ph:printer-bold" className="w-4 h-4" />
+                        {fetchingId === row.original.ID ? (
+                            <Icon icon="ph:spinner-gap-bold" className="w-4 h-4" />
+                        ) : (
+                            <Icon icon="ph:printer-bold" className="w-4 h-4" />
+                        )}
                     </button>
                 </div>
             )
@@ -141,10 +158,11 @@ const Collections = () => {
                 description="View and manage generated student fee vouchers and transaction logs."
             >
                 <Button
-                    text="Collection Ledger"
-                    className="btn-primary px-4 rounded-lg font-bold uppercase tracking-wider text-[10px] h-10 shadow-lg shadow-primary-500/10"
-                    icon="ph:file-text-bold"
+                    text={ledgerLoading ? "Please wait..." : "Collection Ledger"}
+                    className="btn-primary px-4 rounded-lg font-bold uppercase tracking-wider text-[10px] h-10 shadow-lg shadow-primary-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                    icon={ledgerLoading ? "ph:spinner-gap-bold animate-spin" : "ph:file-text-bold"}
                     onClick={fetchLedger}
+                    disabled={ledgerLoading}
                 />
             </PageHeader>
 
@@ -200,100 +218,121 @@ const Collections = () => {
                 </Card>
             </div>
 
-            {/* LEDGER MODAL */}
-            <Modal
-                title="Collection Ledger Report"
-                activeModal={isLedgerOpen}
-                onClose={() => setIsLedgerOpen(false)}
-                className="max-w-6xl"
-            >
-                <div className="space-y-6">
-                    <div className="flex justify-between items-end border-b pb-4">
-                        <div>
-                            <h4 className="text-lg font-black text-slate-800 dark:text-white uppercase">Financial Audit Ledger</h4>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase">{dateRange.start} — {dateRange.end}</p>
+            {/* LEDGER REPORT VIEWER */}
+            {isLedgerOpen && (
+                <ReportViewer
+                    title="Collection Ledger Report"
+                    onClose={() => setIsLedgerOpen(false)}
+                >
+                    <div className="bg-white border px-4 w-[210mm] min-h-[297mm] poppins text-slate-900 shadow-sm print:shadow-none">
+                        <ReportHeader className="mb-8" />
+
+                        <div className="flex justify-between items-end border-b-2 border-slate-800 pb-4 mb-6">
+                            <div>
+                                <h4 className="text-xl font-black text-slate-900 uppercase leading-none mb-1">Financial Audit Ledger</h4>
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Date Range: {moment(dateRange.start).format('DD MMM YYYY')} — {moment(dateRange.end).format('DD MMM YYYY')}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Generated On</p>
+                                <p className="text-[11px] font-black text-slate-700 uppercase">{moment().format('DD MMM YYYY [@] hh:mm A')}</p>
+                            </div>
                         </div>
-                        <Button
-                            text="Print Ledger"
-                            className="btn-primary btn-sm rounded-lg font-bold uppercase tracking-widest text-[9px]"
-                            icon="ph:printer-bold"
-                            onClick={() => window.print()}
-                        />
-                    </div>
 
-                    <div className="overflow-x-auto" id="printable-ledger">
-                        <table className="w-full text-left text-[13px] border-collapse border border-slate-200 dark:border-slate-800">
-                            <thead className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-                                <tr className="text-slate-600 dark:text-slate-400 font-black uppercase tracking-wider text-[11px]">
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Date</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Voucher</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Student Info</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Fee Type</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Month</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 text-right">Amount</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {(() => {
-                                    const renderedRows = [];
-                                    for (let i = 0; i < ledgerData.length; i++) {
-                                        const item = ledgerData[i];
-                                        const isFirst = i === 0 || item.VoucherNumber !== ledgerData[i - 1].VoucherNumber;
+                        <div className="overflow-visible">
+                            <table className="w-full text-left text-[11px] border-collapse border border-slate-300">
+                                <thead className="bg-slate-50 border-b border-slate-300">
+                                    <tr className="text-slate-700 font-black uppercase tracking-wider text-[9px]">
+                                        <th className="px-3 py-2 border border-slate-300">Date</th>
+                                        <th className="px-3 py-2 border border-slate-300">Voucher #</th>
+                                        <th className="px-3 py-2 border border-slate-300">Student Info</th>
+                                        <th className="px-3 py-2 border border-slate-300">Fee Description</th>
+                                        <th className="px-3 py-2 border border-slate-300 text-right">Fee Amount</th>
+                                        <th className="px-3 py-2 border border-slate-300 text-right">Voucher Total</th>
+                                        <th className="px-3 py-2 border border-slate-300 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {(() => {
+                                        const renderedRows = [];
+                                        for (let i = 0; i < ledgerData.length; i++) {
+                                            const item = ledgerData[i];
+                                            const isFirst = i === 0 || item.VoucherNumber !== ledgerData[i - 1].VoucherNumber;
+     
+                                            let rowSpan = 1;
+                                            let voucherTotal = 0;
 
-                                        let rowSpan = 1;
-                                        if (isFirst) {
-                                            for (let j = i + 1; j < ledgerData.length; j++) {
-                                                if (ledgerData[j].VoucherNumber === item.VoucherNumber) rowSpan++;
-                                                else break;
+                                            if (isFirst) {
+                                                for (let j = i; j < ledgerData.length; j++) {
+                                                    if (ledgerData[j].VoucherNumber === item.VoucherNumber) {
+                                                        voucherTotal += parseFloat(ledgerData[j].Amount);
+                                                        if (j > i) rowSpan++;
+                                                    } else break;
+                                                }
                                             }
-                                        }
-
-                                        renderedRows.push(
-                                            <tr key={i} className={`transition-colors ${isFirst ? 'bg-slate-50/30' : 'bg-transparent'}`}>
-                                                {isFirst && (
-                                                    <>
-                                                        <td rowSpan={rowSpan} className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 font-medium whitespace-nowrap align-middle">
-                                                            {moment(item.CreatedAt).format('DD MMM YY')}
-                                                        </td>
-                                                        <td rowSpan={rowSpan} className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 font-black text-primary-500 uppercase tracking-tighter align-middle">
-                                                            {item.VoucherNumber}
-                                                        </td>
-                                                        <td rowSpan={rowSpan} className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 font-bold text-slate-700 dark:text-slate-200 align-middle">
-                                                            <div className="flex gap-2 items-center">
-                                                                <div className="leading-tight">{item.FirstName} {item.LastName}</div>
-                                                                <div className="text-[10px] text-muted font-bold">({item.AdmissionNumber})</div>
-                                                            </div>
-                                                        </td>
-                                                    </>
-                                                )}
-                                                <td className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 font-medium text-slate-600 dark:text-slate-400">
-                                                    <div className="flex items-center gap-1.5">
-                                                        {!isFirst && <Icon icon="ph:arrow-elbow-down-right-bold" className="w-2.5 h-2.5 text-slate-300" />}
-                                                        {item.FeeType}
-                                                    </div>
-                                                </td>
-                                                <td className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 font-black uppercase text-[10px] text-slate-500">{item.Month}</td>
-                                                <td className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 text-right font-black text-slate-800 dark:text-slate-100">Rs. {item.Amount.toLocaleString()}</td>
-                                                {isFirst && (
-                                                    <td rowSpan={rowSpan} className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 align-middle">
-                                                        <div className="flex flex-col gap-1">
-                                                            <span className={`text-[10px] font-black uppercase ${item.Status === 'Paid' ? 'text-success-600' : 'text-warning-600'}`}>
-                                                                {item.Status}
-                                                            </span>
+    
+                                            renderedRows.push(
+                                                <tr key={i} className={`${isFirst ? 'bg-slate-50/20' : ''}`}>
+                                                    {isFirst && (
+                                                        <>
+                                                            <td rowSpan={rowSpan} className="px-3 py-2 border border-slate-300 font-bold whitespace-nowrap align-top text-slate-600">
+                                                                {moment(item.CreatedAt).format('DD MMM YY')}
+                                                            </td>
+                                                            <td rowSpan={rowSpan} className="px-3 py-2 border border-slate-300 font-black text-primary-600 uppercase tracking-tighter align-top">
+                                                                {item.VoucherNumber}
+                                                            </td>
+                                                            <td rowSpan={rowSpan} className="px-3 py-2 border border-slate-300 align-top">
+                                                                <div className="font-bold text-slate-800 uppercase leading-none mb-1">{item.FirstName} {item.LastName}</div>
+                                                                <div className="text-[9px] text-slate-500 font-bold uppercase tracking-tight">REG: {item.AdmissionNumber}</div>
+                                                            </td>
+                                                        </>
+                                                    )}
+                                                    <td className="px-3 py-2 border border-slate-300 text-slate-700">
+                                                        <div className="flex items-center gap-2">
+                                                            {item.FeeType} <span className="text-[9px] font-bold text-slate-400 capitalize">({item.Month})</span>
                                                         </div>
                                                     </td>
-                                                )}
-                                            </tr>
-                                        );
-                                    }
-                                    return renderedRows;
-                                })()}
-                            </tbody>
-                        </table>
+                                                    <td className="px-3 py-2 border border-slate-300 text-right font-bold text-slate-600">
+                                                        Rs. {item.Amount.toLocaleString()}
+                                                    </td>
+                                                    {isFirst && (
+                                                        <>
+                                                            <td rowSpan={rowSpan} className="px-3 py-2 border border-slate-300 text-right align-top">
+                                                                <span className="text-[12px] font-black text-slate-900 leading-none">
+                                                                    Rs. {voucherTotal.toLocaleString()}
+                                                                </span>
+                                                            </td>
+                                                            <td rowSpan={rowSpan} className="px-3 py-2 border border-slate-300 text-center align-top">
+                                                                <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded border ${item.Status === 'Paid' ? 'border-success-200 text-success-600 bg-success-50' : 'border-warning-200 text-warning-600 bg-warning-50'}`}>
+                                                                    {item.Status}
+                                                                </span>
+                                                            </td>
+                                                        </>
+                                                    )}
+                                                </tr>
+                                            );
+                                        }
+                                        return renderedRows;
+                                    })()}
+                                </tbody>
+                                <tfoot>
+                                    <tr className="bg-slate-100 font-black">
+                                        <td colSpan={5} className="px-3 py-2 border border-slate-300 text-right uppercase tracking-widest text-[9px]">Grand Total (Net Collection)</td>
+                                        <td colSpan={2} className="px-3 py-2 border border-slate-300 text-right text-lg text-primary-600">
+                                            Rs. {ledgerData.reduce((acc, curr) => acc + parseFloat(curr.Amount), 0).toLocaleString()}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        {/* Audit Footer */}
+                        <div className="mt-12 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-widest border-t border-dashed border-slate-300 pt-6">
+                            <div>System Audit ID: {moment().format('X')}</div>
+                            <div>Verification Required For Valid Audit</div>
+                        </div>
                     </div>
-                </div>
-            </Modal>
+                </ReportViewer>
+            )}
 
             {/* VOUCHER PREVIEW REPORT VIEWER */}
             {isPreviewOpen && activeVoucher && (
