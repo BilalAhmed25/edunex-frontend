@@ -2,6 +2,12 @@
 <html lang="en" dir="ltr">
 
 <head>
+    <script>
+        // Pre-shim for libraries expecting Node.js globals
+        if (typeof global === 'undefined') {
+            window.global = window;
+        }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/Edunex-Square-Logo.png" />
