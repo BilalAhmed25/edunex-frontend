@@ -18,6 +18,16 @@ export default defineConfig({
         global: "window",
         "process.env": {},
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                // EXPLICIT RESOLUTION: Moving to the modern, high-performance Sass compiler API
+                api: "modern-compiler",
+                // Suppress remaining 3rd party warnings while our internal code is now modernized
+                quietDeps: true,
+            },
+        },
+    },
     build: {
         minify: true,
         cssMinify: true,
