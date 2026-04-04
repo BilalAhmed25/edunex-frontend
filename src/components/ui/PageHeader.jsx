@@ -68,7 +68,7 @@ const PageHeader = ({
                     <Button
                         text={buttonText}
                         icon={buttonIcon}
-                        className="btn-primary px-6 py-2.5 rounded-xl shadow-lg shadow-primary-500/20 font-bold text-sm transition-all hover:scale-[1.02] active:scale-[0.95]"
+                        className="btn-primary px-6 py-2.5 rounded-lg text-xs transition-all hover:scale-[1.02] active:scale-[0.95]"
                         onClick={onButtonClick}
                     />
                 )}

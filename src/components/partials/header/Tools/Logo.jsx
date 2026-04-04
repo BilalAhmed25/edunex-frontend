@@ -14,14 +14,17 @@ const Logo = () => {
   return (
     <div>
       <Link to="/dashboard">
-        {width >= breakpoints.xl ? (
-          <img src={isDark ? LogoWhite : MainLogo} alt="logo-1" />
-        ) : (
-          <img src={isDark ? MobileLogoWhite : MobileLogo} alt="logo-2" />
-        )}
+        <div className="flex items-center">
+          {width >= breakpoints.xl ? (
+            <img src={isDark ? LogoWhite : MainLogo} alt="logo-1" className="h-[35px]" />
+          ) : (
+            <img src={isDark ? MobileLogoWhite : MobileLogo} alt="logo-2" className="h-[30px]" />
+          )}
+        </div>
       </Link>
     </div>
   );
+
 };
 
 export default Logo;

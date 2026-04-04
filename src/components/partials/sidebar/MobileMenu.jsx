@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
-
 import Navmenu from "./Navmenu";
-import { menuItems } from "@/mocks/data";
+import { getNavigationByAccess } from "@/configs/navigation";
+import { useSelector } from "react-redux";
 import SimpleBar from "simplebar-react";
 import useSemiDark from "@/hooks/useSemiDark";
 import useDarkMode from "@/hooks/useDarkMode";
@@ -12,44 +12,56 @@ import Icon from "@/components/ui/Icon";
 // import images
 import MobileLogo from "@/assets/images/logo/Edunex-Square-Logo.png";
 import MobileLogoWhite from "@/assets/images/logo/Edunex-Square-Logo.png";
-import svgRabitImage from "@/assets/images/svg/rabit.svg";
+
 const MobileMenu = ({ className = "custom-class" }) => {
   const scrollableNodeRef = useRef();
   const [scroll, setScroll] = useState(false);
+
+  // Get user from auth slice
+  const { user } = useSelector((state) => state.auth);
+  // Get navigation array based on access, fallback to empty array if no access defined
+  const menuItems = getNavigationByAccess(user?.Access || []);
+
   useEffect(() => {
     const handleScroll = () => {
-      if (scrollableNodeRef.current.scrollTop > 0) {
+      if (scrollableNodeRef.current && scrollableNodeRef.current.scrollTop > 0) {
         setScroll(true);
       } else {
         setScroll(false);
       }
     };
-    scrollableNodeRef.current.addEventListener("scroll", handleScroll);
+    if (scrollableNodeRef.current) {
+      scrollableNodeRef.current.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (scrollableNodeRef.current) {
+        scrollableNodeRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
   }, [scrollableNodeRef]);
 
   const [isSemiDark] = useSemiDark();
   const [isDark] = useDarkMode();
   const [mobileMenu, setMobileMenu] = useMobileMenu();
+
   return (
     <div className={isSemiDark ? "dark" : ""}>
       <div
-        className={`${className} fixed  top-0 bg-white dark:bg-gray-800 shadow-lg  h-full   w-[280px]`}
+        className={`${className} fixed top-0 bg-white dark:bg-[#111111] border-r dark:border-[#2f3336] shadow-lg h-full w-[280px] z-[9999]`}
       >
-        <div className="logo-segment flex justify-between items-center bg-white dark:bg-gray-800 z-[9] h-[85px]  px-4 ">
+        <div className="logo-segment flex justify-between items-center bg-white dark:bg-gray-800 z-[9] py-2 px-4 mb-2">
           <Link to="/dashboard">
-            <div className="flex items-center space-x-4">
-              <div className="logo-icon">
+            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+              <div className="logo-icon h-[42px]">
                 {!isDark && !isSemiDark ? (
-                  <img src={MobileLogo} alt="" />
+                  <img src={MobileLogo} alt="" className="h-full" />
                 ) : (
-                  <img src={MobileLogoWhite} alt="" />
+                  <img src={MobileLogoWhite} alt="" className="h-full" />
                 )}
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                  Edunex
-                </h1>
-                <p className="text-[10px] text-gray-400 font-medium -mt-1 leading-none block">Your digital partner</p>
+                <h1 className="text-[20px] font-medium" style={{ marginTop: '-4px', marginBottom: '-6px' }}>edunex</h1>
+                <p className="text-[9px] text-gray-400 font-medium -mt-1 leading-none block">Your digital partner</p>
               </div>
             </div>
           </Link>
@@ -63,12 +75,10 @@ const MobileMenu = ({ className = "custom-class" }) => {
         </div>
 
         <div
-          className={`h-[60px]  absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none ${
-            scroll ? " opacity-100" : " opacity-0"
-          }`}
+          className={`h-[60px] absolute top-[80px] z-[1] w-full transition-all duration-200 pointer-events-none ${scroll ? " opacity-100" : " opacity-0"}`}
         ></div>
         <SimpleBar
-          className="sidebar-menu  h-[calc(100%-80px)]"
+          className="sidebar-menu h-[calc(100%-80px)]"
           scrollableNodeProps={{ ref: scrollableNodeRef }}
         >
           <Navmenu menus={menuItems} />
@@ -79,3 +89,4 @@ const MobileMenu = ({ className = "custom-class" }) => {
 };
 
 export default MobileMenu;
+
