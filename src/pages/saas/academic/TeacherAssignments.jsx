@@ -193,8 +193,8 @@ const TeacherAssignments = () => {
 
                 <div className="lg:col-span-3">
                     <div className="bg-white dark:bg-[#111111] rounded-2xl border dark:border-[#2f3336] shadow-sm overflow-hidden min-h-[400px]">
-                        {!loading ? (
-                            <div className="p-10"><SkeletonTable count={6} /></div>
+                        {loading ? (
+                            <SkeletonTable count={6} />
                         ) : (
                             <DataTable
                                 columns={columns}
