@@ -7,6 +7,7 @@ import { get, put } from "@/lib/apiClient";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import SchoolPlaceholder from "@/assets/images/logo/logo.png"; // Fallback logo
+import PageHeader from "@/components/ui/PageHeader";
 
 const SchoolProfile = () => {
     const { user } = useSelector((state) => state.auth);
@@ -92,12 +93,11 @@ const SchoolProfile = () => {
 
     return (
         <div className="space-y-6 animate-fade-in poppins pb-10">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-semibold text-slate-800 dark:text-white uppercase tracking-tight">Institutional Profile</h2>
-                    <p className="text-sm text-slate-500 font-medium">Configure global school identity, branding, and contact details.</p>
-                </div>
-            </div>
+            <PageHeader
+                icon="ph:buildings-bold"
+                title="Institutional Profile"
+                description="Configure global school identity, branding, and contact details."
+            />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Branding Sidebar */}

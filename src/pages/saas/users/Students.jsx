@@ -327,7 +327,7 @@ const Students = () => {
             </div>
 
             <div className="bg-white dark:bg-[#111111] rounded-2xl border dark:border-[#2f3336] shadow-sm overflow-hidden transition-all">
-                {loading ? <div className="p-10"><SkeletonTable count={7} /></div> : (
+                {loading ? <SkeletonTable count={7} /> : (
                     <DataTable columns={columns} data={students} pageSize={10} className="poppins" />
                 )}
             </div>

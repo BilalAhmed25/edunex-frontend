@@ -272,7 +272,14 @@ const Staff = () => {
     };
 
     const StaffAvailabilityEditor = ({ value, onChange }) => {
-        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const days = [
+            { name: "Monday", short: "Mon" },
+            { name: "Tuesday", short: "Tue" },
+            { name: "Wednesday", short: "Wed" },
+            { name: "Thursday", short: "Thu" },
+            { name: "Friday", short: "Fri" },
+            { name: "Saturday", short: "Sat" }
+        ];
 
         const addSlot = (day) => {
             onChange([...value, { day, startTime: schoolInfo.startTime, endTime: schoolInfo.endTime }]);
@@ -291,48 +298,59 @@ const Staff = () => {
         };
 
         return (
-            <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {days.map(day => (
-                        <div key={day} className="bg-slate-50 dark:bg-slate-900/40 p-3 rounded-xl border dark:border-slate-800">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">{day}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {days.map(day => {
+                    const daySlots = value.filter(s => s.day === day.name);
+                    const isActive = daySlots.length > 0;
+                    return (
+                        <div key={day.name} className={`relative group p-4 rounded-2xl border transition-all duration-300 ${isActive ? 'bg-white dark:bg-slate-800/40 border-primary-100 dark:border-primary-900/30' : 'bg-slate-50/50 dark:bg-slate-900/20 border-slate-100 dark:border-slate-800 opacity-60 hover:opacity-100'}`}>
+                            {/* Day Header */}
+                            <div className="flex justify-between items-center mb-4">
+                                <div className="flex items-center gap-2">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-black uppercase transition-all ${isActive ? 'bg-primary-500 text-white rotate-6' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                                        {day.short}
+                                    </div>
+                                    <span className="text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-tight">{day.name}</span>
+                                </div>
                                 <button
                                     type="button"
-                                    onClick={() => addSlot(day)}
-                                    className="text-[10px] bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-600 transition-colors flex items-center gap-1"
+                                    onClick={() => addSlot(day.name)}
+                                    className="w-7 h-7 rounded-full bg-primary-50 dark:bg-primary-900 shadow-sm border border-primary-100 dark:border-primary-800 flex items-center justify-center text-primary-600 hover:bg-primary-500 hover:text-white transition-all transform hover:rotate-90 active:scale-90"
                                 >
-                                    <Icon icon="ph:plus-bold" /> Add Slot
+                                    <Icon icon="ph:plus-bold" className="text-xs" />
                                 </button>
                             </div>
 
+                            {/* Slots Container */}
                             <div className="space-y-2">
-                                {value.filter(s => s.day === day).length === 0 ? (
-                                    <div className="text-[10px] text-slate-400 italic py-1 pl-1">No availability set</div>
+                                {daySlots.length === 0 ? (
+                                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest py-3 flex items-center gap-1.5 opacity-40">
+                                        <div className="w-1 h-1 rounded-full bg-slate-300"></div> No Shift
+                                    </div>
                                 ) : (
                                     value.map((slot, idx) => {
-                                        if (slot.day !== day) return null;
+                                        if (slot.day !== day.name) return null;
                                         return (
-                                            <div key={idx} className="flex items-center gap-2 bg-white dark:bg-slate-800 p-2 rounded-lg border dark:border-slate-700 shadow-sm transition-all hover:border-primary-200">
+                                            <div key={idx} className="flex items-center gap-2 bg-slate-50 dark:bg-slate-900/80 p-2 rounded-xl border border-slate-100 dark:border-slate-800 group/slot hover:border-primary-300 dark:hover:border-primary-700 transition-all">
                                                 <input
                                                     type="time"
-                                                    className="bg-transparent text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none w-full"
+                                                    className="bg-transparent text-[10px] font-black text-slate-600 dark:text-slate-300 w-full outline-none focus:text-primary-500 text-center"
                                                     value={slot.startTime}
                                                     onChange={(e) => updateSlot(idx, "startTime", e.target.value)}
                                                 />
-                                                <span className="text-slate-300">→</span>
+                                                <span className="text-slate-300 font-bold mx-1">-</span>
                                                 <input
                                                     type="time"
-                                                    className="bg-transparent text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none w-full"
+                                                    className="bg-transparent text-[10px] font-black text-slate-600 dark:text-slate-300 w-full outline-none focus:text-primary-500 text-center"
                                                     value={slot.endTime}
                                                     onChange={(e) => updateSlot(idx, "endTime", e.target.value)}
                                                 />
                                                 <button
                                                     type="button"
                                                     onClick={() => removeSlot(idx)}
-                                                    className="text-red-400 hover:text-red-600 p-1"
+                                                    className="text-danger transition-all p-1"
                                                 >
-                                                    <Icon icon="ph:x-bold" />
+                                                    <Icon icon="ph:trash-bold" className="text-sm" />
                                                 </button>
                                             </div>
                                         );
@@ -340,8 +358,8 @@ const Staff = () => {
                                 )}
                             </div>
                         </div>
-                    ))}
-                </div>
+                    );
+                })}
             </div>
         );
     };
@@ -375,7 +393,7 @@ const Staff = () => {
 
             <div className="bg-white dark:bg-[#111111] rounded-2xl border dark:border-[#2f3336] shadow-sm overflow-hidden transition-all">
                 {loading ? (
-                    <div className="p-10"><SkeletonTable count={7} /></div>
+                    <SkeletonTable count={7} />
                 ) : (
                     <DataTable
                         columns={columns}

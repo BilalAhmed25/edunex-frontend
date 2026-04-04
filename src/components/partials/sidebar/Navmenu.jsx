@@ -40,7 +40,17 @@ const Navmenu = ({ menus }) => {
         }
       }
     });
-    document.title = `Edunex  | ${locationName}`;
+    let activeTitle = "";
+    menus.forEach((item) => {
+      if (item.link === locationName) {
+        activeTitle = item.title;
+      } else if (item.child) {
+        const child = item.child.find((ci) => ci.childlink === locationName);
+        if (child) activeTitle = child.childtitle;
+      }
+    });
+
+    document.title = activeTitle ? `Edunex | ${activeTitle}` : `Edunex | ${locationName.split('/').pop().replace(/-/g, ' ')}`;
 
     setActiveSubmenu(submenuIndex);
     if (mobileMenu) {
