@@ -52,7 +52,7 @@ const Staff = () => {
             setLoading(true);
             const [staffRes, rolesRes] = await Promise.all([
                 get("/users/staff"),
-                get("/roles/all")
+                get("/roles")
             ]);
 
             if (staffRes?.data) setStaffList(staffRes.data);

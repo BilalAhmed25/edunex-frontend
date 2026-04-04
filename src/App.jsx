@@ -34,6 +34,7 @@ const GeneralLedger = lazy(() => import("./pages/saas/finance/GeneralLedger"));
 const SchoolProfile = lazy(() => import("./pages/saas/settings/SchoolProfile"));
 const UserProfile   = lazy(() => import("./pages/saas/settings/UserProfile"));
 const Roles         = lazy(() => import("./pages/saas/settings/Roles"));
+const DashboardSettings = lazy(() => import("./pages/saas/settings/DashboardSettings"));
 
 // ── Teacher ────────────────────────────────────────────────────────────────
 const TeacherClasses    = lazy(() => import("./pages/saas/teacher/TeacherClasses"));
@@ -99,6 +100,7 @@ function App() {
           <Route path="settings/profile" element={<SchoolProfile />} />
           <Route path="user-profile"   element={<UserProfile />} />
           <Route path="settings/roles"   element={<Roles />} />
+          <Route path="settings/dashboard" element={<DashboardSettings />} />
 
           {/* Teacher */}
           <Route path="teacher/classes"    element={<TeacherClasses />} />

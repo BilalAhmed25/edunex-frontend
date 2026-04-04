@@ -39,12 +39,19 @@ const Profile = ({ sticky }) => {
             action: () => navigate("/user-profile"),
         },
         {
+            label: "Customize Dashboard",
+            icon: "ph:squares-four-bold",
+            status: "green",
+            action: () => navigate("/settings/dashboard"),
+        },
+        {
             label: "Update Password",
             icon: "ph:lock-key-bold",
             status: "yellow",
             action: () => navigate("/user-profile?tab=password"),
         },
     ];
+
 
     const handleLogout = () => {
         dispatch(logOut());

@@ -38,11 +38,11 @@ const RolesManagement = () => {
             setCurrentRole(role);
             setFormData({
                 name: role.Name,
-                access: Array.isArray(role.Access) ? role.Access.map(String) : [] // Ensure all IDs are strings
+                access: Array.isArray(role.Access) ? Array.from(new Set([...role.Access.map(String), "1", "1.1"])) : ["1", "1.1"] // Ensure dashboard is always present
             });
         } else {
             setCurrentRole(null);
-            setFormData({ name: "", access: [] });
+            setFormData({ name: "", access: ["1", "1.1"] });
         }
         setIsEditOpen(true);
     };
@@ -139,7 +139,8 @@ const RolesManagement = () => {
 
     const renderPermissionSection = (item) => {
         const isHeader = item.isHeadr;
-        const isSelected = formData.access.includes(String(item.id));
+        const idStr = String(item.id);
+        const isSelected = formData.access.includes(idStr);
 
         return (
             <div key={item.id} className="mb-4">
@@ -152,13 +153,14 @@ const RolesManagement = () => {
                         <div className="flex items-center justify-between group">
                             <div className="flex items-center gap-3">
                                 <button
-                                    onClick={() => handlePermissionToggle(item.id)}
-                                    className={`h-5 w-5 rounded flex items-center justify-center transition-all border ${isSelected ? 'bg-primary-500 border-primary-500 text-white' : 'border-slate-300 dark:border-slate-600'}`}
+                                    onClick={() => !["1", "1.1"].includes(idStr) && handlePermissionToggle(item.id)}
+                                    className={`h-5 w-5 rounded flex items-center justify-center transition-all border ${isSelected ? 'bg-primary-500 border-primary-500 text-white' : 'border-slate-300 dark:border-slate-600'} ${["1", "1.1"].includes(idStr) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    disabled={["1", "1.1"].includes(idStr)}
                                 >
                                     {isSelected && <Icon icon="ph:check-bold" className="text-[10px]" />}
                                 </button>
                                 <span className={`text-[12px] font-bold ${isSelected ? 'text-slate-800 dark:text-slate-100' : 'text-slate-500'}`}>
-                                    {item.title}
+                                    {item.title} {["1", "1.1"].includes(idStr) && <span className="text-[9px] text-primary-500 ml-1 font-bold italic">(Required)</span>}
                                 </span>
                             </div>
                         </div>
@@ -173,11 +175,11 @@ const RolesManagement = () => {
                                             onClick={() => handlePermissionToggle(child.id)}
                                             className={`flex items-center gap-3 p-2.5 px-3 rounded-xl border transition-all cursor-pointer hover:shadow-sm ${isChildSelected ? 'bg-primary-50 border-primary-200 dark:bg-primary-500/10 dark:border-primary-500/30' : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800'}`}
                                         >
-                                            <div className={`h-4 w-4 rounded flex items-center justify-center transition-all border ${isChildSelected ? 'bg-primary-500 border-primary-500 text-white' : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800'}`}>
+                                            <div className={`h-4 w-4 rounded flex items-center justify-center transition-all border ${isChildSelected ? 'bg-primary-500 border-primary-500 text-white' : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800'} ${["1", "1.1"].includes(String(child.id)) ? 'opacity-50' : ''}`}>
                                                 {isChildSelected && <Icon icon="ph:check-bold" className="text-[8px]" />}
                                             </div>
                                             <span className={`text-[12px] font-medium leading-none ${isChildSelected ? 'text-primary-700 dark:text-primary-400 font-bold' : 'text-slate-500'}`}>
-                                                {child.childtitle}
+                                                {child.childtitle} {["1", "1.1"].includes(String(child.id)) && <span className="text-[8px] text-primary-500 font-bold italic opacity-70">(Required)</span>}
                                             </span>
                                         </div>
                                     );
