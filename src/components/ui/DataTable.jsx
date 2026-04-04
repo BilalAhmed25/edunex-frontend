@@ -82,13 +82,18 @@ const DataTable = ({
             <div className="overflow-x-auto">
                 <table className="min-w-full border-collapse" {...getTableProps()}>
                     <thead className="bg-slate-100/50 dark:bg-[#1f2128]/80 shadow-sm">
-                        {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th
-                                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                                        className="px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest select-none group border-b border-slate-200 dark:border-[#2f3336]"
-                                    >
+                        {headerGroups.map((headerGroup) => {
+                            const { key, ...rowProps } = headerGroup.getHeaderGroupProps();
+                            return (
+                                <tr key={key} {...rowProps}>
+                                    {headerGroup.headers.map((column) => {
+                                        const { key, ...headerProps } = column.getHeaderProps(column.getSortByToggleProps());
+                                        return (
+                                            <th
+                                                key={key}
+                                                {...headerProps}
+                                                className="px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest select-none group border-b border-slate-200 dark:border-[#2f3336]"
+                                            >
                                         <div className="flex items-center gap-2">
                                             {column.render("Header")}
                                             <span className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity">
@@ -101,21 +106,27 @@ const DataTable = ({
                                                 )}
                                             </span>
                                         </div>
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
+                                            </th>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })}
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-[#2f3336]" {...getTableBodyProps()}>
                         {page.length > 0 ? page.map((row) => {
                             prepareRow(row);
+                            const { key, ...rowProps } = row.getRowProps();
                             return (
-                                <tr {...row.getRowProps()} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors">
-                                    {row.cells.map((cell) => (
-                                        <td {...cell.getCellProps()} className="px-6 py-3 text-[13px] text-slate-600 dark:text-slate-300 align-middle">
-                                            {cell.render("Cell")}
-                                        </td>
-                                    ))}
+                                <tr key={key} {...rowProps} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors">
+                                    {row.cells.map((cell) => {
+                                        const { key, ...cellProps } = cell.getCellProps();
+                                        return (
+                                            <td key={key} {...cellProps} className="px-6 py-3 text-[13px] text-slate-600 dark:text-slate-300 align-middle">
+                                                {cell.render("Cell")}
+                                            </td>
+                                        );
+                                    })}
                                 </tr>
                             );
                         }) : (

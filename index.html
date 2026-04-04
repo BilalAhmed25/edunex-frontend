@@ -3,10 +3,14 @@
 
 <head>
     <script>
-        // Pre-shim for libraries expecting Node.js globals
-        if (typeof global === 'undefined') {
-            window.global = window;
-        }
+        // 🏗️ COMPLETE GLOBAL INTEROP BRIDGE
+        (function() {
+            if (typeof global === 'undefined') { window.global = window; }
+            if (typeof process === 'undefined') { window.process = { env: { NODE_ENV: 'production' } }; }
+            if (typeof module === 'undefined') { window.module = { exports: {} }; }
+            // Many legacy shims in HeadlessUI/Framer-Motion expect 'exports' as a global
+            if (typeof exports === 'undefined') { window.exports = window.module.exports; }
+        })();
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

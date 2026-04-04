@@ -29,18 +29,8 @@ const Layout = () => {
     useEffect(() => {
         if (!isAuth || !user) {
             navigate("/");
-            return;
         }
-
-        // Access Check: check if the user has access to the current route
-        const moduleId = getModuleIdByPath(location.pathname);
-        // If its for module check (moduleId exists) and user doesn't have it in access list
-        if (moduleId && !checkAccess(moduleId, user?.Access)) {
-            // Redirect to dashboard or 404 if no access
-            // Special case: if we found a moduleId but user has NO access, block them
-            navigate("/404");
-        }
-    }, [isAuth, user, navigate, location.pathname]);
+    }, [isAuth, user, navigate]);
 
     // Guard: render nothing before redirect fires (prevents dashboard flash)
     if (!isAuth || !user) return null;

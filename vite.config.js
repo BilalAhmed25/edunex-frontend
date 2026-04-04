@@ -1,52 +1,32 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
 
-// https://vitejs.dev/config/
+// 🛡️ SPACE-PROOF DEFINITIVE STABLE CONFIGURATION
 export default defineConfig({
     resolve: {
-        alias: [
-            {
-                find: "@",
-                replacement: path.resolve(__dirname, "./src"),
-            },
-        ],
+        alias: {
+            // Using direct relative aliases to avoid Windows path resolution errors with spaces
+            "@": "/src",
+            "@juggle/resize-observer": "@juggle/resize-observer/lib/ResizeObserver.js",
+        },
     },
-
     plugins: [
         react(),
     ],
-
+    // Defines for Redux and UI library hybrids in production
+    define: {
+        global: "window",
+        "process.env": {},
+    },
     build: {
-        chunkSizeWarningLimit: 1500,
-        rollupOptions: {
-            output: {
-                manualChunks(id) {
-                    if (id.includes("node_modules")) {
-                        // Consolidate ALL core React, Redux, Router and related libs to ensure they share interop context
-                        if (
-                            id.includes("react") ||
-                            id.includes("react-dom") ||
-                            id.includes("react-router-dom") ||
-                            id.includes("@reduxjs/toolkit") ||
-                            id.includes("react-redux") ||
-                            id.includes("immer") ||
-                            id.includes("react-is") ||
-                            id.includes("hoist-non-react-statics")
-                        ) {
-                            return "vendor_core";
-                        }
-                        if (id.includes("moment")) {
-                            return "vendor_moment";
-                        }
-                        return "vendor";
-                    }
-                },
-            },
-        },
+        minify: true,
+        cssMinify: true,
+        sourcemap: true,
+        chunkSizeWarningLimit: 5000,
         commonjsOptions: {
-            transformMixedEsModules: true, // Handle mixed ESM/CJS code (like React + addons)
-            include: [/node_modules/],     // Ensure all dependencies are covered by CJS transformation
+            transformMixedEsModules: true,
+            requireReturnsDefault: "preferred",
+            esmExternals: true,
         },
     },
 });

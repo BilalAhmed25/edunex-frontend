@@ -172,37 +172,44 @@ const RecentOrderTable = () => {
                 {...getTableProps}
               >
                 <thead className=" bg-gray-100 dark:bg-gray-700 ">
-                  {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
-                        <th
-                          {...column.getHeaderProps(
+                  {headerGroups.map((headerGroup) => {
+                    const { key, ...headerGroupProps } = headerGroup.getHeaderGroupProps();
+                    return (
+                      <tr key={key} {...headerGroupProps}>
+                        {headerGroup.headers.map((column) => {
+                          const { key, ...headerProps } = column.getHeaderProps(
                             column.getSortByToggleProps()
-                          )}
-                          scope="col"
-                          className=" table-th "
-                        >
-                          <div className="flex items-center justify-between ">
-                            {column.render("Header")}
-                            <span>
-                              {column.isSorted ? (
-                                column.isSortedDesc ? (
-                                  <Icon icon="ph:caret-up-fill" />
-                                ) : (
-                                  <Icon icon="ph:caret-down-fill" />
-                                )
-                              ) : (
-                                <Icon
-                                  icon="ri:expand-up-down-fill"
-                                  className="text-[15px] text-gray-400"
-                                />
-                              )}
-                            </span>
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
+                          );
+                          return (
+                            <th
+                              key={key}
+                              {...headerProps}
+                              scope="col"
+                              className=" table-th "
+                            >
+                              <div className="flex items-center justify-between ">
+                                {column.render("Header")}
+                                <span>
+                                  {column.isSorted ? (
+                                    column.isSortedDesc ? (
+                                      <Icon icon="ph:caret-up-fill" />
+                                    ) : (
+                                      <Icon icon="ph:caret-down-fill" />
+                                    )
+                                  ) : (
+                                    <Icon
+                                      icon="ri:expand-up-down-fill"
+                                      className="text-[15px] text-gray-400"
+                                    />
+                                  )}
+                                </span>
+                              </div>
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
                 </thead>
                 <tbody
                   className="bg-white divide-y divide-gray-100 dark:bg-gray-800 dark:divide-gray-700"
@@ -210,14 +217,17 @@ const RecentOrderTable = () => {
                 >
                   {page.map((row) => {
                     prepareRow(row);
+                    const { key, ...rowProps } = row.getRowProps();
                     return (
                       <tr
-                        {...row.getRowProps()}
+                        key={key}
+                        {...rowProps}
                         className="hover:bg-gray-100 dark:hover:bg-gray-700 hover:bg-opacity-30  transition-all duration-200"
                       >
                         {row.cells.map((cell) => {
+                          const { key, ...cellProps } = cell.getCellProps();
                           return (
-                            <td {...cell.getCellProps()} className="table-td">
+                            <td key={key} {...cellProps} className="table-td">
                               {cell.render("Cell")}
                             </td>
                           );
