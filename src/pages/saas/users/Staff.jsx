@@ -19,6 +19,7 @@ const Staff = () => {
     const [isSalaryOpen, setIsSalaryOpen] = useState(false);
     const [selectedStaff, setSelectedStaff] = useState(null);
     const [salaryHistory, setSalaryHistory] = useState([]);
+    const [schoolInfo, setSchoolInfo] = useState({ startTime: "08:00", endTime: "14:00" });
 
     // Form States
     const [isEditMode, setIsEditMode] = useState(false);
@@ -59,6 +60,15 @@ const Staff = () => {
             if (staffRes?.data) setStaffList(staffRes.data);
             if (rolesRes?.data) {
                 setRoles(rolesRes.data.map(r => ({ value: r.ID, label: r.Name })));
+            }
+
+            // Fetch school settings for availability defaults
+            const schoolRes = await get("/users/school/profile");
+            if (schoolRes?.data) {
+                setSchoolInfo({
+                    startTime: schoolRes.data.StartTime?.slice(0, 5) || "08:00",
+                    endTime: schoolRes.data.EndTime?.slice(0, 5) || "14:00"
+                });
             }
         } catch (err) {
             toast.error("Failed to load staff metadata");
@@ -234,7 +244,7 @@ const Staff = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        
+
         // Validation
         if (!formData.firstName?.trim() || !formData.lastName?.trim()) return toast.error("Name is required");
         if (!formData.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return toast.error("Valid email is required");
@@ -263,9 +273,9 @@ const Staff = () => {
 
     const StaffAvailabilityEditor = ({ value, onChange }) => {
         const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        
+
         const addSlot = (day) => {
-            onChange([...value, { day, startTime: "08:00", endTime: "14:00" }]);
+            onChange([...value, { day, startTime: schoolInfo.startTime, endTime: schoolInfo.endTime }]);
         };
 
         const removeSlot = (index) => {
@@ -287,7 +297,7 @@ const Staff = () => {
                         <div key={day} className="bg-slate-50 dark:bg-slate-900/40 p-3 rounded-xl border dark:border-slate-800">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">{day}</span>
-                                <button 
+                                <button
                                     type="button"
                                     onClick={() => addSlot(day)}
                                     className="text-[10px] bg-primary-500 text-white px-2 py-1 rounded hover:bg-primary-600 transition-colors flex items-center gap-1"
@@ -295,7 +305,7 @@ const Staff = () => {
                                     <Icon icon="ph:plus-bold" /> Add Slot
                                 </button>
                             </div>
-                            
+
                             <div className="space-y-2">
                                 {value.filter(s => s.day === day).length === 0 ? (
                                     <div className="text-[10px] text-slate-400 italic py-1 pl-1">No availability set</div>
@@ -304,20 +314,20 @@ const Staff = () => {
                                         if (slot.day !== day) return null;
                                         return (
                                             <div key={idx} className="flex items-center gap-2 bg-white dark:bg-slate-800 p-2 rounded-lg border dark:border-slate-700 shadow-sm transition-all hover:border-primary-200">
-                                                <input 
-                                                    type="time" 
+                                                <input
+                                                    type="time"
                                                     className="bg-transparent text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none w-full"
                                                     value={slot.startTime}
                                                     onChange={(e) => updateSlot(idx, "startTime", e.target.value)}
                                                 />
                                                 <span className="text-slate-300">→</span>
-                                                <input 
-                                                    type="time" 
+                                                <input
+                                                    type="time"
                                                     className="bg-transparent text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none w-full"
                                                     value={slot.endTime}
                                                     onChange={(e) => updateSlot(idx, "endTime", e.target.value)}
                                                 />
-                                                <button 
+                                                <button
                                                     type="button"
                                                     onClick={() => removeSlot(idx)}
                                                     className="text-red-400 hover:text-red-600 p-1"
@@ -475,11 +485,11 @@ const Staff = () => {
                                 <span className="text-[9px] lowercase font-normal italic text-slate-500 normal-case">Strictly enforced during timetabling</span>
                             </h4>
                         </div>
-                        
+
                         <div className="col-span-full">
-                            <StaffAvailabilityEditor 
-                                value={formData.availability} 
-                                onChange={(val) => setFormData(prev => ({ ...prev, availability: val }))} 
+                            <StaffAvailabilityEditor
+                                value={formData.availability}
+                                onChange={(val) => setFormData(prev => ({ ...prev, availability: val }))}
                             />
                         </div>
                     </div>
@@ -487,7 +497,7 @@ const Staff = () => {
                     <div className="pt-4 border-t dark:border-slate-700 px-1 text-right">
                         <Button
                             type="submit"
-                            className="btn-primary px-10 py-2.5 rounded-lg shadow-lg font-bold text-sm"
+                            className="btn-primary px-10 py-2.5 rounded-lg text-sm"
                             text={isEditMode ? (submitting ? "Applying..." : "Update Profile") : (submitting ? "Please wait..." : "Create Account")}
                             disabled={submitting}
                         />

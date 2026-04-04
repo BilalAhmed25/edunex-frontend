@@ -18,7 +18,9 @@ const SchoolProfile = () => {
         logoUrl: "",
         address: "",
         phone: "",
-        email: ""
+        email: "",
+        startTime: "08:00",
+        endTime: "14:00"
     });
 
     const isAuthorized = user?.RoleID === 1 || user?.RoleID === 2;
@@ -42,7 +44,9 @@ const SchoolProfile = () => {
                 logoUrl: data.LogoUrl || "",
                 address: data.Address || "",
                 phone: data.Phone || "",
-                email: data.Email || ""
+                email: data.Email || "",
+                startTime: data.StartTime || "08:00",
+                endTime: data.EndTime || "14:00"
             });
         } catch (error) {
             toast.error("Failed to load institutional profile");
@@ -180,11 +184,30 @@ const SchoolProfile = () => {
                                     disabled={submitting}
                                     icon="ph:map-pin-bold"
                                 />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                    <Textinput
+                                        type="time"
+                                        label="Business Start Hours (e.g. 08:00 AM)"
+                                        value={formData.startTime}
+                                        onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                                        disabled={submitting}
+                                        icon="ph:clock-bold"
+                                    />
+                                    <Textinput
+                                        type="time"
+                                        label="Business End Hours (e.g. 02:00 PM)"
+                                        value={formData.endTime}
+                                        onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                                        disabled={submitting}
+                                        icon="ph:clock-afternoon-bold"
+                                    />
+                                </div>
                                 <div className="pt-6 border-t dark:border-slate-700">
                                     <Button
                                         type="submit"
                                         text={submitting ? "Applying Changes..." : "Update Institutional Profile"}
-                                        className="btn-primary w-full text-sm font-bold uppercase tracking-widest rounded-2xl shadow-xl shadow-indigo-100 dark:shadow-none"
+                                        className="btn-primary w-full text-sm shadow-xl shadow-indigo-100 dark:shadow-none"
                                         disabled={submitting}
                                         icon="ph:cloud-arrow-up-bold"
                                     />
