@@ -1,6 +1,15 @@
 .btn {
     @apply font-medium text-sm tracking-[0.025rem] py-[10px] px-5 rounded-lg capitalize transition-all duration-150 md:whitespace-nowrap whitespace-normal items-center relative;
     font-size: 12px;
+    
+    &:hover {
+        @apply opacity-100 !important;
+        filter: brightness(1.1);
+    }
+    
+    &:active {
+        @apply scale-95;
+    }
 }
 
 .btn.block-btn {
@@ -250,4 +259,14 @@
 
 .invocie-btn {
     @apply hover:bg-gray-900 hover:text-gray-100 dark:hover:bg-gray-600 mr-3 mb-4;
+}
+
+.btn:disabled,
+.btn.disabled {
+    @apply bg-gray-100 text-slate-500 border-slate-200 opacity-100 cursor-not-allowed pointer-events-none grayscale !important;
+}
+
+body.dark .btn:disabled,
+body.dark .btn.disabled {
+    @apply bg-slate-800 text-slate-500 border-slate-700 opacity-60 grayscale-[0.6] !important;
 }

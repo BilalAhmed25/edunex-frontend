@@ -11,6 +11,8 @@ import Icon from "@/components/ui/Icon";
 import SkeletonTable from "@/components/skeleton/Table";
 import { formatDate } from "@/lib/utils";
 import Modal from "@/components/ui/Modal";
+import Checkbox from "@/components/ui/Checkbox";
+import Tooltip from "@/components/ui/Tooltip";
 
 import { useSelector } from "react-redux";
 
@@ -33,6 +35,17 @@ const StudentAttendance = () => {
     const [sessions, setSessions] = useState([]);
     const [sections, setSections] = useState([]);
     const [myAssignments, setMyAssignments] = useState([]); // Array of {ClassID, SectionID}
+
+    // Register Modal
+    const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+    const [registerData, setRegisterData] = useState([]);
+    const [loadingRegister, setLoadingRegister] = useState(false);
+    const [registerRange, setRegisterRange] = useState({
+        startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split("T")[0],
+        endDate: new Date().toISOString().split("T")[0]
+    });
+
+    const [selectedStudents, setSelectedStudents] = useState(new Set());
 
     // Filters
     const [filters, setFilters] = useState({
@@ -203,7 +216,7 @@ const StudentAttendance = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {/* Filtration Controls */}
                 <div className="lg:col-span-1 space-y-4">
-                    <Card title="Attendance Settings" className="border-t-4 border-primary-500 shadow-sm rounded-3xl">
+                    <Card title="Attendance Settings" className="border-t-4 border-primary-500 shadow-sm rounded-xl">
                         <div className="space-y-4">
                             <Select
                                 label="Session"
@@ -262,35 +275,19 @@ const StudentAttendance = () => {
                                 <Button
                                     text="Mark All Present"
                                     icon="ph:checks-bold"
-                                    className="bg-primary-500 text-white btn-sm w-full font-bold shadow-lg shadow-primary-500/20"
+                                    className="bg-primary-500 text-white btn-sm w-full"
                                     onClick={() => handleMarkAll("Present")}
                                     disabled={loading || attendanceData.length === 0}
                                 />
                             </div>
                         </div>
                     </Card>
-
-                    {attendanceData.length > 0 && (
-                        <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-xl animate-fade-in lg:block hidden">
-                            <h4 className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-4">Live Statistics</h4>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-3 bg-success-500/10 rounded-2xl border border-success-500/20">
-                                    <div className="text-xl font-black text-success-500">{attendanceData.filter(a => a.status === 'Present').length}</div>
-                                    <div className="text-[8px] text-slate-400 font-bold uppercase">Present</div>
-                                </div>
-                                <div className="p-3 bg-danger-500/10 rounded-2xl border border-danger-500/20">
-                                    <div className="text-xl font-black text-danger-500">{attendanceData.filter(a => a.status === 'Absent').length}</div>
-                                    <div className="text-[8px] text-slate-400 font-bold uppercase">Absent</div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* Main Content Board */}
                 <div className="lg:col-span-3 space-y-6">
                     {!filters.sectionID ? (
-                        <div className="flex flex-col items-center justify-center p-20 text-center space-y-4 bg-white dark:bg-[#111111] rounded-3xl border dark:border-[#2f3336]">
+                        <div className="flex flex-col items-center justify-center p-20 text-center space-y-4 bg-white dark:bg-[#111111] rounded-xl border dark:border-[#2f3336]">
                             <Icon icon="ph:users-three-duotone" className="text-6xl text-primary-500/30" />
                             <div>
                                 <h3 className="text-xl font-semibold text-slate-800 dark:text-white">Board Initialization</h3>
@@ -298,68 +295,166 @@ const StudentAttendance = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-6">
+                            {/* Live Statistics at the top */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in">
+                                <div className="bg-white dark:bg-[#111111] p-4 rounded-xl border dark:border-[#2f3336] shadow-sm flex items-center space-x-3">
+                                    <div className="h-10 w-10 flex items-center justify-center bg-blue-500/10 text-blue-500 rounded-lg">
+                                        <Icon icon="ph:users-bold" className="text-xl" />
+                                    </div>
+                                    <div>
+                                        <div className="text-[10px] text-slate-400 font-bold uppercase">Total</div>
+                                        <div className="text-xl font-black text-slate-800 dark:text-white">{attendanceData.length}</div>
+                                    </div>
+                                </div>
+                                <div className="bg-white dark:bg-[#111111] p-4 rounded-xl border dark:border-[#2f3336] shadow-sm flex items-center space-x-3 border-b-2 border-b-success-500">
+                                    <div className="h-10 w-10 flex items-center justify-center bg-success-500/10 text-success-500 rounded-lg">
+                                        <Icon icon="ph:user-circle-check-bold" className="text-xl" />
+                                    </div>
+                                    <div>
+                                        <div className="text-[10px] text-slate-400 font-bold uppercase">Present</div>
+                                        <div className="text-xl font-black text-slate-800 dark:text-white">{attendanceData.filter(a => a.status === 'Present').length}</div>
+                                    </div>
+                                </div>
+                                <div className="bg-white dark:bg-[#111111] p-4 rounded-xl border dark:border-[#2f3336] shadow-sm flex items-center space-x-3 border-b-2 border-b-danger-500">
+                                    <div className="h-10 w-10 flex items-center justify-center bg-danger-500/10 text-danger-500 rounded-lg">
+                                        <Icon icon="ph:user-circle-minus-bold" className="text-xl" />
+                                    </div>
+                                    <div>
+                                        <div className="text-[10px] text-slate-400 font-bold uppercase">Absent</div>
+                                        <div className="text-xl font-black text-slate-800 dark:text-white">{attendanceData.filter(a => a.status === 'Absent').length}</div>
+                                    </div>
+                                </div>
+                                <div className="bg-white dark:bg-[#111111] p-4 rounded-xl border dark:border-[#2f3336] shadow-sm flex items-center space-x-3 border-b-2 border-b-warning-500">
+                                    <div className="h-10 w-10 flex items-center justify-center bg-warning-500/10 text-warning-500 rounded-lg">
+                                        <Icon icon="ph:user-gear-bold" className="text-xl" />
+                                    </div>
+                                    <div>
+                                        <div className="text-[10px] text-slate-400 font-bold uppercase">Late / Leave</div>
+                                        <div className="text-xl font-black text-slate-800 dark:text-white">{attendanceData.filter(a => a.status === 'Late' || a.status === 'Leave').length}</div>
+                                    </div>
+                                </div>
+                            </div>
                             <div className="flex items-center justify-between px-2">
                                 <div>
-                                    <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Daily Attendance Board</h2>
+                                    <h2 className="text-lg font-semibold text-slate-800 dark:text-white">Student Attendance Ledger</h2>
                                     <p className="text-[12px] text-slate-400 font-semibold flex items-center gap-1.5">
                                         <Icon icon="ph:calendar-bold" className="text-lg" />
                                         {formatDate(filters.date)}
                                     </p>
                                 </div>
-                                <Button
-                                    text={submitting ? "Synchronizing..." : "Submit Attendance"}
-                                    icon="ph:cloud-arrow-up-fill"
-                                    className="bg-primary-500 hover:bg-primary-600 text-white px-8 rounded-xl font-bold tracking-wider shadow-xl shadow-primary-500/25 transition-all active:scale-95 disabled:grayscale"
-                                    disabled={loading || submitting || attendanceData.length === 0}
-                                    onClick={markAttendance}
-                                />
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        text="Attendance Register"
+                                        icon="ph:book-open-bold"
+                                        className="bg-slate-800 hover:bg-slate-900 text-white rounded transition-all"
+                                        onClick={() => setIsRegisterModalOpen(true)}
+                                    />
+                                    <Button
+                                        text={submitting ? "Synchronizing..." : "Submit Attendance"}
+                                        isLoading={submitting}
+                                        icon="ph:cloud-arrow-up-fill"
+                                        className="bg-primary-500 hover:bg-primary-600 text-white px-8 rounded transition-all active:scale-95"
+                                        disabled={loading || submitting || attendanceData.length === 0}
+                                        onClick={markAttendance}
+                                    />
+                                </div>
                             </div>
 
                             {loading ? (
                                 <SkeletonTable count={8} />
+                            ) : attendanceData.length === 0 ? (
+                                <div className="py-24 text-center bg-white dark:bg-[#111111] rounded-2xl border dark:border-slate-800 shadow-sm animate-fade-in">
+                                    <div className="h-20 w-20 bg-slate-50 dark:bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-6 border dark:border-slate-800">
+                                        <Icon icon="ph:users-three-bold" className="text-4xl text-slate-300 dark:text-slate-700" />
+                                    </div>
+                                    <h3 className="text-slate-600 dark:text-slate-300 font-bold text-base mb-1">No student data found</h3>
+                                    <p className="text-slate-400 dark:text-slate-500 text-xs max-w-[480px] mx-auto leading-relaxed">
+                                        We couldn't find any students for the selected class and section. Please verify your filters or contact the administrator.
+                                    </p>
+                                </div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                                    {attendanceData.map((a) => (
-                                        <div key={a.studentID} className={`group p-4 bg-white dark:bg-[#111111] border dark:border-[#2f3336] rounded-3xl shadow-sm hover:shadow-md transition-all relative overflow-hidden ${a.status === 'Absent' ? 'border-l-4 border-l-danger-500' : a.status === 'Late' ? 'border-l-4 border-l-warning-500' : 'border-l-4 border-l-success-500'}`}>
-                                            <div className="flex items-center space-x-4">
-                                                <div
-                                                    className="h-12 w-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-black text-primary-500 text-lg border dark:border-slate-700 shadow-inner cursor-pointer"
-                                                    onClick={() => fetchStudentHistory(a)}
-                                                >
-                                                    {a.photo ? <img src={a.photo} className="h-full w-full object-cover rounded-2xl" alt="P" /> : (a.firstName[0] + a.lastName[0])}
-                                                </div>
-                                                <div className="flex-1 cursor-pointer" onClick={() => fetchStudentHistory(a)}>
-                                                    <div className="text-xs font-black text-slate-800 dark:text-slate-100 uppercase truncate">
-                                                        {a.firstName} {a.lastName}
-                                                    </div>
-                                                    <div className="text-[9px] text-slate-400 font-bold uppercase flex items-center gap-1.5 mt-0.5">
-                                                        <span>ROLL: {a.rollNumber}</span>
-                                                        <span className="opacity-40">|</span>
-                                                        <span className="text-primary-500">GR: {a.admissionNumber}</span>
-                                                    </div>
-                                                </div>
-                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <button onClick={() => fetchStudentHistory(a)} className="p-1.5 rounded-lg bg-primary-50 text-primary-500 hover:bg-primary-500 hover:text-white transition-all">
-                                                        <Icon icon="ph:clock-counter-clockwise-bold" className="w-3 h-3" />
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            {/* Status Switcher */}
-                                            <div className="mt-4 flex items-center justify-between p-1 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border dark:border-slate-700">
-                                                {statusOptions.map((opt) => (
-                                                    <button
-                                                        key={opt.value}
-                                                        onClick={() => handleStatusChange(a.studentID, opt.value)}
-                                                        className={`flex-1 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all transform active:scale-90 ${a.status === opt.value ? opt.className + ' shadow-lg' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
-                                                    >
-                                                        {opt.label}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className="bg-white dark:bg-[#111111] border dark:border-[#2f3336] rounded-2xl overflow-hidden shadow-sm overflow-x-auto">
+                                    <table className="w-full text-left border-collapse min-w-[800px]">
+                                        <thead className="bg-slate-50 dark:bg-slate-900/50">
+                                            <tr>
+                                                <th className="p-4 w-12 border-b dark:border-slate-800">
+                                                    <Checkbox
+                                                        id="select-all"
+                                                        value={selectedStudents.size === attendanceData.length && attendanceData.length > 0}
+                                                        onChange={() => {
+                                                            if (selectedStudents.size === attendanceData.length) {
+                                                                setSelectedStudents(new Set());
+                                                            } else {
+                                                                setSelectedStudents(new Set(attendanceData.map(a => a.studentID)));
+                                                            }
+                                                        }}
+                                                    />
+                                                </th>
+                                                <th className="p-4 text-[11px] font-black uppercase text-slate-400 border-b dark:border-slate-800">Student Info</th>
+                                                <th className="p-4 text-[11px] font-black uppercase text-slate-400 border-b dark:border-slate-800 text-center">Roll #</th>
+                                                <th className="p-4 text-[11px] font-black uppercase text-slate-400 border-b dark:border-slate-800 text-center">Admission #</th>
+                                                <th className="p-4 text-[11px] font-black uppercase text-slate-400 border-b dark:border-slate-800 text-center">Status</th>
+                                                <th className="p-4 text-[11px] font-black uppercase text-slate-400 border-b dark:border-slate-800">Remarks</th>
+                                                <th className="p-4 text-[11px] font-black uppercase text-slate-400 border-b dark:border-slate-800 text-center">History</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {attendanceData.map((a) => (
+                                                <tr key={a.studentID} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
+                                                    <td className="p-4 border-b dark:border-slate-800">
+                                                        <Checkbox
+                                                            id={`student-${a.studentID}`}
+                                                            value={selectedStudents.has(a.studentID)}
+                                                            onChange={() => {
+                                                                const next = new Set(selectedStudents);
+                                                                if (next.has(a.studentID)) next.delete(a.studentID);
+                                                                else next.add(a.studentID);
+                                                                setSelectedStudents(next);
+                                                            }}
+                                                        />
+                                                    </td>
+                                                    <td className="p-4 border-b dark:border-slate-800">
+                                                        <div className="flex items-center space-x-3">
+                                                            <div className="h-9 w-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-black text-primary-500 overflow-hidden border dark:border-slate-700">
+                                                                {a.photo ? <img src={a.photo} className="h-full w-full object-cover" /> : (a.firstName[0] + a.lastName[0])}
+                                                            </div>
+                                                            <div className="font-bold text-slate-800 dark:text-slate-200 text-sm">{a.firstName} {a.lastName}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td className="p-4 border-b dark:border-slate-800 text-center font-mono text-xs text-slate-500 font-bold">{a.rollNumber}</td>
+                                                    <td className="p-4 border-b dark:border-slate-800 text-center font-mono text-xs text-slate-500 font-bold">{a.admissionNumber}</td>
+                                                    <td className="p-4 border-b dark:border-slate-800">
+                                                        <div className="flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-900 rounded-lg max-w-[200px] mx-auto border dark:border-slate-800">
+                                                            {statusOptions.map((opt) => (
+                                                                <button
+                                                                    key={opt.value}
+                                                                    onClick={() => handleStatusChange(a.studentID, opt.value)}
+                                                                    className={`flex-1 py-1 text-[9px] font-black uppercase transition-all rounded ${a.status === opt.value ? opt.className : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                                                                >
+                                                                    {opt.label}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    </td>
+                                                    <td className="p-4 border-b dark:border-slate-800">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Add remarks..."
+                                                            className="w-full bg-transparent border-none text-[10px] text-slate-500 focus:outline-none focus:ring-0 placeholder:text-slate-400 placeholder"
+                                                            value={a.remarks}
+                                                            onChange={(e) => setAttendanceData(prev => prev.map(item => item.studentID === a.studentID ? { ...item, remarks: e.target.value } : item))}
+                                                        />
+                                                    </td>
+                                                    <td className="p-4 border-b dark:border-slate-800 text-center">
+                                                        <button onClick={() => fetchStudentHistory(a)} className="p-2 rounded-lg bg-primary-50 dark:bg-primary-500/10 text-primary-500 hover:bg-primary-500 hover:text-white transition-all">
+                                                            <Icon icon="ph:clock-counter-clockwise-fill" className="w-4 h-4" />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             )}
                         </div>
@@ -385,9 +480,9 @@ const StudentAttendance = () => {
                     ) : (
                         <div className="grid grid-cols-1 gap-3">
                             {studentHistoryLog.map((log, i) => (
-                                <div key={i} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border dark:border-slate-800">
+                                <div key={i} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl border dark:border-slate-800">
                                     <div className="flex items-center gap-4">
-                                        <div className={`h-10 w-10 rounded-xl flex items-center justify-center font-black text-xs ${log.Status === 'Present' ? 'bg-success-500/10 text-success-500 border border-success-500/20' :
+                                        <div className={`h-10 w-10 flex items-center justify-center font-black text-xs ${log.Status === 'Present' ? 'bg-success-500/10 text-success-500 border border-success-500/20' :
                                             log.Status === 'Absent' ? 'bg-danger-500/10 text-danger-500 border border-danger-500/20' :
                                                 log.Status === 'Late' ? 'bg-warning-500/10 text-warning-500 border border-warning-500/20' :
                                                     'bg-info-500/10 text-info-500 border border-info-500/20'
@@ -405,6 +500,112 @@ const StudentAttendance = () => {
                                     />
                                 </div>
                             )).reverse()}
+                        </div>
+                    )}
+                </div>
+            </Modal>
+
+            {/* Attendance Register Modal */}
+            <Modal
+                title="Class Attendance Register"
+                activeModal={isRegisterModalOpen}
+                onClose={() => setIsRegisterModalOpen(false)}
+                className="max-w-6xl"
+            >
+                <div className="space-y-6 py-2">
+                    <div className="flex flex-wrap items-end gap-4 p-4 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border dark:border-slate-800">
+                        <div className="flex-1 min-w-[150px]">
+                            <Textinput
+                                label="From"
+                                type="date"
+                                value={registerRange.startDate}
+                                onChange={(e) => setRegisterRange(r => ({ ...r, startDate: e.target.value }))}
+                            />
+                        </div>
+                        <div className="flex-1 min-w-[150px]">
+                            <Textinput
+                                label="To"
+                                type="date"
+                                value={registerRange.endDate}
+                                onChange={(e) => setRegisterRange(r => ({ ...r, endDate: e.target.value }))}
+                            />
+                        </div>
+                        <Button
+                            text="Load Register"
+                            isLoading={loadingRegister}
+                            icon="ph:database-bold"
+                            className="bg-primary-500 hover:bg-primary-600 transition-all text-white rounded h-10 mb-1"
+                            onClick={async () => {
+                                try {
+                                    setLoadingRegister(true);
+                                    const params = new URLSearchParams({
+                                        classID: filters.classID,
+                                        sectionID: filters.sectionID,
+                                        startDate: registerRange.startDate,
+                                        endDate: registerRange.endDate
+                                    });
+                                    const res = await get(`/activity/attendance-register?${params.toString()}`);
+                                    setRegisterData(res?.data || res || []);
+                                } catch (err) {
+                                    toast.error("Failed to fetch register data");
+                                } finally {
+                                    setLoadingRegister(false);
+                                }
+                            }}
+                            disabled={loadingRegister || !filters.classID || !filters.sectionID}
+                        />
+                    </div>
+
+                    {loadingRegister ? (
+                        <div className="py-20 text-center">
+                            <Icon icon="ph:spinner-gap-bold" className="text-4xl text-primary-500 animate-spin mx-auto mb-4" />
+                            <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">Processing Register Data...</p>
+                        </div>
+                    ) : registerData.length === 0 ? (
+                        <div className="py-20 text-center opacity-40">
+                            <Icon icon="ph:files-bold" className="text-6xl mx-auto mb-4" />
+                            <p className="font-bold text-sm">No records found for selected period.</p>
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto border dark:border-slate-800 rounded-2xl">
+                            <table className="w-full text-left border-collapse min-w-max text-xs">
+                                <thead className="bg-slate-100 dark:bg-slate-900 text-[10px] font-black uppercase text-slate-500">
+                                    <tr>
+                                        <th className="p-4 border-b dark:border-slate-800 sticky left-0 bg-slate-100 dark:bg-slate-900 z-10 w-48 font-black">Student</th>
+                                        {[...new Set(registerData.map(d => d.Date.split("T")[0]))].sort().map(d => (
+                                            <th key={d} className="p-3 border-b border-l dark:border-slate-800 text-center min-w-[50px] font-black">{d.split("-")[2]}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.values(registerData.reduce((acc, curr) => {
+                                        const sID = curr.StudentID;
+                                        if (!acc[sID]) acc[sID] = { name: `${curr.FirstName} ${curr.LastName}`, roll: curr.RollNumber, attendance: {} };
+                                        acc[sID].attendance[curr.Date.split("T")[0]] = curr.Status;
+                                        return acc;
+                                    }, {})).map((student, idx) => (
+                                        <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                            <td className="p-4 border-b dark:border-slate-800 sticky left-0 bg-white dark:bg-[#111111] z-10 border-r dark:border-r-slate-800 shadow-[2px_0_5px_rgba(0,0,0,0.05)]">
+                                                <div className="font-bold text-slate-700 dark:text-slate-200">{student.name}</div>
+                                                <div className="text-[9px] text-slate-400 font-bold uppercase">Roll: {student.roll}</div>
+                                            </td>
+                                            {[...new Set(registerData.map(d => d.Date.split("T")[0]))].sort().map(d => {
+                                                const status = student.attendance[d];
+                                                return (
+                                                    <td key={d} className="p-3 border-b border-l dark:border-slate-800 text-center">
+                                                        {status === 'Present' ? <span className="text-success-500 font-black">P</span> :
+                                                            status === 'Absent' ? <span className="text-danger-500 font-black">A</span> :
+                                                                status === 'Late' ? <span className="text-warning-500 font-black">L</span> :
+                                                                    status === 'Leave' ? <span className="text-info-500 font-black">LV</span> :
+                                                                        <span className="text-slate-200 dark:text-slate-800">-</span>
+                                                        }
+                                                    </td>
+                                                )
+                                            })}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     )}
                 </div>

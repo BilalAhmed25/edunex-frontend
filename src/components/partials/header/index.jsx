@@ -59,10 +59,10 @@ const Header = ({ className = "custom-class" }) => {
                         <div className="flex items-center md:space-x-4 space-x-2 rtl:space-x-reverse">
                             {/* Toggle Sidebar Icon (Useful for Top Bar) */}
                             <div
-                                className="cursor-pointer text-slate-900 dark:text-white text-2xl hidden xl:block"
+                                className="cursor-pointer text-slate-900 dark:text-white text-lg hidden xl:block text-muted"
                                 onClick={() => setMenuCollapsed(!collapsed)}
                             >
-                                <Icon icon={collapsed ? "heroicons-outline:menu-alt-2" : "heroicons-outline:menu"} />
+                                <Icon icon={collapsed ? "ph:caret-double-right-bold" : "ph:caret-double-left-bold"} />
                             </div>
 
                             {width < breakpoints.xl && <Logo />}
@@ -81,7 +81,7 @@ const Header = ({ className = "custom-class" }) => {
                                     className="cursor-pointer text-gray-900 dark:text-white text-2xl"
                                     onClick={handleOpenMobileMenu}
                                 >
-                                    <Icon icon="heroicons-outline:menu-alt-3" />
+                                    <Icon icon="ph:caret-double-right-bold" />
                                 </div>
                             )}
                         </div>
@@ -103,7 +103,7 @@ const Header = ({ className = "custom-class" }) => {
                             className="cursor-pointer text-gray-900 dark:text-white text-2xl xl:hidden block"
                             onClick={handleOpenMobileMenu}
                         >
-                            <Icon icon="heroicons-outline:menu-alt-3" />
+                            <Icon icon="ph:caret-double-right-bold" />
                         </div>
                     </div>
                 </div>

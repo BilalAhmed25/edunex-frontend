@@ -21,7 +21,7 @@ function Button({
 	hFlip,
 	vFlip,
 }) {
-	const commonClasses = `btn d-inline-flex justify-content-center align-items-center ${isLoading ? "disabled" : ""} ${className}`;
+	const commonClasses = `btn d-inline-flex justify-content-center align-items-center ${disabled || isLoading ? "disabled cursor-not-allowed" : ""} ${className}`;
 
 	const renderContent = () => (
 		<>
@@ -32,7 +32,7 @@ function Button({
 						role="status"
 						aria-hidden="true"
 					></span>
-					<span>Please wait...</span>
+					<span>{text || "Please wait..."}</span>
 				</span>
 			) : (
 				<>
