@@ -10,6 +10,7 @@ import DataTable from "@/components/ui/DataTable";
 import PageHeader from "@/components/ui/PageHeader";
 import Icon from "@/components/ui/Icon";
 import SkeletonTable from "@/components/skeleton/Table";
+import { formatDate } from "@/lib/utils";
 
 const Staff = () => {
     const [staffList, setStaffList] = useState([]);
@@ -444,7 +445,7 @@ const Staff = () => {
                                 <div key={i} className="flex justify-between items-center p-3 rounded-lg border dark:border-[#2f3336] bg-white dark:bg-[#16181c]">
                                     <div>
                                         <div className="text-sm font-bold text-slate-800 dark:text-slate-100">PKR {h.Amount.toLocaleString()}</div>
-                                        <div className="text-[10px] uppercase text-slate-400 font-bold">{new Date(h.ChangeDate).toLocaleDateString()}</div>
+                                        <div className="text-[10px] uppercase text-slate-400 font-bold">{formatDate(h.ChangeDate)}</div>
                                     </div>
                                     <div className="text-[11px] text-slate-500 italic max-w-[200px] text-right truncate">
                                         {h.Notes}

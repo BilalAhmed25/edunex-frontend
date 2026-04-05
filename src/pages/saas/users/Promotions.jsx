@@ -55,9 +55,9 @@ const Promotions = () => {
             setLoading(true);
             const res = await get("/users/students");
             // Client-side filtering because our generic students API returns all
-            const filtered = res.data.filter(s => 
-                Number(s.AcademicYearID) === Number(source.year) && 
-                Number(s.ClassID) === Number(source.class) && 
+            const filtered = res.data.filter(s =>
+                Number(s.AcademicYearID) === Number(source.year) &&
+                Number(s.ClassID) === Number(source.class) &&
                 (!source.section || Number(s.SectionID) === Number(source.section))
             );
             setStudents(filtered);
@@ -74,8 +74,8 @@ const Promotions = () => {
             Header: "Selection",
             id: "selection",
             Cell: ({ row }) => (
-                <input 
-                    type="checkbox" 
+                <input
+                    type="checkbox"
                     className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-gray-300 rounded cursor-pointer"
                     checked={selectedStudents.includes(row.original.ID)}
                     onChange={(e) => {
@@ -155,34 +155,34 @@ const Promotions = () => {
                 {/* Source Selection */}
                 <Card title="Source (Current Location)" className="border-t-4 border-slate-300">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Select 
-                            label="Session" 
-                            options={years} 
-                            value={years.find(y => y.value === source.year)} 
+                        <Select
+                            label="Session"
+                            options={years}
+                            value={years.find(y => y.value === source.year)}
                             onChange={(s) => setSource(p => ({ ...p, year: s.value }))}
                             icon="ph:calendar-blank-bold"
                         />
-                        <Select 
-                            label="Class" 
-                            options={classes} 
-                            value={classes.find(c => c.value === source.class)} 
+                        <Select
+                            label="Class"
+                            options={classes}
+                            value={classes.find(c => c.value === source.class)}
                             onChange={(s) => setSource(p => ({ ...p, class: s.value, section: "" }))}
                             icon="ph:chalkboard-bold"
                         />
-                        <Select 
-                            label="Section" 
-                            options={sourceSections} 
-                            value={sourceSections.find(s => s.value === source.section)} 
+                        <Select
+                            label="Section"
+                            options={sourceSections}
+                            value={sourceSections.find(s => s.value === source.section)}
                             onChange={(s) => setSource(p => ({ ...p, section: s.value }))}
                             icon="ph:layout-bold"
                         />
                     </div>
                     <div className="mt-6 flex justify-end">
-                        <Button 
-                            text="Load Students" 
-                            className="btn-outline-primary btn-sm px-6" 
-                            onClick={fetchStudents} 
-                            disabled={loading || !source.year || !source.class} 
+                        <Button
+                            text="Load Students"
+                            className="btn-outline-primary btn-sm px-6"
+                            onClick={fetchStudents}
+                            disabled={loading || !source.year || !source.class}
                         />
                     </div>
                 </Card>
@@ -190,24 +190,24 @@ const Promotions = () => {
                 {/* Target Selection */}
                 <Card title="Target (Promotion Destination)" className="border-t-4 border-primary-500">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Select 
-                            label="Target Session" 
-                            options={years} 
-                            value={years.find(y => y.value === target.year)} 
+                        <Select
+                            label="Target Session"
+                            options={years}
+                            value={years.find(y => y.value === target.year)}
                             onChange={(s) => setTarget(p => ({ ...p, year: s.value }))}
                             icon="ph:calendar-plus-bold"
                         />
-                        <Select 
-                            label="Target Class" 
-                            options={classes} 
-                            value={classes.find(c => c.value === target.class)} 
+                        <Select
+                            label="Target Class"
+                            options={classes}
+                            value={classes.find(c => c.value === target.class)}
                             onChange={(s) => setTarget(p => ({ ...p, class: s.value, section: "" }))}
                             icon="ph:chalkboard-teacher-bold"
                         />
-                        <Select 
-                            label="Target Section" 
-                            options={targetSections} 
-                            value={targetSections.find(s => s.value === target.section)} 
+                        <Select
+                            label="Target Section"
+                            options={targetSections}
+                            value={targetSections.find(s => s.value === target.section)}
                             onChange={(s) => setTarget(p => ({ ...p, section: s.value }))}
                             icon="ph:layout-bold"
                         />

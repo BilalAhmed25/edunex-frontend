@@ -10,6 +10,7 @@ import DataTable from "@/components/ui/DataTable";
 import PageHeader from "@/components/ui/PageHeader";
 import Icon from "@/components/ui/Icon";
 import SkeletonTable from "@/components/skeleton/Table";
+import { formatDate } from "@/lib/utils";
 
 const Students = () => {
     const [students, setStudents] = useState([]);
@@ -24,6 +25,7 @@ const Students = () => {
     const [classes, setClasses] = useState([]);
     const [sessions, setSessions] = useState([]);
     const [sections, setSections] = useState([]);
+    const [schoolInfo, setSchoolInfo] = useState(null);
 
     // Form States
     const [isEditMode, setIsEditMode] = useState(false);
@@ -65,14 +67,16 @@ const Students = () => {
             if (filters.classID) queryParams.append("classID", filters.classID);
             if (filters.sectionID) queryParams.append("sectionID", filters.sectionID);
 
-            const [stdRes, clsRes, sessRes] = await Promise.all([
+            const [stdRes, clsRes, sessRes, schoolRes] = await Promise.all([
                 get(`/users/students?${queryParams.toString()}`),
                 get("/academic/classes"),
-                get("/academic/years")
+                get("/academic/years"),
+                get("/users/school/profile")
             ]);
             if (stdRes?.data) setStudents(stdRes.data);
             if (clsRes?.data) setClasses(clsRes.data.map(c => ({ value: c.ID, label: c.Name, sections: c.sections })));
             if (sessRes?.data) setSessions(sessRes.data.map(s => ({ value: s.ID, label: s.Name })));
+            if (schoolRes?.data || schoolRes) setSchoolInfo(schoolRes.data || schoolRes);
         } catch (err) {
             toast.error("Failed to load student data");
         } finally {
@@ -81,6 +85,29 @@ const Students = () => {
     };
 
     useEffect(() => { fetchData(); }, [filters]);
+
+    // Auto-fetch next GR & Roll
+    useEffect(() => {
+        const fetchNextNumbers = async () => {
+            if (!formData.academicYearID || !formData.classID || !formData.sectionID || isEditMode) return;
+
+            try {
+                const res = await get(`/users/students/next-available?yearID=${formData.academicYearID}&classID=${formData.classID}&sectionID=${formData.sectionID}`);
+                if (res?.data) {
+                    const { nextGR, nextRoll } = res.data;
+                    setFormData(prev => ({
+                        ...prev,
+                        admissionNumber: prev.admissionNumber || nextGR.toString(),
+                        rollNumber: prev.rollNumber || nextRoll.toString()
+                    }));
+                }
+            } catch (err) {
+                console.error("Failed to suggest GR/Roll numbers", err);
+            }
+        };
+
+        fetchNextNumbers();
+    }, [formData.academicYearID, formData.classID, formData.sectionID, isEditMode, schoolInfo]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -397,8 +424,31 @@ const Students = () => {
                                 <Select label="Admission Year" options={sessions} value={sessions.find(s => s.value === formData.academicYearID)} onChange={(s) => setFormData(p => ({ ...p, academicYearID: s.value }))} className="" icon="ph:calendar-bold" />
                                 <Select label="Target Class" options={classes} value={classes.find(c => c.value === formData.classID)} onChange={handleClassChange} className="" icon="ph:chalkboard-bold" />
                                 <Select label="Section" options={sections} value={sections.find(s => s.value === formData.sectionID)} onChange={(s) => setFormData(p => ({ ...p, sectionID: s.value }))} className="" icon="ph:layout-bold" />
-                                <Textinput name="admissionNumber" label="Admission No" placeholder="Manual override if required" value={formData.admissionNumber} onChange={handleChange} className=" text-primary-500" icon="ph:identification-card-bold" />
-                                <Textinput name="rollNumber" label="Roll Number" placeholder="Auto-suggested" value={formData.rollNumber} onChange={handleChange} className="" icon="ph:hash-bold" />
+                                <div className="space-y-1">
+                                    <Textinput
+                                        name="admissionNumber"
+                                        label={`Admission Number (GR) ${schoolInfo ? `[Prefix: ${schoolInfo.ID}-]` : ''}`}
+                                        placeholder="e.g. 501"
+                                        value={formData.admissionNumber}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(/[^0-9]/g, '');
+                                            setFormData(p => ({ ...p, admissionNumber: val }));
+                                        }}
+                                        className="text-primary-500 font-bold"
+                                        icon="ph:identification-card-bold"
+                                        description="Only enter the serial number. The school prefix is added automatically."
+                                    />
+                                </div>
+                                <Textinput
+                                    name="rollNumber"
+                                    label="Roll Number"
+                                    placeholder="Auto-calculated"
+                                    value={formData.rollNumber}
+                                    onChange={handleChange}
+                                    className="font-bold"
+                                    icon="ph:hash-bold"
+                                    description="Unique within the selected section."
+                                />
                                 <Textinput type="date" name="admissionDate" label="Admission Date" value={formData.admissionDate} onChange={handleChange} className="" icon="ph:calendar-plus-bold" />
                             </div>
                         </div>
@@ -426,12 +476,12 @@ const Students = () => {
                     </div>
 
                     <div className="pt-8 border-t dark:border-slate-700 flex justify-end items-center space-x-4">
-                        <span className="text-[10px] text-slate-400 font-medium italic hidden md:block">* All data is encrypted and strictly used for academic administration.</span>
-                        <Button type="button" text="Cancel" className="btn-light px-8  font-bold tracking-wider text-[11px]" onClick={() => setIsOpen(false)} />
+                        <span className="text-[10px] text-slate-400 font-medium hidden md:block">* All data is encrypted and strictly used for academic administration.</span>
+                        <Button type="button" text="Cancel" className="btn-light px-8 text-[11px]" onClick={() => setIsOpen(false)} />
                         <Button
                             type="submit"
                             text={submitting ? "Please wait..." : (isEditMode ? "Propagate Changes" : "Confirm Enrollment")}
-                            className="bg-primary-500 hover:bg-primary-600 text-white px-12 rounded-xl  font-bold tracking-widest text-[12px] shadow-lg shadow-primary-500/25 transition-all active:scale-95"
+                            className="bg-primary-500 hover:bg-primary-600 text-white px-12 text-[12px] transition-all active:scale-95"
                             disabled={submitting}
                         />
                     </div>
@@ -444,7 +494,7 @@ const Students = () => {
                     <div className="bg-primary-50 dark:bg-primary-900/10 p-4 rounded-xl border border-primary-100 dark:border-primary-800/30 flex items-center justify-between">
                         <div>
                             <div className="text-[10px] uppercase font-bold text-primary-600 dark:text-primary-400">Admitted Date</div>
-                            <div className="text-sm font-bold text-slate-800 dark:text-slate-100">{selectedStudent?.AdmissionDate ? new Date(selectedStudent.AdmissionDate).toLocaleDateString() : 'N/A'}</div>
+                            <div className="text-sm font-bold text-slate-800 dark:text-slate-100">{formatDate(selectedStudent?.AdmissionDate)}</div>
                         </div>
                         <div className="text-right">
                             <div className="text-[10px] uppercase font-bold text-primary-600 dark:text-primary-400">Status</div>
@@ -464,7 +514,7 @@ const Students = () => {
                                     <div className="flex-1">
                                         <div className="flex justify-between">
                                             <span className="text-[12px] font-bold text-slate-800 dark:text-slate-100">{h.Action} to {h.ClassName || 'New Class'}</span>
-                                            <span className="text-[10px] text-slate-400 font-bold">{h.Date}</span>
+                                            <span className="text-[10px] text-slate-400 font-bold">{formatDate(h.Date)}</span>
                                         </div>
                                         <div className="text-[11px] text-slate-500 mt-0.5">{h.Notes}</div>
                                     </div>
@@ -490,7 +540,7 @@ const Students = () => {
                             {(selectedStudent?.ConcessionHistory ? (typeof selectedStudent.ConcessionHistory === 'string' ? JSON.parse(selectedStudent.ConcessionHistory) : selectedStudent.ConcessionHistory) : []).map((h, i) => (
                                 <div key={i} className="flex justify-between items-center p-3 rounded-lg border dark:border-slate-700 bg-slate-50 dark:bg-slate-800/20 text-xs ">
                                     <div className="font-bold text-success-500">PKR {h.Amount?.toLocaleString()}</div>
-                                    <div className="text-slate-400">{new Date(h.Date).toLocaleDateString()}</div>
+                                    <div className="text-slate-400">{formatDate(h.Date)}</div>
                                     <div className="text-right truncate max-w-[150px] italic text-slate-500">{h.Notes}</div>
                                 </div>
                             ))}
