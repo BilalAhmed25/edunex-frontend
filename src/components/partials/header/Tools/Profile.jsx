@@ -12,7 +12,7 @@ import UserAvatar from "@/assets/images/placeholder/blank-profile.png";
 const ProfileLabel = ({ sticky, user }) => {
     return (
         <div
-            className={clsx(" rounded-full transition-all duration-300 border-2 border-white dark:border-slate-600 shadow-sm overflow-hidden", {
+            className={clsx("rounded-full transition-all duration-300 border-1 dark:border-slate-600 shadow-sm overflow-hidden p-1", {
                 "h-9 w-9": sticky,
                 "lg:h-12 lg:w-12 h-7 w-7": !sticky,
             })}

@@ -33,7 +33,7 @@ const Breadcrumbs = () => {
   return (
     <>
       {!isHide ? (
-        <div className=" flex space-x-3 rtl:space-x-reverse mt-2 ">
+        <div className=" flex space-x-3 rtl:space-x-reverse ">
           <ul className="breadcrumbs">
             <li className="text-indigo-500">
               <NavLink to="/dashboard">Home</NavLink>

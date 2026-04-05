@@ -9,7 +9,7 @@ const SwitchDark = () => {
   return (
     <span>
       <div
-        className=" text-gray-600 dark:text-gray-100 text-2xl  cursor-pointer "
+        className="lg:h-[32px] lg:w-[32px] lg:bg-slate-100 lg:dark:bg-slate-800 text-slate-800 dark:text-white flex items-center justify-center rounded-full cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-200"
         onClick={() => setDarkMode(!isDark)}
       >
         {isDark ? (

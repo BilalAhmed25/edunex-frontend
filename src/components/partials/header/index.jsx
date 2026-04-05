@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Icon from "@/components/ui/Icon";
 import SwitchDark from "./Tools/SwitchDark";
+import Fullscreen from "./Tools/Fullscreen";
 import HorizentalMenu from "./Tools/HorizentalMenu";
 import useWidth from "@/hooks/useWidth";
 import useSidebar from "@/hooks/useSidebar";
 import useMenulayout from "@/hooks/useMenulayout";
 import Logo from "./Tools/Logo";
-import SearchBox from "./Tools/SearchBox";
 import Profile from "./Tools/Profile";
 import Notification from "./Tools/Notification";
 import Message from "./Tools/Message";
@@ -66,7 +66,9 @@ const Header = ({ className = "custom-class" }) => {
                             </div>
 
                             {width < breakpoints.xl && <Logo />}
-                            <SearchBox />
+                            <div className="hidden lg:block">
+                                <Breadcrumbs />
+                            </div>
                         </div>
                     )}
 
@@ -92,6 +94,7 @@ const Header = ({ className = "custom-class" }) => {
 
                     {/* Nav Tools */}
                     <div className="nav-tools flex items-center lg:space-x-6 space-x-3 rtl:space-x-reverse">
+                        <Fullscreen />
                         <SwitchDark />
                         <Profile sticky={sticky} />
 

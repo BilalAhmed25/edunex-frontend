@@ -61,9 +61,11 @@ const Layout = () => {
             )}
 
             <MobileMenu
-                className={`${width < breakpoints.xl && mobileMenu
-                    ? "left-0 visible opacity-100  z-[9999]"
-                    : "left-[-300px] invisible opacity-0  z-[-999] "
+                className={`${width < breakpoints.xl
+                    ? mobileMenu
+                        ? "left-0 opacity-100 z-[9999]"
+                        : "left-[-300px] opacity-0 z-[9999] pointer-events-none"
+                    : "hidden"
                     }`}
             />
             {/* mobile menu overlay*/}

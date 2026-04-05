@@ -47,12 +47,12 @@ const MobileMenu = ({ className = "custom-class" }) => {
   return (
     <div className={isSemiDark ? "dark" : ""}>
       <div
-        className={`${className} fixed top-0 bg-white dark:bg-[#111111] border-r dark:border-[#2f3336] shadow-lg h-full w-[280px] z-[9999]`}
+        className={`${className} fixed top-0 bg-white dark:bg-[#111111] border-r dark:border-[#2f3336] shadow-lg h-full w-[280px] z-[9999] transition-all duration-300 ease-in-out`}
       >
         <div className="logo-segment flex justify-between items-center bg-white dark:bg-gray-800 z-[9] py-2 px-4 mb-2">
           <Link to="/dashboard">
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
-              <div className="logo-icon h-[42px]">
+              <div className="logo-icon h-[50px]">
                 {!isDark && !isSemiDark ? (
                   <img src={MobileLogo} alt="" className="h-full" />
                 ) : (
@@ -60,8 +60,8 @@ const MobileMenu = ({ className = "custom-class" }) => {
                 )}
               </div>
               <div>
-                <h1 className="text-[20px] font-medium" style={{ marginTop: '-4px', marginBottom: '-6px' }}>edunex</h1>
-                <p className="text-[9px] text-gray-400 font-medium -mt-1 leading-none block">Your digital partner</p>
+                <h1 className="text-[22px] font-medium" style={{ marginTop: '-4px', marginBottom: '-6px' }}>edunex</h1>
+                <p className="text-[10px] text-gray-400 font-medium -mt-1 leading-none block">Your digital partner</p>
               </div>
             </div>
           </Link>
