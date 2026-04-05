@@ -77,7 +77,7 @@ const Modal = ({
                                         <Dialog.Panel className={`w-full transform overflow-hidden rounded-3xl bg-white dark:bg-[#111111] text-left align-middle shadow-2xl transition-all border dark:border-[#2f3336] ${className}`}>
                                             {title && (
                                                 <div className={`relative overflow-hidden py-5 px-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center`}>
-                                                    <h2 className="capitalize leading-6 font-bold text-lg text-slate-800 dark:text-slate-100 poppins">
+                                                    <h2 className="capitalize leading-6 font-bold text-lg text-slate-800 dark:text-slate-100 ">
                                                         {title}
                                                     </h2>
                                                     <button onClick={closeModal} className="text-[22px]">
@@ -132,7 +132,7 @@ const Modal = ({
                                     <Dialog.Panel className={`w-full transform overflow-hidden rounded-3xl bg-white dark:bg-[#111111] text-left align-middle shadow-2xl border dark:border-[#2f3336] transition-all ${className}`}>
                                         {title && (
                                             <div className={`relative overflow-hidden py-4 px-8 border-b border-slate-100 dark:border-slate-700 text-slate-800 flex justify-between items-center`}>
-                                                <h2 className="capitalize leading-6 text-lg dark:text-slate-100 poppins">
+                                                <h2 className="capitalize leading-6 text-lg dark:text-slate-100 ">
                                                     {title}
                                                 </h2>
                                                 <button onClick={onClose} className="text-[22px]">

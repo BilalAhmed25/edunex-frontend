@@ -177,7 +177,7 @@ const Payments = () => {
                                 type="date"
                                 value={dateRange.start}
                                 onChange={(e) => setDateRange(p => ({ ...p, start: e.target.value }))}
-                                className="poppins"
+                                className=""
                                 inputClass="h-7 text-[11px] border-0 bg-transparent font-bold !no-border p-0 w-[95px]"
                                 label="Start Date"
                             />
@@ -186,7 +186,7 @@ const Payments = () => {
                                 type="date"
                                 value={dateRange.end}
                                 onChange={(e) => setDateRange(p => ({ ...p, end: e.target.value }))}
-                                className="poppins"
+                                className=""
                                 inputClass="h-7 text-[11px] border-0 bg-transparent font-bold !no-border p-0 w-[95px]"
                                 label="End Date"
                             />
@@ -209,7 +209,7 @@ const Payments = () => {
                     <DataTable
                         columns={columns}
                         data={expenses}
-                        className="poppins text-[13px]"
+                        className=" text-[13px]"
                     />
                 )}
             </Card>

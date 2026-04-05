@@ -36,7 +36,7 @@ body {
   color: #4b5563;
   font-weight: 400;
   background-color: #fafafd;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Lexend', sans-serif;
   font-size: 13px;
 }
 
@@ -47,19 +47,26 @@ body.dark {
   .app-header,
   .sidebar-wrapper,
   .card {
-     background-color: #111111 !important;
-     border-color: #2f3336 !important;
+    background-color: #111111 !important;
+    border-color: #2f3336 !important;
   }
 
   .bg-white {
     background-color: #111111 !important;
   }
 
-  .text-slate-900, .text-gray-900, .text-dark {
+  .text-slate-900,
+  .text-gray-900,
+  .text-dark {
     color: #eff3f4 !important;
   }
 
-  .border, .border-b, .border-r, .border-l, .divide-y > *, .divide-x > * {
+  .border,
+  .border-b,
+  .border-r,
+  .border-l,
+  .divide-y>*,
+  .divide-x>* {
     border-color: #2f3336 !important;
   }
 
@@ -69,6 +76,7 @@ body.dark {
     color: #eff3f4 !important;
     border-color: #2f3336 !important;
   }
+
   select option {
     background-color: #111111 !important;
     color: #eff3f4 !important;
@@ -82,38 +90,48 @@ body.dark {
     border-color: #2f3336 !important;
     color: #ffffff !important;
   }
+
   .edunex-select__menu {
     background-color: #16181c !important;
     border: 1px solid #2f3336 !important;
     box-shadow: none !important;
   }
+
   .edunex-select__option {
     background-color: transparent;
     color: #cbd5e1 !important;
+
     &:hover {
       background-color: #1d1f23 !important;
     }
   }
+
   .edunex-select__option--is-focused {
     background-color: #1d1f23 !important;
   }
+
   .edunex-select__option--is-selected {
     background-color: #4F46E5 !important;
     color: #ffffff !important;
   }
+
   .edunex-select__single-value {
     color: #ffffff !important;
   }
+
   .edunex-select__input-container {
     color: #ffffff !important;
   }
+
   .edunex-select__multi-value {
     background-color: #1d1f23 !important;
   }
+
   .edunex-select__multi-value__label {
     color: #cbd5e1 !important;
   }
 }
+
 body {
   height: 100%;
 }
@@ -185,14 +203,17 @@ html[dir="rtl"] {
   border-radius: 8px !important;
 }
 
-.poppins {
-  font-family: "Poppins", sans-serif !important;
-}
-
 /* Global solid UI reset: remove all shadows */
 * {
+  font-family: 'Poppins', sans-serif !important;
   box-shadow: none !important;
 }
-.shadow, .shadow-sm, .shadow-lg, .shadow-xl, .shadow-base, .shadow-card {
+
+.shadow,
+.shadow-sm,
+.shadow-lg,
+.shadow-xl,
+.shadow-base,
+.shadow-card {
   box-shadow: none !important;
 }

@@ -268,7 +268,7 @@ const Promotions = () => {
                 {!loading && students.length === 0 && (
                     <div className="py-12 flex flex-col items-center justify-center text-slate-400 bg-slate-50/50 dark:bg-slate-800/30 rounded-xl border-2 border-dashed">
                         <Icon icon="ph:magnifying-glass-duotone" className="w-12 h-12 opacity-20 mb-3" />
-                        <p className="text-sm poppins">Select source filters and load students to begin promotion.</p>
+                        <p className="text-sm ">Select source filters and load students to begin promotion.</p>
                     </div>
                 )}
             </Card>

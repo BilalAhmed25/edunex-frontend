@@ -186,7 +186,7 @@ const Staff = () => {
             Header: "Department",
             accessor: "Department",
             Cell: ({ value }) => (
-                <Badge label={value || "N/A"} className="badge-soft-slate poppins font-bold text-[10px]" />
+                <Badge label={value || "N/A"} className="badge-soft-slate  font-bold text-[10px]" />
             )
         },
         {
@@ -197,7 +197,7 @@ const Staff = () => {
                     onClick={() => handleSalaryClick(row.original)}
                     className="cursor-pointer group flex flex-col"
                 >
-                    <span className="text-[13px] font-bold text-slate-700 dark:text-slate-200 poppins">
+                    <span className="text-[13px] font-bold text-slate-700 dark:text-slate-200 ">
                         PKR {value?.toLocaleString() || "0.00"}
                     </span>
                     <span className="text-[10px] text-primary-500 font-bold uppercase group-hover:underline flex items-center gap-1">
@@ -399,7 +399,7 @@ const Staff = () => {
                         columns={columns}
                         data={staffList}
                         pageSize={10}
-                        className="poppins"
+                        className=""
                     />
                 )}
             </div>
@@ -439,7 +439,7 @@ const Staff = () => {
                         <div className="text-[10px] font-bold uppercase text-slate-400 mb-3 tracking-widest pl-1">Salary Log</div>
                         <div className="max-h-64 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                             {salaryHistory.length === 0 ? (
-                                <div className="text-center py-6 border-2 border-dashed dark:border-slate-800 rounded-xl opacity-40 text-xs poppins">No previous salary updates found.</div>
+                                <div className="text-center py-6 border-2 border-dashed dark:border-slate-800 rounded-xl opacity-40 text-xs ">No previous salary updates found.</div>
                             ) : salaryHistory.map((h, i) => (
                                 <div key={i} className="flex justify-between items-center p-3 rounded-lg border dark:border-[#2f3336] bg-white dark:bg-[#16181c]">
                                     <div>

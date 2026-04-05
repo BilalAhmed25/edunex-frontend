@@ -157,13 +157,13 @@ const UserProfile = () => {
         }
     };
 
-    if (isLoading) return <div className="text-center py-20 poppins text-slate-500">Loading profile data...</div>;
+    if (isLoading) return <div className="text-center py-20  text-slate-500">Loading profile data...</div>;
 
     const displayName = profileData?.FirstName ? `${profileData.FirstName} ${profileData.LastName || ''}` : "Set Your Name";
     const displayRole = profileData?.RoleName || "User";
 
     return (
-        <div className="space-y-6 animate-fade-in poppins pb-10">
+        <div className="space-y-6 animate-fade-in  pb-10">
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-semibold text-slate-800 dark:text-white">Account Settings</h2>

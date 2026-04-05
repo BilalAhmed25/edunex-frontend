@@ -39,7 +39,7 @@ const ForgotPass2 = () => {
 							</div>
 
 							<div className="mb-4">
-								<h2 className="h3 fw-bold text-dark dark:text-white mb-2 poppins">
+								<h2 className="h3 fw-bold text-dark dark:text-white mb-2 ">
 									Forgot Your Password?
 								</h2>
 								<p className="text-muted mb-0">
@@ -53,7 +53,7 @@ const ForgotPass2 = () => {
 
 							<div className="text-center text-sm mt-5 mb-1 text-muted">
 								<span>Forget It, </span>
-								<Link to="/login2" className="text-primary text-decoration-none fw-medium poppins">
+								<Link to="/login2" className="text-primary text-decoration-none fw-medium ">
 									Send me back
 								</Link>
 								<span> to the sign in</span>
@@ -64,11 +64,11 @@ const ForgotPass2 = () => {
 					{/* Fixed Footer at the bottom */}
 					<div className="p-4 text-center w-100">
 						<div className="d-flex justify-content-center small text-muted gap-3 mb-3">
-							<a href="#" className="text-decoration-none hover:text-primary transition-colors poppins font-medium">Privacy Notice</a>
+							<a href="#" className="text-decoration-none hover:text-primary transition-colors  font-medium">Privacy Notice</a>
 							<span className="text-muted opacity-25">|</span>
-							<a href="#" className="text-decoration-none hover:text-primary transition-colors poppins font-medium">Terms of Service</a>
+							<a href="#" className="text-decoration-none hover:text-primary transition-colors  font-medium">Terms of Service</a>
 						</div>
-						<p className="small text-muted mb-0 opacity-50 poppins">
+						<p className="small text-muted mb-0 opacity-50 ">
 							&copy; {new Date().getFullYear()} Edunex. All rights reserved.
 						</p>
 					</div>

@@ -244,7 +244,7 @@ const ClassesSections = () => {
             ) : classes.length === 0 ? (
                 <div className="col-span-full text-center bg-white dark:bg-[#111111] p-20 rounded-2xl border dark:border-[#2f3336]">
                     <Icon icon="ph:files-light" className="mx-auto text-6xl text-muted mb-4 opacity-20" />
-                    <p className="text-xl text-muted poppins mb-6">No Classes Setup Yet.</p>
+                    <p className="text-xl text-muted  mb-6">No Classes Setup Yet.</p>
                     <Button text="Get Started" className="btn-primary btn-sm px-6" onClick={() => setIsOpen(true)} />
                 </div>
             ) : (
@@ -273,7 +273,7 @@ const ClassesSections = () => {
                                     </div>
 
                                     <div className="mb-4">
-                                        <h5 className="font-bold text-xl poppins text-primary-600 dark:text-primary-400">{cls.Name}</h5>
+                                        <h5 className="font-bold text-xl  text-primary-600 dark:text-primary-400">{cls.Name}</h5>
                                     </div>
 
                                     <div className="flex-grow space-y-5">
@@ -308,7 +308,7 @@ const ClassesSections = () => {
                                                         {s.Name}
                                                     </div>
                                                 )) : (
-                                                    <span className="text-[10px] text-muted italic poppins opacity-60">No sections added</span>
+                                                    <span className="text-[10px] text-muted italic  opacity-60">No sections added</span>
                                                 )}
                                             </div>
                                         </div>
@@ -330,7 +330,7 @@ const ClassesSections = () => {
                                                         {s.Name}
                                                     </span>
                                                 )) : (
-                                                    <span className="text-[10px] text-primary-400 italic poppins opacity-60">No subjects assigned</span>
+                                                    <span className="text-[10px] text-primary-400 italic  opacity-60">No subjects assigned</span>
                                                 )}
                                             </div>
                                         </div>
@@ -350,7 +350,7 @@ const ClassesSections = () => {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="poppins"
+                        className=""
                     />
                     <div>
                         <MultiSelect
@@ -389,14 +389,14 @@ const ClassesSections = () => {
                                 type="submit"
                                 text={editSectionId ? "Update" : "Add"}
                                 icon={editSectionId ? "ph:pencil-line" : "ph:plus-bold"}
-                                className="btn-primary poppins px-4 py-3"
+                                className="btn-primary  px-4 py-3"
                             />
                         </div>
                     </form>
 
                     <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-3 border dark:border-slate-800">
                         <div className="flex items-center justify-between mb-4 pb-2 border-b dark:border-slate-800">
-                            <h6 className="text-sm font-bold poppins text-dark dark:text-white flex items-center gap-2">
+                            <h6 className="text-sm font-bold  text-dark dark:text-white flex items-center gap-2">
                                 <Icon icon="ph:list-dashes-bold" className="text-primary-500" />
                                 Configured Sections
                             </h6>
@@ -404,17 +404,17 @@ const ClassesSections = () => {
                         </div>
 
                         {sectionsLoading ? (
-                            <p className="text-sm text-muted animate-pulse poppins">Updating section registry...</p>
+                            <p className="text-sm text-muted animate-pulse ">Updating section registry...</p>
                         ) : sections.length === 0 ? (
                             <div className="text-center py-6">
                                 <Icon icon="ph:warning-circle" className="text-3xl text-muted opacity-30 mx-auto mb-2" />
-                                <p className="text-xs text-muted poppins">Add a section to get started.</p>
+                                <p className="text-xs text-muted ">Add a section to get started.</p>
                             </div>
                         ) : (
                             <div className="flex flex-wrap gap-2">
                                 {sections.map((section) => (
                                     <div key={section.ID} className="group/item bg-white dark:bg-slate-800 border dark:border-slate-700 pl-3 pr-2 py-2 rounded-xl flex items-center gap-3 hover:border-primary-500 transition-all">
-                                        <span className="text-sm font-bold poppins text-slate-700 dark:text-slate-300">{section.Name}</span>
+                                        <span className="text-sm font-bold  text-slate-700 dark:text-slate-300">{section.Name}</span>
                                         <div className="flex gap-1">
                                             <button
                                                 type="button"
@@ -458,8 +458,8 @@ const ClassesSections = () => {
                     </div>
 
                     <div className="pt-4 border-t flex justify-end gap-3">
-                        <Button text="Cancel" className="btn-light btn-sm poppins" onClick={() => setIsSubjectsOpen(false)} />
-                        <Button text="Save Changes" className="btn-primary btn-sm poppins" onClick={handleSaveSubjects} />
+                        <Button text="Cancel" className="btn-light btn-sm " onClick={() => setIsSubjectsOpen(false)} />
+                        <Button text="Save Changes" className="btn-primary btn-sm " onClick={handleSaveSubjects} />
                     </div>
                 </div>
             </Modal>

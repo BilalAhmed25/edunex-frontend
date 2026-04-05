@@ -79,7 +79,7 @@ const SchoolProfile = () => {
         }
     };
 
-    if (loading) return <div className="text-center py-20 poppins text-slate-500">Loading school metadata...</div>;
+    if (loading) return <div className="text-center py-20  text-slate-500">Loading school metadata...</div>;
 
     if (!isAuthorized) {
         return (
@@ -92,7 +92,7 @@ const SchoolProfile = () => {
     }
 
     return (
-        <div className="space-y-6 animate-fade-in poppins pb-10">
+        <div className="space-y-6 animate-fade-in  pb-10">
             <PageHeader
                 icon="ph:buildings-bold"
                 title="Institutional Profile"

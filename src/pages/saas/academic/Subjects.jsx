@@ -243,7 +243,7 @@ const Subjects = () => {
                         columns={columns}
                         data={data}
                         pageSize={10}
-                        className="poppins"
+                        className=""
                     />
                 </div>
             )}
@@ -262,7 +262,7 @@ const Subjects = () => {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="poppins"
+                        className=""
                         icon="ph:book-bold"
                     />
                     <Textinput
@@ -271,11 +271,11 @@ const Subjects = () => {
                         placeholder="e.g. MATH101"
                         value={formData.code}
                         onChange={handleChange}
-                        className="poppins font-mono"
+                        className=" font-mono"
                         icon="ph:hash-bold"
                     />
                     <div className="flex items-center space-x-3 pt-1">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 poppins">Active Status</label>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 ">Active Status</label>
                         <input
                             type="checkbox"
                             name="isActive"
@@ -300,7 +300,7 @@ const Subjects = () => {
                 className="max-w-2xl"
             >
                 <div className="space-y-4">
-                    <div className="bg-primary-50 dark:bg-primary-900/10 text-primary-600 dark:text-primary-400 p-3 rounded-xl text-[12px] poppins flex items-start gap-3 border border-primary-100 dark:border-primary-800/30 font-medium leading-relaxed mb-3">
+                    <div className="bg-primary-50 dark:bg-primary-900/10 text-primary-600 dark:text-primary-400 p-3 rounded-xl text-[12px]  flex items-start gap-3 border border-primary-100 dark:border-primary-800/30 font-medium leading-relaxed mb-3">
                         <Icon icon="ph:info-bold" className="w-5 h-5 flex-shrink-0" />
                         Assigning a subject to a class registers it within that academic track, enabling section-level teacher allocations and timetable integration.
                     </div>
@@ -312,19 +312,19 @@ const Subjects = () => {
                             value={assignClasses}
                             onChange={setAssignClasses}
                             placeholder="Select classes..."
-                            className="poppins text-[13px]"
+                            className=" text-[13px]"
                         />
                     </div>
 
                     <div className="pt-6 border-t dark:border-slate-700 flex justify-end gap-3 mt-4">
                         <Button
                             text="Cancel"
-                            className="btn-light poppins px-8 font-bold text-[11px] uppercase tracking-wider"
+                            className="btn-light  px-8 font-bold text-[11px] uppercase tracking-wider"
                             onClick={() => setIsAssignOpen(false)}
                         />
                         <Button
                             text="Synchronize Assignments"
-                            className="btn-primary poppins px-10 font-bold text-[11px] uppercase tracking-wider h-[40px] rounded-xl"
+                            className="btn-primary  px-10 font-bold text-[11px] uppercase tracking-wider h-[40px] rounded-xl"
                             onClick={handleSaveAssignments}
                         />
                     </div>

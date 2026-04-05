@@ -84,13 +84,13 @@ const FeeStructures = () => {
                             <span className="text-[10px] text-slate-400 font-medium">Rs. </span>
                             {parseFloat(value.Amount).toLocaleString()}
                         </div>
-                        <div className="absolute -top-8 left-0 invisible group-hover:visible bg-slate-900 border border-slate-700 text-white text-[9px] px-2 py-1 rounded-md poppins whitespace-nowrap z-50 shadow-2xl opacity-0 group-hover:opacity-100 transition-all translate-y-1 group-hover:translate-y-0">
+                        <div className="absolute -top-8 left-0 invisible group-hover:visible bg-slate-900 border border-slate-700 text-white text-[9px] px-2 py-1 rounded-md  whitespace-nowrap z-50 shadow-2xl opacity-0 group-hover:opacity-100 transition-all translate-y-1 group-hover:translate-y-0">
                             <span className="flex items-center gap-1">
                                 <Icon icon="heroicons-outline:pencil" className="w-3 h-3" /> Click to Edit
                             </span>
                         </div>
                     </div>
-                ) : <span className="text-slate-300 dark:text-slate-700 poppins text-[12px]">--</span>
+                ) : <span className="text-slate-300 dark:text-slate-700  text-[12px]">--</span>
             });
         });
 
@@ -270,7 +270,7 @@ const FeeStructures = () => {
                             icon="ph:calendar-blank-duotone"
                         />
                     </div>
-                    <div className="text-[12px] text-slate-400 poppins self-end" style={{ marginBottom: '20px' }}>
+                    <div className="text-[12px] text-slate-400  self-end" style={{ marginBottom: '20px' }}>
                         Showing <span className="text-primary-500">{pivotedData.rows.length}</span> class profiles across <span className="text-primary-500">{pivotedData.feeTypes.length}</span> billing entities.
                     </div>
                 </div>
@@ -297,7 +297,7 @@ const FeeStructures = () => {
                 className="max-w-xl"
             >
                 <form onSubmit={onSubmit} className="space-y-6">
-                    <div className="bg-primary-50 dark:bg-primary-900/10 text-primary-600 dark:text-primary-400 p-4 py-3 rounded-xl text-[12px] poppins flex items-start gap-3 border border-primary-100 dark:border-primary-800/30 font-medium leading-relaxed">
+                    <div className="bg-primary-50 dark:bg-primary-900/10 text-primary-600 dark:text-primary-400 p-4 py-3 rounded-xl text-[12px]  flex items-start gap-3 border border-primary-100 dark:border-primary-800/30 font-medium leading-relaxed">
                         <Icon icon="ph:info-bold" className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         Fee structures define the standard amounts formatted in <b>Rs.</b> per class for a specific academic year.
                     </div>
@@ -352,13 +352,13 @@ const FeeStructures = () => {
                         <Button
                             text="Cancel"
                             disabled={isSubmitting}
-                            className="btn-light poppins px-8 font-bold text-[11px] uppercase tracking-wider h-[44px] rounded-xl"
+                            className="btn-light  px-8 font-bold text-[11px] uppercase tracking-wider h-[44px] rounded-xl"
                             onClick={() => setIsOpen(false)}
                         />
                         <Button
                             type="submit"
                             disabled={isSubmitting}
-                            className="btn-primary poppins px-10 font-bold text-[11px] uppercase tracking-wider h-[44px] rounded-xl flex items-center gap-2"
+                            className="btn-primary  px-10 font-bold text-[11px] uppercase tracking-wider h-[44px] rounded-xl flex items-center gap-2"
                             text={isSubmitting ? "Please wait..." : (isEditMode ? "Synchronize Updates" : "Create Structure")}
                         />
                     </div>

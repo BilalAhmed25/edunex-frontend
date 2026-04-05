@@ -57,7 +57,7 @@ const AcademicYears = () => {
             Cell: ({ cell: { value } }) => (
                 <Badge
                     label={value ? "Current Active" : "Inactive Session"}
-                    className={value ? "badge-soft-success poppins font-bold px-3 py-1.5 rounded-lg border-0" : "badge-soft-warning poppins font-bold px-3 py-1.5 rounded-lg border-0"}
+                    className={value ? "badge-soft-success  font-bold px-3 py-1.5 rounded-lg border-0" : "badge-soft-warning font-bold px-3 py-1.5 rounded-lg border-0"}
                 />
             )
         }
@@ -110,7 +110,7 @@ const AcademicYears = () => {
 
     return (
         <div className="space-y-6">
-            <PageHeader 
+            <PageHeader
                 icon="ph:calendar-blank"
                 title="Academic Sessions"
                 description="Manage institutional academic years and active sessions."
@@ -140,7 +140,7 @@ const AcademicYears = () => {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="poppins"
+                        className=""
                     />
                     <div className="grid grid-cols-2 gap-4">
                         <Textinput
@@ -150,7 +150,7 @@ const AcademicYears = () => {
                             value={formData.startDate}
                             onChange={handleChange}
                             required
-                            className="poppins"
+                            className=""
                         />
                         <Textinput
                             type="date"
@@ -159,7 +159,7 @@ const AcademicYears = () => {
                             value={formData.endDate}
                             onChange={handleChange}
                             required
-                            className="poppins"
+                            className=""
                         />
                     </div>
                     <div className="mt-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border dark:border-slate-700">
@@ -168,11 +168,11 @@ const AcademicYears = () => {
                             name="isActive"
                             value={formData.isActive}
                             onChange={handleChange}
-                            className="poppins font-medium"
+                            className=" font-medium"
                         />
-                        <p className="text-[10px] text-muted mt-1 ml-7 poppins italic">Enabling this will set this session as the default for all active students.</p>
+                        <p className="text-[10px] text-muted mt-1 ml-7  italic">Enabling this will set this session as the default for all active students.</p>
                     </div>
-                    <Button type="submit" className="btn-primary block w-full text-center mt-6 poppins fw-bold" text="Save Session" />
+                    <Button type="submit" className="btn-primary block w-full text-center mt-6  fw-bold" text="Save Session" />
                 </form>
             </Modal>
         </div>

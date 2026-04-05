@@ -6,7 +6,7 @@ const FeeVoucher = ({ voucher, copyTitle = "Office Copy" }) => {
     if (!voucher) return null;
 
     return (
-        <div className="bg-white text-slate-900 poppins w-full sm:w-[794px] min-h-[374px] flex flex-col border border-dashed border-slate-300 last:mb-0 print:border-solid print:rounded-none print:shadow-none print:mb-0 print:w-[210mm] print:min-h-[99mm] print:border-b-2">
+        <div className="bg-white text-slate-900  w-full sm:w-[794px] min-h-[374px] flex flex-col border border-dashed border-slate-300 last:mb-0 print:border-solid print:rounded-none print:shadow-none print:mb-0 print:w-[210mm] print:min-h-[99mm] print:border-b-2">
             {/* Branding Header */}
             <ReportHeader className="bg-slate-50/50 p-3" />
 

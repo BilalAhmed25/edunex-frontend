@@ -63,7 +63,6 @@ module.exports = {
         }
       },
       fontFamily: {
-        outfit: ["Outfit", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
       },
       boxShadow: {

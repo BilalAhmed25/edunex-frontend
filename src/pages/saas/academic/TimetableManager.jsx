@@ -183,7 +183,7 @@ const TimetableManager = () => {
                 {!filters.classID ? (
                     <div className="flex flex-col items-center justify-center py-20 bg-slate-50 dark:bg-[#16181c] rounded-2xl border-2 border-dashed dark:border-slate-800 opacity-60">
                         <Icon icon="ph:selection-all-bold" className="w-12 h-12 mb-3 text-primary-500" />
-                        <p className="text-sm poppins">Select a class to view or manage schedule.</p>
+                        <p className="text-sm ">Select a class to view or manage schedule.</p>
                     </div>
                 ) : (
                     <div className="overflow-x-auto rounded-xl border dark:border-slate-800 shadow-sm">

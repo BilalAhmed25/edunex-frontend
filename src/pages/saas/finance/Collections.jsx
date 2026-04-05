@@ -175,7 +175,7 @@ const Collections = () => {
                             label="Start Date"
                             value={dateRange.start}
                             onChange={(e) => setDateRange(p => ({ ...p, start: e.target.value }))}
-                            className="poppins"
+                            className=""
                             inputClass="h-7 text-[11px] border-1 bg-transparent font-bold !no-border p-0 w-[95px]"
                         />
                         <Icon icon="ph:arrow-right-bold" className="text-slate-300 w-2.5 h-2.5" />
@@ -184,7 +184,7 @@ const Collections = () => {
                             label="End Date"
                             value={dateRange.end}
                             onChange={(e) => setDateRange(p => ({ ...p, end: e.target.value }))}
-                            className="poppins"
+                            className=""
                             inputClass="h-7 text-[11px] border-0 bg-transparent font-bold !no-border p-0 w-[95px]"
                         />
                     </div>
@@ -212,7 +212,7 @@ const Collections = () => {
                         <DataTable
                             columns={columns}
                             data={vouchers}
-                            className="poppins text-[13px]"
+                            className=" text-[13px]"
                         />
                     )}
                 </Card>
@@ -224,7 +224,7 @@ const Collections = () => {
                     title="Collection Ledger Report"
                     onClose={() => setIsLedgerOpen(false)}
                 >
-                    <div className="bg-white border px-4 w-[210mm] min-h-[297mm] poppins text-slate-900 shadow-sm print:shadow-none">
+                    <div className="bg-white border px-4 w-[210mm] min-h-[297mm]  text-slate-900 shadow-sm print:shadow-none">
                         <ReportHeader className="mb-8" />
 
                         <div className="flex justify-between items-end border-b-2 border-slate-800 pb-4 mb-6">

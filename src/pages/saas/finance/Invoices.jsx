@@ -172,7 +172,7 @@ const Invoices = () => {
                         options={years}
                         value={selectedYear}
                         onChange={(val) => setSelectedYear(val)}
-                        className="w-[180px] poppins text-[13px]"
+                        className="w-[180px]  text-[13px]"
                         icon="ph:calendar-bold"
                         label="Academic Session"
                     />
@@ -191,7 +191,7 @@ const Invoices = () => {
                                     label="Enter admission #"
                                     value={admNo}
                                     onChange={(e) => setAdmNo(e.target.value)}
-                                    className="poppins flex-1"
+                                    className=" flex-1"
                                     inputClass="h-[38px] text-[12px] bg-slate-50 dark:bg-slate-900/50"
                                     icon="ph:identification-card-bold"
                                 />
@@ -271,7 +271,7 @@ const Invoices = () => {
                                             {selectedFees.length === 0 && (
                                                 <div className="py-12 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-slate-300">
                                                     <Icon icon="ph:shopping-cart-simple-duotone" className="w-10 h-10 opacity-20" />
-                                                    <p className="text-[10px] poppins font-medium mt-2">No charges selected</p>
+                                                    <p className="text-[10px]  font-medium mt-2">No charges selected</p>
                                                 </div>
                                             )}
                                             {selectedFees.map((f) => (
@@ -291,7 +291,7 @@ const Invoices = () => {
                                                         options={months.filter(m => !paidFees.some(pf => pf.FeeType === f.FeeType && pf.Month === m.value))}
                                                         value={f.months}
                                                         onChange={(m) => handleMonthChange(f.FeeType, m)}
-                                                        className="poppins text-[12px]"
+                                                        className=" text-[12px]"
                                                         icon="ph:calendar-bold"
                                                     />
                                                 </div>
@@ -303,7 +303,7 @@ const Invoices = () => {
                         ) : (
                             <div className="py-32 flex flex-col items-center justify-center text-slate-400 opacity-60">
                                 <Icon icon="ph:user-focus-duotone" className="w-16 h-16 mb-1" />
-                                <p className="text-[14px] poppins text-center leading-loose">Synchronize student profile to begin voucher generation.</p>
+                                <p className="text-[14px]  text-center leading-loose">Synchronize student profile to begin voucher generation.</p>
                             </div>
                         )}
                     </Card>

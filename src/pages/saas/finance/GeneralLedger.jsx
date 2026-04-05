@@ -145,7 +145,7 @@ const GeneralLedger = () => {
                                 label="Start Date"
                                 value={dateRange.start}
                                 onChange={(e) => setDateRange(p => ({ ...p, start: e.target.value }))}
-                                className="poppins"
+                                className=""
                                 inputClass="h-7 text-[11px] border-0 bg-transparent font-bold !no-border p-0 w-[100px]"
                             />
                             <Icon icon="ph:arrows-left-right-bold" className="text-slate-300 w-3 h-3" />
@@ -154,7 +154,7 @@ const GeneralLedger = () => {
                                 label="End Date"
                                 value={dateRange.end}
                                 onChange={(e) => setDateRange(p => ({ ...p, end: e.target.value }))}
-                                className="poppins"
+                                className=""
                                 inputClass="h-7 text-[11px] border-0 bg-transparent font-bold !no-border p-0 w-[100px]"
                             />
                         </div>
@@ -173,7 +173,7 @@ const GeneralLedger = () => {
                     <DataTable
                         columns={columns}
                         data={ledgerData}
-                        className="poppins text-[13px]"
+                        className=" text-[13px]"
                     />
                 )}
             </Card>

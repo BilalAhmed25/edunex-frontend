@@ -63,7 +63,7 @@ const Textinput = ({
                         placeholder={effectivePlaceholder}
                         readOnly={readonly}
                         disabled={disabled}
-                        className={`form-control text-[12px] poppins text-slate-700 dark:text-slate-100 ${error ? "is-invalid" : ""} ${validate ? "is-valid" : ""} ${className} ${'inputClass'}`}
+                        className={`form-control text-[12px]  text-slate-700 dark:text-slate-100 ${error ? "is-invalid" : ""} ${validate ? "is-valid" : ""} ${className} ${'inputClass'}`}
                         onChange={onChange}
                         {...(isMask ? { options } : {})}
                         {...(register && name ? register(name) : {})} // Minimal react-hook-form support

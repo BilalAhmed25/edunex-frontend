@@ -16,7 +16,7 @@ const PageHeader = ({
     const pathnames = location.pathname.split("/").filter((x) => x);
 
     return (
-        <div className="flex flex-col md:flex-row items-center justify-between py-2 mb-6 gap-6 poppins">
+        <div className="flex flex-col md:flex-row items-center justify-between py-2 mb-6 gap-6 ">
             <div className="flex items-center gap-4 w-full md:w-auto">
                 {/* Icon Box */}
                 <div className="h-12 w-12 flex-none flex items-center justify-center rounded-xl bg-primary-500 shadow-lg shadow-primary-500/30 text-white transition-transform hover:scale-110 duration-300">

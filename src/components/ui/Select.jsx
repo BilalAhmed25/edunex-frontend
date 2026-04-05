@@ -110,14 +110,14 @@ const Select = ({
                     placeholder={placeholder}
                     styles={customStyles}
                     classNamePrefix="edunex-select"
-                    className="edunex-select-container poppins h-full no-border"
+                    className="edunex-select-container  h-full no-border"
                     {...rest}
                 />
             </div>
             {error && <div className="text-danger-500 text-[11px] mt-1.5 font-bold flex items-center gap-1 pl-1">
                 <Icon icon="ph:info-fill" className="w-3.5 h-3.5" /> {error}
             </div>}
-            {description && <div className="text-slate-400 text-[10px] mt-1.5 poppins font-medium italic opacity-80 pl-1">{description}</div>}
+            {description && <div className="text-slate-400 text-[10px] mt-1.5  font-medium italic opacity-80 pl-1">{description}</div>}
         </div>
     );
 };
