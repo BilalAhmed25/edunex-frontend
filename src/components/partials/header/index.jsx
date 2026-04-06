@@ -31,14 +31,9 @@ const Header = ({ className = "custom-class" }) => {
     };
 
     return (
-        <header
-            className={clsx(
-                className,
-                "transition-all duration-300 has-sticky-header"
-            )}
-        >
-            <div
-                className={clsx(
+        <header className={clsx(className, "transition-all duration-300 has-sticky-header")}>
+            <div className={
+                clsx(
                     "app-header transition-all duration-300",
                     {
                         // 1. Removed pt-6 to ensure it starts exactly at the top
@@ -66,9 +61,9 @@ const Header = ({ className = "custom-class" }) => {
                             </div>
 
                             {width < breakpoints.xl && <Logo />}
-                            <div className="hidden lg:block">
+                            {/* <div className="hidden lg:block">
                                 <Breadcrumbs />
-                            </div>
+                            </div> */}
                         </div>
                     )}
 
