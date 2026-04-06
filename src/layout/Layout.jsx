@@ -26,6 +26,14 @@ const Layout = () => {
     const location = useLocation();
     const { isAuth, user } = useSelector((state) => state.auth);
 
+    // content width
+    const [contentWidth] = useContentWidth();
+    const [menuType] = useMenulayout();
+    const [menuHidden] = useMenuHidden();
+    // mobile menu
+    const [mobileMenu, setMobileMenu] = useMobileMenu();
+    const nodeRef = useRef(null);
+
     useEffect(() => {
         if (!isAuth || !user) {
             navigate("/");
@@ -44,13 +52,6 @@ const Layout = () => {
             return "ltr:ml-[280px] rtl:mr-[280px]";
         }
     };
-    // content width
-    const [contentWidth] = useContentWidth();
-    const [menuType] = useMenulayout();
-    const [menuHidden] = useMenuHidden();
-    // mobile menu
-    const [mobileMenu, setMobileMenu] = useMobileMenu();
-    const nodeRef = useRef(null);
 
     return (
         <>
