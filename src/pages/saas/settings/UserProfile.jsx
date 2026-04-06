@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import UserAvatar from "@/assets/images/placeholder/blank-profile.png";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
+import PageHeader from "@/components/ui/PageHeader";
 
 const UserProfile = () => {
     const { user } = useSelector((state) => state.auth);
@@ -164,23 +165,22 @@ const UserProfile = () => {
 
     return (
         <div className="space-y-6 animate-fade-in  pb-10">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-semibold text-slate-800 dark:text-white">Account Settings</h2>
-                    <p className="text-sm text-slate-500 font-medium">Manage your professional identity and security.</p>
-                </div>
-            </div>
+            <PageHeader
+                icon="ph:user-gear"
+                title="Account Settings"
+                description="Manage your professional identity and security settings."
+            />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Profile Overview */}
                 <div className="lg:col-span-1 space-y-6">
                     <Card className="border dark:border-slate-700/50 shadow-sm rounded-3xl">
-                        <div className="flex flex-col items-center text-center p-4">
+                        <div className="flex flex-col items-center text-center">
                             <div className="relative group">
                                 <div className="h-32 w-32 rounded-full border-4 border-white dark:border-slate-800 shadow-xl overflow-hidden mb-4 bg-slate-100 dark:bg-slate-800">
                                     <img src={profileData?.Photo || UserAvatar} alt="Profile" className="h-full w-full object-cover" />
                                 </div>
-                                <div className="absolute bottom-4 right-0 flex space-x-1">
+                                <div className="absolute bottom-8 right-1 flex space-x-1">
                                     <button
                                         onClick={() => { syncEditForm(profileData); setIsEditModalOpen(true); }}
                                         className="bg-indigo-500 text-white p-2 rounded-full shadow-lg hover:scale-110 transition-transform active:scale-95"
@@ -193,14 +193,14 @@ const UserProfile = () => {
                             <h3 className="text-xl font-semibold text-slate-800 dark:text-white">{displayName}</h3>
                             <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mt-1 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">{displayRole}</p>
 
-                            <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 italic max-w-[200px]">
+                            <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 italic max-w-[270px]">
                                 {profileData?.Bio || "No bio added yet. Tell us a bit about yourself!"}
                             </p>
 
                             <div className="w-full mt-8 space-y-3">
                                 <div className="flex items-center space-x-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl">
                                     <span className="h-8 w-8 bg-indigo-100 dark:bg-indigo-500/20 text-indigo-500 rounded-lg flex items-center justify-center">
-                                        <Icon icon="ph:envelope-bold" />
+                                        <Icon icon="ph:envelope-bold" className="text-lg" />
                                     </span>
                                     <div className="text-left overflow-hidden">
                                         <p className="text-[10px] text-slate-400 font-semibold uppercase">Email Address</p>
@@ -209,7 +209,7 @@ const UserProfile = () => {
                                 </div>
                                 <div className="flex items-center space-x-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl">
                                     <span className="h-8 w-8 bg-green-100 dark:bg-green-500/20 text-green-500 rounded-lg flex items-center justify-center">
-                                        <Icon icon="ph:phone-bold" />
+                                        <Icon icon="ph:phone-bold" className="text-lg" />
                                     </span>
                                     <div className="text-left">
                                         <p className="text-[10px] text-slate-400 font-semibold uppercase">Contact Number</p>
@@ -244,14 +244,14 @@ const UserProfile = () => {
                             <div className="space-y-6">
                                 <h4 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest border-b dark:border-slate-700 pb-2">Academic & Experience</h4>
                                 <div className="flex items-start space-x-4">
-                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:student-bold" /></div>
+                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:student-bold" className="text-lg" /></div>
                                     <div>
                                         <p className="text-xs font-semibold text-slate-400 uppercase">Qualification</p>
                                         <p className="text-sm text-slate-700 dark:text-slate-300 font-semibold mt-1">{profileData?.Qualification || "Not provided"}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start space-x-4">
-                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:chart-bar-bold" /></div>
+                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:chart-bar-bold" className="text-lg" /></div>
                                     <div>
                                         <p className="text-xs font-semibold text-slate-400 uppercase">Experience</p>
                                         <p className="text-sm text-slate-700 dark:text-slate-300 font-semibold mt-1">{profileData?.Experience || "Not provided"}</p>
@@ -263,14 +263,14 @@ const UserProfile = () => {
                             <div className="space-y-6">
                                 <h4 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest border-b dark:border-slate-700 pb-2">Personal Identity</h4>
                                 <div className="flex items-start space-x-4">
-                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:gender-intersex-bold" /></div>
+                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:gender-intersex-bold" className="text-lg" /></div>
                                     <div>
                                         <p className="text-xs font-semibold text-slate-400 uppercase">Gender</p>
                                         <p className="text-sm text-slate-700 dark:text-slate-300 font-semibold mt-1 capitalize">{profileData?.Gender || "Not Set"}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start space-x-4">
-                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:calendar-bold" /></div>
+                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:calendar-bold" className="text-lg" /></div>
                                     <div>
                                         <p className="text-xs font-semibold text-slate-400 uppercase">Date of Birth</p>
                                         <p className="text-sm text-slate-700 dark:text-slate-300 font-semibold mt-1">
@@ -284,7 +284,7 @@ const UserProfile = () => {
                             <div className="md:col-span-2 space-y-6">
                                 <h4 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest border-b dark:border-slate-700 pb-2">Contact & Location</h4>
                                 <div className="flex items-start space-x-4">
-                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:map-pin-bold" /></div>
+                                    <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl flex items-center justify-center flex-none"><Icon icon="ph:map-pin-bold" className="text-lg" /></div>
                                     <div>
                                         <p className="text-xs font-semibold text-slate-400 uppercase">Residential Address</p>
                                         <p className="text-sm text-slate-700 dark:text-slate-300 font-semibold mt-1">
@@ -298,13 +298,13 @@ const UserProfile = () => {
                         <div className="mt-12 flex flex-col md:flex-row gap-3">
                             <Button
                                 text="Edit Profile Information"
-                                className="btn-primary flex-1 py-3 font-semibold text-sm shadow-indigo-100"
+                                className="btn-primary flex-1 text-sm shadow-indigo-100"
                                 icon="ph:pencil-simple-line-bold"
                                 onClick={() => { syncEditForm(profileData); setIsEditModalOpen(true); }}
                             />
                             <Button
                                 text="Change Account Photo"
-                                className="btn-outline-primary flex-1 py-3 font-semibold text-sm"
+                                className="btn-outline-primary flex-1 text-sm"
                                 icon="ph:camera-bold"
                                 onClick={() => { syncEditForm(profileData); setIsEditModalOpen(true); }}
                             />
@@ -365,7 +365,7 @@ const UserProfile = () => {
                     </div>
 
                     <div className="flex justify-end pt-4">
-                        <Button type="submit" text={isSubmitting ? "Updating Profile..." : "Save Account Updates"} className="btn-primary w-full py-4 text-lg font-semibold rounded-2xl shadow-lg shadow-indigo-100 dark:shadow-none" disabled={isSubmitting} />
+                        <Button type="submit" text={isSubmitting ? "Updating Profile..." : "Save Account Updates"} className="btn-primary w-full rounded-lg" disabled={isSubmitting} />
                     </div>
                 </form>
             </Modal>
