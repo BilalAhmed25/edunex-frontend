@@ -251,7 +251,7 @@ const TeacherGradebook = () => {
 
             {/* Stats */}
             {gradebookData && (
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-2">
                     {[
                         { label: "Total Students", value: gradebookData.rows?.length, icon: "ph:users-bold", color: "text-slate-500 bg-slate-100 dark:bg-slate-800" },
                         { label: "Submitted", value: submitted, icon: "ph:upload-simple-bold", color: "text-primary-500 bg-primary-50 dark:bg-primary-900/10" },

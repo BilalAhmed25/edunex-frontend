@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useTable, useSortBy, useGlobalFilter, usePagination, useRowSelect, } from "react-table";
+import { useTable, useSortBy, useGlobalFilter, usePagination, useRowSelect, useResizeColumns, useFlexLayout } from "react-table";
 import Icon from "@/components/ui/Icon";
 
 const GlobalFilter = ({ filter, setFilter }) => {
@@ -34,19 +34,45 @@ const DataTable = ({
     showSearch = true,
     actionButton
 }) => {
+    const defaultColumn = useMemo(
+        () => ({
+            minWidth: 30,
+            width: 150,
+            maxWidth: 400,
+        }),
+        []
+    );
+
     const tableInstance = useTable(
         {
             columns: useMemo(() => columns, [columns]),
             data: useMemo(() => data, [data]),
             initialState: { pageSize: initialPageSize },
+            defaultColumn,
         },
-        useGlobalFilter, useSortBy, usePagination, useRowSelect
+        useGlobalFilter,
+        useSortBy,
+        usePagination,
+        useRowSelect,
+        useResizeColumns,
+        useFlexLayout
     );
 
     const {
-        getTableProps, getTableBodyProps, headerGroups, page, nextPage, previousPage,
-        canNextPage, canPreviousPage, pageOptions, state, setGlobalFilter,
-        prepareRow, setPageSize, gotoPage
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        page,
+        nextPage,
+        previousPage,
+        canNextPage,
+        canPreviousPage,
+        pageOptions,
+        state,
+        setGlobalFilter,
+        prepareRow,
+        setPageSize,
+        gotoPage
     } = tableInstance;
 
     const { globalFilter, pageIndex, pageSize } = state;
@@ -56,7 +82,6 @@ const DataTable = ({
             {/* Header Section */}
             {(title || showSearch || actionButton) && (
                 <div className="p-6 border-b border-slate-100 dark:border-[#2f3336] md:flex justify-between items-center space-y-4 md:space-y-0">
-
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Show</span>
                         <select
@@ -80,69 +105,65 @@ const DataTable = ({
 
             {/* Table Body */}
             <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse" {...getTableProps()}>
-                    <thead className="bg-slate-100/50 dark:bg-[#1f2128]/80 shadow-sm">
-                        {headerGroups.map((headerGroup) => {
-                            const { key, ...rowProps } = headerGroup.getHeaderGroupProps();
-                            return (
-                                <tr key={key} {...rowProps}>
-                                    {headerGroup.headers.map((column) => {
-                                        const { key, ...headerProps } = column.getHeaderProps(column.getSortByToggleProps());
-                                        return (
-                                            <th
-                                                key={key}
-                                                {...headerProps}
-                                                className="px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest select-none group border-b border-slate-200 dark:border-[#2f3336]"
-                                            >
-                                                <div className="flex items-center gap-2">
-                                                    {column.render("Header")}
-                                                    <span className="flex flex-col ">
-                                                        {column.isSorted ? (
-                                                            column.isSortedDesc ?
-                                                                <Icon icon="ph:caret-down-fill" className="text-primary-500" /> :
-                                                                <Icon icon="ph:caret-up-fill" className="text-primary-500" />
-                                                        ) : (
-                                                            <Icon icon="ph:caret-up-down" className="text-slate-300 dark:text-slate-600" />
-                                                        )}
-                                                    </span>
-                                                </div>
-                                            </th>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                        })}
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-[#2f3336]" {...getTableBodyProps()}>
+                <div className="w-full block align-middle" {...getTableProps()}>
+                    <div className="bg-slate-100/50 dark:bg-[#1f2128]/80 shadow-sm border-b border-slate-200 dark:border-[#2f3336]">
+                        {headerGroups.map((headerGroup) => (
+                            <div {...headerGroup.getHeaderGroupProps({ style: { width: '99%' } })} className="flex">
+                                {headerGroup.headers.map((column) => (
+                                    <div
+                                        {...column.getHeaderProps({
+                                            style: { ...column.getHeaderProps().style, flexGrow: 1 },
+                                            className: "px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest select-none group relative flex items-center overflow-visible"
+                                        })}
+                                    >
+                                        <div {...column.getSortByToggleProps()} className="flex items-center gap-2 flex-1">
+                                            {column.render("Header")}
+                                            <span className="flex flex-col ">
+                                                {column.isSorted ? (
+                                                    column.isSortedDesc ?
+                                                        <Icon icon="ph:caret-down-fill" className="text-primary-500" /> :
+                                                        <Icon icon="ph:caret-up-fill" className="text-primary-500" />
+                                                ) : (
+                                                    <Icon icon="ph:caret-up-down" className="text-slate-300 dark:text-slate-600 transition-opacity" />
+                                                )}
+                                            </span>
+                                        </div>
+
+                                        {/* Column Resizer */}
+                                        <div
+                                            {...column.getResizerProps()}
+                                            className={`absolute -right-[1px] top-0 h-full w-1.5 cursor-col-resize select-none touch-none z-50 transition-all ${column.isResizing ? "bg-primary-500 opacity-100" : "bg-primary-500/50 opacity-0 group-hover:opacity-100"}`}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="divide-y divide-slate-100 dark:divide-[#2f3336]" {...getTableBodyProps()}>
                         {page.length > 0 ? page.map((row) => {
                             prepareRow(row);
-                            const { key, ...rowProps } = row.getRowProps();
                             return (
-                                <tr key={key} {...rowProps} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors">
-                                    {row.cells.map((cell) => {
-                                        const { key, ...cellProps } = cell.getCellProps();
-                                        return (
-                                            <td key={key} {...cellProps} className="px-6 py-3 text-[13px] text-slate-600 dark:text-slate-300 align-middle">
-                                                {cell.render("Cell")}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
+                                <div {...row.getRowProps({ style: { width: '100%' } })} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors flex border-b dark:border-[#2f3336]">
+                                    {row.cells.map((cell) => (
+                                        <div {...cell.getCellProps({ style: { ...cell.getCellProps().style, flexGrow: 1 } })} className="px-6 py-3 text-[13px] text-slate-600 dark:text-slate-300 align-middle flex items-center">
+                                            {cell.render("Cell")}
+                                        </div>
+                                    ))}
+                                </div>
                             );
                         }) : (
-                            <tr>
-                                <td colSpan={columns.length} className="px-6 py-20 text-center">
-                                    <div className="flex flex-col items-center justify-center space-y-3 opacity-40">
-                                        <Icon icon="ph:database-light" className="text-6xl text-slate-300 dark:text-slate-600" />
-                                        <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                                            {globalFilter ? "No matches found for your search" : "No results found"}
-                                        </div>
+                            <div className="px-6 py-20 text-center w-full">
+                                <div className="flex flex-col items-center justify-center space-y-3 opacity-40">
+                                    <Icon icon="ph:database-light" className="text-6xl text-slate-300 dark:text-slate-600" />
+                                    <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                                        {globalFilter ? "No matches found for your search" : "No results found"}
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                         )}
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
 
             {/* Pagination & Row Control Footer */}

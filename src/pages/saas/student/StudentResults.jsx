@@ -70,7 +70,7 @@ const StudentResults = () => {
             />
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[
                     { label: "Results Published", value: stats.count, icon: "ph:list-checks-bold", color: "from-primary-500 to-blue-400" },
                     { label: "Average Score", value: stats.avg != null ? `${stats.avg}%` : "—", icon: "ph:chart-line-up-bold", color: "from-warning-500 to-amber-400" },
@@ -89,14 +89,14 @@ const StudentResults = () => {
             </div>
 
             {/* Tab Filter */}
-            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-[#1a1a1a] rounded-xl w-fit">
+            <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-[#1a1a1a] rounded-xl w-full sm:w-fit overflow-x-auto">
                 {[
                     { key: "all", label: "All Results" },
                     { key: "assignments", label: "Assignments" },
                     { key: "assessments", label: "Assessments" },
                 ].map(t => (
                     <button key={t.key} onClick={() => setTab(t.key)}
-                        className={`px-5 py-2 rounded-lg text-[12px] font-bold uppercase tracking-wide transition-all ${tab === t.key ? "bg-white dark:bg-[#222] shadow-sm text-primary-600 dark:text-primary-400" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}>
+                        className={`px-5 py-2 rounded-lg text-[11px] sm:text-[12px] font-bold uppercase tracking-wide transition-all flex-1 sm:flex-none whitespace-nowrap ${tab === t.key ? "bg-white dark:bg-[#222] shadow-sm text-primary-600 dark:text-primary-400" : "text-slate-500 dark:text-slate-400 hover:text-slate-700"}`}>
                         {t.label}
                     </button>
                 ))}

@@ -152,6 +152,7 @@ const TeacherAssignments = () => {
         {
             Header: "Class",
             accessor: "ClassName",
+            width: 200,
             Cell: ({ row }) => (
                 <div className="flex items-center gap-1">
                     <Badge label={row.original.ClassName} className="badge-soft-primary text-[11px] font-semibold px-2.5" />
@@ -240,12 +241,12 @@ const TeacherAssignments = () => {
             />
 
             {/* Stats Bar */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[
                     { label: "Total Assignments", value: stats.total, icon: "ph:clipboard-text", color: "text-primary-500 bg-primary-50 dark:bg-primary-900/10" },
                     { label: "Active", value: stats.active, icon: "ph:check-circle", color: "text-success-500 bg-success-50 dark:bg-success-900/10" },
                     { label: "Total Submissions", value: stats.totalSubmissions, icon: "ph:upload-simple", color: "text-warning-500 bg-warning-50 dark:bg-warning-900/10" },
-                ].map(s => (
+                ].map((s) => (
                     <div key={s.label} className="card p-4 flex-row items-center gap-4 border dark:border-[#2f3336] bg-white dark:bg-[#111111] rounded-xl shadow-none">
                         <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${s.color}`}>
                             <Icon icon={s.icon} className="w-5 h-5" />

@@ -161,6 +161,21 @@ const TeacherAssessments = () => {
         } catch { toast.error("Failed to update status"); }
     };
 
+    const formatDate = (dateString) => {
+        if (!dateString) return "—";
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, "0");
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        let hours = date.getHours();
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const ampm = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        return `${day} ${month} ${year} ${String(hours).padStart(2, "0")}:${minutes} ${ampm}`;
+    };
+
     const statusBadge = (s) => {
         const map = { draft: "badge-soft-secondary", active: "badge-soft-success", closed: "badge-soft-danger" };
         return <Badge label={s} className={`text-[11px] capitalize font-semibold px-2.5 ${map[s] || "badge-soft-secondary"}`} />;
@@ -192,9 +207,9 @@ const TeacherAssessments = () => {
         {
             Header: "Window",
             Cell: ({ row: { original: r } }) => (
-                <div className="text-[11px] text-slate-500 dark:text-slate-400 space-y-0.5">
-                    {r.StartDateTime && <div><Icon icon="ph:play-bold" className="w-3 h-3 inline mr-1 text-success-500" />{new Date(r.StartDateTime).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}</div>}
-                    {r.EndDateTime   && <div><Icon icon="ph:stop-bold"  className="w-3 h-3 inline mr-1 text-danger-500" />{new Date(r.EndDateTime).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}</div>}
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 space-y-0.5">
+                    {r.StartDateTime && <div><Icon icon="ph:play-bold" className="w-2.5 h-2.5 inline mr-1 text-success-500" />{formatDate(r.StartDateTime)}</div>}
+                    {r.EndDateTime   && <div><Icon icon="ph:stop-bold"  className="w-2.5 h-2.5 inline mr-1 text-danger-500" />{formatDate(r.EndDateTime)}</div>}
                     {!r.StartDateTime && <span className="text-slate-300 dark:text-slate-700">—</span>}
                 </div>
             ),
@@ -238,6 +253,12 @@ const TeacherAssessments = () => {
         },
     ], []);
 
+    const stats = useMemo(() => ({
+        total: assessments.length,
+        active: assessments.filter(a => a.Status === "active").length,
+        totalSubmissions: assessments.reduce((s, a) => s + (parseInt(a.SubmissionCount) || 0), 0),
+    }), [assessments]);
+
     return (
         <div className="space-y-6">
             <PageHeader
@@ -247,6 +268,25 @@ const TeacherAssessments = () => {
                 buttonText="Create Assessment"
                 onButtonClick={() => { resetForm(); setIsOpen(true); }}
             />
+ 
+            {/* Stats Bar */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                    { label: "Total Assessments", value: stats.total, icon: "ph:exam-bold", color: "text-primary-500 bg-primary-50 dark:bg-primary-900/10" },
+                    { label: "Active", value: stats.active, icon: "ph:check-circle-bold", color: "text-success-500 bg-success-50 dark:bg-success-900/10" },
+                    { label: "Total Submissions", value: stats.totalSubmissions, icon: "ph:upload-simple-bold", color: "text-warning-500 bg-warning-50 dark:bg-warning-900/10" },
+                ].map((s) => (
+                    <div key={s.label} className="card p-4 flex-row items-center gap-4 border dark:border-[#2f3336] bg-white dark:bg-[#111111] rounded-xl shadow-none">
+                        <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${s.color}`}>
+                            <Icon icon={s.icon} className="w-5 h-5" />
+                        </div>
+                        <div>
+                            <div className="text-2xl font-bold text-slate-800 dark:text-white">{s.value}</div>
+                            <div className="text-[11px] text-slate-400 font-medium uppercase tracking-wide">{s.label}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
             {loading ? (
                 <div className="card p-6 border dark:border-[#2f3336] bg-white dark:bg-[#111111] rounded-xl shadow-none"><SkeletonTable count={5} /></div>
@@ -265,7 +305,7 @@ const TeacherAssessments = () => {
             >
                 <form onSubmit={onSubmit} className="space-y-6">
                     {/* Basic Info */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Select name="classID" label="Target Class" required options={classes}
                             value={classes.find(c => c.value === formData.classID) || null}
                             onChange={opt => setFormData(p => ({ ...p, classID: opt?.value || "", sectionID: "" }))}
@@ -283,7 +323,7 @@ const TeacherAssessments = () => {
                     <Textarea label="Instructions" placeholder="Enter instructions for students..." value={formData.description} onChange={e => setFormData(p => ({ ...p, description: e.target.value }))} row={2} />
 
                     {/* Type + Settings Row */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Select name="assessmentType" label="Assessment Type" required
                             options={[{ value: "MCQ", label: "MCQ (Auto-graded)" }, { value: "Text", label: "Text (Manual grading)" }]}
                             value={{ value: formData.assessmentType, label: formData.assessmentType === "MCQ" ? "MCQ (Auto-graded)" : "Text (Manual grading)" }}
@@ -293,7 +333,7 @@ const TeacherAssessments = () => {
                     </div>
 
                     {/* Date Window + Marks */}
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <Textinput name="startDateTime" label="Start" type="datetime-local" value={formData.startDateTime} onChange={handleChange} icon="ph:play-bold" />
                         <Textinput name="endDateTime"   label="End"   type="datetime-local" value={formData.endDateTime}   onChange={handleChange} icon="ph:stop-bold" />
                         <Textinput name="totalMarks" label="Total Marks" type="number" min="1" value={formData.totalMarks} onChange={handleChange} required icon="ph:star-bold" />
@@ -363,7 +403,7 @@ const TeacherAssessments = () => {
                                             </div>
 
                                             {formData.assessmentType === "MCQ" && (
-                                                <div className="grid grid-cols-2 gap-2">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                                     {q.options.map((opt, oi) => (
                                                         <div key={oi} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all ${q.correctAnswer === String(oi) ? "border-success-400 bg-success-50 dark:bg-success-900/20" : "border-slate-200 dark:border-slate-700 hover:border-primary-300"}`}
                                                             onClick={() => updateQuestion(qi, "correctAnswer", String(oi))}>
