@@ -107,49 +107,57 @@ const DataTable = ({
             <div className="overflow-x-auto">
                 <div className="w-full block align-middle" {...getTableProps()}>
                     <div className="bg-slate-100/50 dark:bg-[#1f2128]/80 shadow-sm border-b border-slate-200 dark:border-[#2f3336]">
-                        {headerGroups.map((headerGroup) => (
-                            <div {...headerGroup.getHeaderGroupProps({ style: { width: '99%' } })} className="flex">
-                                {headerGroup.headers.map((column) => (
-                                    <div
-                                        {...column.getHeaderProps({
+                        {headerGroups.map((headerGroup) => {
+                            const { key, ...getHeaderGroupProps } = headerGroup.getHeaderGroupProps({ style: { width: '99%' } });
+                            return (
+                                <div key={key} {...getHeaderGroupProps} className="flex">
+                                    {headerGroup.headers.map((column) => {
+                                        const { key: colKey, ...getHeaderProps } = column.getHeaderProps({
                                             style: { ...column.getHeaderProps().style, flexGrow: 1 },
                                             className: "px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest select-none group relative flex items-center overflow-visible"
-                                        })}
-                                    >
-                                        <div {...column.getSortByToggleProps()} className="flex items-center gap-2 flex-1">
-                                            {column.render("Header")}
-                                            <span className="flex flex-col ">
-                                                {column.isSorted ? (
-                                                    column.isSortedDesc ?
-                                                        <Icon icon="ph:caret-down-fill" className="text-primary-500" /> :
-                                                        <Icon icon="ph:caret-up-fill" className="text-primary-500" />
-                                                ) : (
-                                                    <Icon icon="ph:caret-up-down" className="text-slate-300 dark:text-slate-600 transition-opacity" />
-                                                )}
-                                            </span>
-                                        </div>
+                                        });
+                                        return (
+                                            <div key={colKey} {...getHeaderProps}>
+                                                <div {...column.getSortByToggleProps()} className="flex items-center gap-2 flex-1">
+                                                    {column.render("Header")}
+                                                    <span className="flex flex-col ">
+                                                        {column.isSorted ? (
+                                                            column.isSortedDesc ?
+                                                                <Icon icon="ph:caret-down-fill" className="text-primary-500" /> :
+                                                                <Icon icon="ph:caret-up-fill" className="text-primary-500" />
+                                                        ) : (
+                                                            <Icon icon="ph:caret-up-down" className="text-slate-300 dark:text-slate-600 transition-opacity" />
+                                                        )}
+                                                    </span>
+                                                </div>
 
-                                        {/* Column Resizer */}
-                                        <div
-                                            {...column.getResizerProps()}
-                                            className={`absolute -right-[1px] top-0 h-full w-1.5 cursor-col-resize select-none touch-none z-50 transition-all ${column.isResizing ? "bg-primary-500 opacity-100" : "bg-primary-500/50 opacity-0 group-hover:opacity-100"}`}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
+                                                {/* Column Resizer */}
+                                                <div
+                                                    {...column.getResizerProps()}
+                                                    className={`absolute -right-[1px] top-0 h-full w-1.5 cursor-col-resize select-none touch-none z-50 transition-all ${column.isResizing ? "bg-primary-500 opacity-100" : "bg-primary-500/50 opacity-0 group-hover:opacity-100"}`}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })}
                     </div>
 
                     <div className="divide-y divide-slate-100 dark:divide-[#2f3336]" {...getTableBodyProps()}>
                         {page.length > 0 ? page.map((row) => {
                             prepareRow(row);
+                            const { key, ...getRowProps } = row.getRowProps({ style: { width: '100%' } });
                             return (
-                                <div {...row.getRowProps({ style: { width: '100%' } })} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors flex border-b dark:border-[#2f3336]">
-                                    {row.cells.map((cell) => (
-                                        <div {...cell.getCellProps({ style: { ...cell.getCellProps().style, flexGrow: 1 } })} className="px-6 py-3 text-[13px] text-slate-600 dark:text-slate-300 align-middle flex items-center">
-                                            {cell.render("Cell")}
-                                        </div>
-                                    ))}
+                                <div key={key} {...getRowProps} className="hover:bg-slate-50/50 dark:hover:bg-white/[0.03] transition-colors flex border-b dark:border-[#2f3336]">
+                                    {row.cells.map((cell) => {
+                                        const { key: cellKey, ...restCellProps } = cell.getCellProps({ style: { ...cell.getCellProps().style, flexGrow: 1 } });
+                                        return (
+                                            <div key={cellKey} {...restCellProps} className="px-6 py-3 text-[13px] text-slate-600 dark:text-slate-300 align-middle flex items-center">
+                                                {cell.render("Cell")}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             );
                         }) : (

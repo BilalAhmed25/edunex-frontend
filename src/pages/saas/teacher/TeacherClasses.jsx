@@ -72,7 +72,7 @@ const TeacherClasses = () => {
                         <select
                             value={selectedStaff}
                             onChange={(e) => setSelectedStaff(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-slate-800 border-transparent rounded-xl text-[13px] font-bold px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none transition-all"
+                            className="w-full bg-slate-50 dark:bg-slate-800 border-transparent rounded-lg text-[13px] px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none transition-all"
                         >
                             <option value="">All Teachers</option>
                             {staffList.map(s => (
