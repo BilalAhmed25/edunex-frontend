@@ -26,14 +26,7 @@ const GlobalFilter = ({ filter, setFilter }) => {
     );
 };
 
-const DataTable = ({
-    columns,
-    data,
-    title,
-    pageSize: initialPageSize = 10,
-    showSearch = true,
-    actionButton
-}) => {
+const DataTable = ({ columns, data, title, pageSize: initialPageSize = 10, showSearch = true, actionButton }) => {
     const defaultColumn = useMemo(
         () => ({
             minWidth: 30,
@@ -114,7 +107,7 @@ const DataTable = ({
                                     {headerGroup.headers.map((column) => {
                                         const { key: colKey, ...getHeaderProps } = column.getHeaderProps({
                                             style: { ...column.getHeaderProps().style, flexGrow: 1 },
-                                            className: "px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest select-none group relative flex items-center overflow-visible"
+                                            className: "px-6 py-3 text-left text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider select-none group relative flex items-center overflow-visible"
                                         });
                                         return (
                                             <div key={colKey} {...getHeaderProps}>

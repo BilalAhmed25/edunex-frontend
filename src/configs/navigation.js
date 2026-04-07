@@ -125,6 +125,11 @@ export const masterNavigation = [
         childlink: "finance/general-ledger",
         id: "2.4.5",
       },
+      {
+        childtitle: "Payroll Management",
+        childlink: "finance/payroll",
+        id: "2.4.6",
+      },
     ],
   },
   {

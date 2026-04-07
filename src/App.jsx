@@ -32,6 +32,7 @@ const Invoices = lazy(() => import("./pages/saas/finance/Invoices"));
 const Collections = lazy(() => import("./pages/saas/finance/Collections"));
 const Payments = lazy(() => import("./pages/saas/finance/Payments"));
 const GeneralLedger = lazy(() => import("./pages/saas/finance/GeneralLedger"));
+const Payroll = lazy(() => import("./pages/saas/finance/Payroll"));
 
 // ── Settings ───────────────────────────────────────────────────────────────
 const SchoolProfile = lazy(() => import("./pages/saas/settings/SchoolProfile"));
@@ -103,6 +104,7 @@ function App() {
           <Route path="finance/collections" element={<Collections />} />
           <Route path="finance/payments" element={<Payments />} />
           <Route path="finance/general-ledger" element={<GeneralLedger />} />
+          <Route path="finance/payroll" element={<Payroll />} />
 
           {/* Settings */}
           <Route path="settings/profile" element={<SchoolProfile />} />
