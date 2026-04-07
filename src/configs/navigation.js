@@ -144,9 +144,19 @@ export const masterNavigation = [
         id: "3.1.1",
       },
       {
-        childtitle: "Assignments",
+        childtitle: "Assignment Manager",
         childlink: "teacher/assignments",
         id: "3.1.2",
+      },
+      {
+        childtitle: "Assessment Creator",
+        childlink: "teacher/assessments",
+        id: "3.1.3",
+      },
+      {
+        childtitle: "Gradebook",
+        childlink: "teacher/gradebook",
+        id: "3.1.4",
       },
     ],
   },
@@ -162,9 +172,24 @@ export const masterNavigation = [
         id: "3.2.1",
       },
       {
-        childtitle: "Assignments",
+        childtitle: "Assignment Hub",
         childlink: "student/assignments",
         id: "3.2.2",
+      },
+      {
+        childtitle: "Assessment Center",
+        childlink: "student/assessments",
+        id: "3.2.3",
+      },
+      {
+        childtitle: "My Attendance",
+        childlink: "student/attendance",
+        id: "3.2.4",
+      },
+      {
+        childtitle: "Performance View",
+        childlink: "student/results",
+        id: "3.2.5",
       },
     ],
   },

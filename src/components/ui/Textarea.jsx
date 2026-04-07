@@ -24,18 +24,16 @@ const Textarea = ({
 }) => {
   return (
     <div
-      className={`textfiled-wrapper  ${error ? "is-error" : ""}  ${
-        horizontal ? "flex w-full items-start" : ""
-      }  ${validate ? "is-valid" : ""} `}
+      className={`textfiled-wrapper  ${error ? "is-error" : ""}  ${horizontal ? "flex w-full items-start" : ""
+        }  ${validate ? "is-valid" : ""} `}
     >
       <div className={`relative w-full ${horizontal ? "flex-1" : ""}`}>
         {name && (
           <textarea
             {...register(name)}
             {...rest}
-            className={`${
-              error ? " is-error" : " "
-            } text-control py-2 peer ${className}  `}
+            className={`${error ? " is-error" : " "
+              } text-control py-2 peer ${className}  `}
             placeholder={label ? " " : placeholder}
             readOnly={readonly}
             disabled={disabled}
@@ -47,9 +45,8 @@ const Textarea = ({
         )}
         {!name && (
           <textarea
-            className={`${
-              error ? " is-error" : " "
-            } text-control py-2 peer ${className}  `}
+            className={`${error ? " is-error" : " "
+              } text-control p-3 peer ${className}  `}
             placeholder={label ? " " : placeholder}
             readOnly={readonly}
             disabled={disabled}
@@ -64,7 +61,7 @@ const Textarea = ({
         {label && (
           <label
             htmlFor={id}
-            className={`absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-6 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 ltr:left-2 rtl:right-2 capitalize pointer-events-none ${classLabel}`}
+            className={`absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-6 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 ltr:left-2 rtl:right-2 pointer-events-none ${classLabel}`}
           >
             {label}
           </label>
