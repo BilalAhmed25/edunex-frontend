@@ -11,6 +11,8 @@ import SkeletonTable from "@/components/skeleton/Table";
 import PageHeader from "@/components/ui/PageHeader";
 import { toast } from "react-toastify";
 import moment from "moment";
+import ReportHeader from "@/components/ui/ReportHeader";
+import ReportViewer from "@/components/ui/ReportViewer";
 
 const Payments = () => {
     const [loading, setLoading] = useState(false);
@@ -271,57 +273,69 @@ const Payments = () => {
                 </form>
             </Modal>
 
-            {/* REPORT MODAL */}
-            <Modal
-                title="Financial Audit Report"
-                activeModal={isReportOpen}
-                onClose={() => setIsReportOpen(false)}
-                className="max-w-5xl"
-            >
-                <div className="space-y-6">
-                    <div className="flex justify-between items-end border-b pb-4">
-                        <div>
-                            <h4 className="text-lg font-black text-slate-800 dark:text-white uppercase">Operational Expenditure Ledger</h4>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase">{dateRange.start} — {dateRange.end}</p>
-                        </div>
-                        <Button
-                            text="Print Ledger"
-                            className="btn-primary btn-sm rounded-lg font-bold uppercase tracking-widest text-[9px]"
-                            icon="ph:printer-bold"
-                            onClick={() => window.print()}
-                        />
-                    </div>
+            {/* EXPENSE AUDIT REPORT VIEWER */}
+            {isReportOpen && (
+                <ReportViewer
+                    title="Expense Audit Report"
+                    onClose={() => setIsReportOpen(false)}
+                >
+                    <div className="bg-white border px-4 w-[210mm] min-h-[297mm] text-slate-900 shadow-sm print:shadow-none">
+                        <ReportHeader className="mb-8" />
 
-                    <div className="overflow-x-auto" id="printable-report">
-                        <table className="w-full text-left text-[13px] border-collapse border border-slate-200 dark:border-slate-800">
-                            <thead className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-                                <tr className="text-slate-600 dark:text-slate-400 font-black uppercase tracking-wider text-[11px]">
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Date</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Classification</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Description / Purpose</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800">Authorized By</th>
-                                    <th className="px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {expenses.map((item, id) => (
-                                    <tr key={id}>
-                                        <td className="px-2.5 py-1 border border-slate-200 dark:border-slate-800 font-medium">{moment(item.ExpenseDate).format('DD MMM YY')}</td>
-                                        <td className="px-2.5 py-1 border border-slate-200 dark:border-slate-800 font-black uppercase text-[10px]">{item.Category}</td>
-                                        <td className="px-2.5 py-1 border border-slate-200 dark:border-slate-800 text-slate-500 italic">{item.Description}</td>
-                                        <td className="px-2.5 py-1 border border-slate-200 dark:border-slate-800 font-bold">{item.FirstName ? `${item.FirstName} ${item.LastName}` : "System Admin"}</td>
-                                        <td className="px-2.5 py-1 border border-slate-200 dark:border-slate-800 text-right font-black text-rose-500 italic">Rs. {parseFloat(item.Amount).toLocaleString()}</td>
+                        <div className="flex justify-between items-end border-b-2 border-slate-800 pb-4 mb-6">
+                            <div>
+                                <h4 className="text-xl font-black text-slate-900 uppercase leading-none mb-1">Operational Expenditure Ledger</h4>
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Audit Period: {moment(dateRange.start).format('DD MMM YYYY')} — {moment(dateRange.end).format('DD MMM YYYY')}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Generated On</p>
+                                <p className="text-[11px] font-black text-slate-700 uppercase">{moment().format('DD MMM YYYY [@] hh:mm A')}</p>
+                            </div>
+                        </div>
+
+                        <div className="overflow-visible">
+                            <table className="w-full text-left text-[11px] border-collapse border border-slate-300 text-slate-800">
+                                <thead className="bg-slate-50 border-b border-slate-300">
+                                    <tr className="text-slate-700 font-black uppercase tracking-wider text-[9px]">
+                                        <th className="px-3 py-2 border border-slate-300">Date</th>
+                                        <th className="px-3 py-2 border border-slate-300">Classification</th>
+                                        <th className="px-3 py-2 border border-slate-300">Description / Memo</th>
+                                        <th className="px-3 py-2 border border-slate-300">Authorized By</th>
+                                        <th className="px-3 py-2 border border-slate-300 text-right">Amount (Rs.)</th>
                                     </tr>
-                                ))}
-                                <tr className="bg-slate-50 dark:bg-slate-900 font-black">
-                                    <td colSpan="4" className="px-2.5 py-2 border border-slate-200 dark:border-slate-800 text-right uppercase tracking-widest text-[11px]">Total Institutional Expenditure</td>
-                                    <td className="px-2.5 py-2 border border-slate-200 dark:border-slate-800 text-right text-rose-500 italic text-[15px]">Rs. {expenses.reduce((acc, curr) => acc + parseFloat(curr.Amount), 0).toLocaleString()}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {expenses.map((item, id) => (
+                                        <tr key={id} className="border-b border-slate-200">
+                                            <td className="px-3 py-2 border border-slate-300 whitespace-nowrap">{moment(item.ExpenseDate).format('DD MMM YYYY')}</td>
+                                            <td className="px-3 py-2 border border-slate-300 font-bold uppercase text-[10px]">{item.Category}</td>
+                                            <td className="px-3 py-2 border border-slate-300 italic text-slate-600 line-clamp-2">{item.Description || "—"}</td>
+                                            <td className="px-3 py-2 border border-slate-300">{item.FirstName ? `${item.FirstName} ${item.LastName}` : "System Admin"}</td>
+                                            <td className="px-3 py-2 border border-slate-300 text-right font-black text-slate-900 uppercase tracking-tighter">
+                                                Rs. {parseFloat(item.Amount).toLocaleString()}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                                <tfoot>
+                                    <tr className="bg-slate-100 font-black">
+                                        <td colSpan={4} className="px-3 py-2 border border-slate-300 text-right uppercase tracking-widest text-[9px]">Total Operational Outflow</td>
+                                        <td className="px-3 py-2 border border-slate-300 text-right text-lg text-rose-600 italic">
+                                            Rs. {expenses.reduce((acc, curr) => acc + parseFloat(curr.Amount), 0).toLocaleString()}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        {/* Audit Footer */}
+                        <div className="mt-12 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-widest border-t border-dashed border-slate-300 pt-6">
+                            <div>System Voucher Audit: {moment().format('X')}</div>
+                            <div>Institutional Expenditure Verification Log</div>
+                        </div>
                     </div>
-                </div>
-            </Modal>
+                </ReportViewer>
+            )}
         </div>
     );
 };
