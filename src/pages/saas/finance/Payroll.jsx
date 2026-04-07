@@ -9,8 +9,8 @@ import SkeletonTable from "@/components/skeleton/Table";
 import PageHeader from "@/components/ui/PageHeader";
 import { toast } from "react-toastify";
 import moment from "moment";
-import ReportHeader from "@/components/ui/ReportHeader";
 import ReportViewer from "@/components/ui/ReportViewer";
+import SalaryReceipt from "./SalaryReceipt";
 
 const Payroll = () => {
     const [loading, setLoading] = useState(false);
@@ -104,7 +104,7 @@ const Payroll = () => {
 
             // Find the specific record in staffList to get its PayrollID
             const staff = staffList.find(s => s.ID === id);
-            
+
             // We need to fetch again or use the returned ID if we changed the backend to return it.
             // But fetchStaffData is called in handleSavePayroll.
             // To be safe, we'll fetch again manually if needed, but fetchStaffData already does it.
@@ -132,7 +132,7 @@ const Payroll = () => {
         if (toPay.length === 0) return toast.info("No saved records ready for disbursement");
 
         const totalCalculated = toPay.reduce((acc, s) => acc + (parseFloat(s.SavedNetSalary) || (s.AttendanceSalary + s.Bonus - s.Deductions)), 0);
-        
+
         if (!window.confirm(`Confirm Bulk Disbursement?\n\nTotal staff to pay: ${toPay.length}\nTotal Outlay: Rs. ${totalCalculated.toLocaleString()}\n\nThis will send SMS and Email alerts to all recipients. Proceed?`)) return;
 
         try {
@@ -169,7 +169,7 @@ const Payroll = () => {
             Cell: ({ row }) => (
                 <div className="flex flex-col">
                     <span className="font-semibold text-slate-700 dark:text-slate-200">{row.original.FirstName} {row.original.LastName}</span>
-                    <span className="text-[10px] text-primary-500 font-bold uppercase tracking-widest">{row.original.Role}</span>
+                    <span className="text-[11px] text-primary-500">{row.original.Role}</span>
                 </div>
             )
         },
@@ -179,16 +179,31 @@ const Payroll = () => {
             Cell: ({ value }) => <span className="font-bold text-[12px]">Rs. {value.toLocaleString()}</span>
         },
         {
-            Header: "Attendance (E.D)",
+            Header: "Attendance Summary",
             accessor: "attendance",
             Cell: ({ value }) => {
                 const effective = value.Present + value.Late + (value.HalfDay * 0.5);
+                const percentage = Math.min(100, Math.round((effective / monthDays) * 100));
+
                 return (
-                    <div className="flex flex-col">
-                        <span className="text-success-600 font-black text-[12px]">{effective} / {monthDays}</span>
-                        <div className="flex gap-1 text-[9px] font-bold text-slate-400">
-                            <span>P:{value.Present}</span>
-                            <span className="text-rose-400">A:{value.Absent}</span>
+                    <div className="flex flex-col min-w-[120px] py-1">
+                        <div className="flex justify-between items-end mb-1">
+                            <span className="text-[14px] font-black text-slate-800 dark:text-slate-100">{effective} <small className="text-[9px] font-bold text-slate-400 uppercase not-italic">Days</small></span>
+                            <span className={`text-[10px] font-black ${percentage > 89 ? 'text-success-600' : percentage > 74 ? 'text-amber-500' : 'text-rose-500'}`}>{percentage}%</span>
+                        </div>
+                        {/* Progress Bar */}
+                        <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex mb-2">
+                            <div
+                                className={`h-full transition-all duration-1000 ${percentage > 89 ? 'bg-success-500' : percentage > 74 ? 'bg-amber-500' : 'bg-rose-500'}`}
+                                style={{ width: `${percentage}%` }}
+                            />
+                        </div>
+                        {/* Breakdown Tags */}
+                        <div className="flex flex-wrap gap-1">
+                            <span className="px-1.5 py-0.5 rounded bg-success-50 dark:bg-success-500/10 text-success-600 text-[9px] font-black tracking-tighter">P: {value.Present}</span>
+                            <span className="px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-500/10 text-amber-600 text-[9px] font-black tracking-tighter">L: {value.Late}</span>
+                            <span className="px-1.5 py-0.5 rounded bg-primary-50 dark:bg-primary-500/10 text-primary-600 text-[9px] font-black tracking-tighter">H: {value.HalfDay}</span>
+                            <span className="px-1.5 py-0.5 rounded bg-rose-50 dark:bg-rose-500/10 text-rose-600 text-[9px] font-black tracking-tighter">A: {value.Absent}</span>
                         </div>
                     </div>
                 );
@@ -340,99 +355,7 @@ const Payroll = () => {
                     title="Salary Payment Advice"
                     onClose={() => setIsReceiptOpen(false)}
                 >
-                    <div className="bg-white border px-10 py-12 w-[210mm] min-h-[297mm] text-slate-900 shadow-sm print:shadow-none">
-                        <ReportHeader className="mb-12" />
-
-                        <div className="flex justify-between border-b-4 border-slate-900 pb-8 mb-10">
-                            <div>
-                                <h1 className="text-4xl font-black uppercase text-slate-900 mb-1 italic">Salary Advice</h1>
-                                <p className="text-[14px] text-slate-500 font-bold uppercase tracking-[0.3em] pl-1">{activeReceipt.Month} {activeReceipt.Year}</p>
-                            </div>
-                            <div className="text-right">
-                                <div className="text-[10px] font-black text-slate-400 uppercase mb-1">Audit Reference</div>
-                                <div className="text-2xl font-black text-primary-600 tracking-tighter italic">#{activeReceipt.VoucherNumber || 'PENDING'}</div>
-                                <div className="text-[11px] font-bold text-slate-500 mt-2">{moment(activeReceipt.PaymentDate).format('DD MMMM YYYY')}</div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-16 mb-16">
-                            <div>
-                                <h4 className="text-[10px] font-black uppercase text-slate-500 mb-4 border-b-2 border-slate-100 pb-1 w-fit pr-10">Employee Profile</h4>
-                                <div className="space-y-1">
-                                    <p className="text-2xl font-black text-slate-900 uppercase italic tracking-tight">{activeReceipt.FirstName} {activeReceipt.LastName}</p>
-                                    <p className="text-[13px] font-bold text-primary-600 uppercase tracking-widest">{activeReceipt.Designation}</p>
-                                    <div className="h-4"></div>
-                                    <p className="text-[11px] font-bold text-slate-400 uppercase">Employee ID: <span className="text-slate-900">{activeReceipt.EmployeeID}</span></p>
-                                    <p className="text-[11px] font-bold text-slate-400 uppercase">Contact: <span className="text-slate-900 lowercase">{activeReceipt.Email}</span></p>
-                                </div>
-                            </div>
-                            <div className="bg-slate-900 p-8 rounded-3xl text-white relative overflow-hidden flex flex-col justify-center">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary-600/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
-                                <h4 className="text-[10px] font-black uppercase text-primary-400 mb-2 tracking-[0.2em] relative z-10 pl-1">Net Compensation</h4>
-                                <div className="text-5xl font-black italic relative z-10">Rs. {parseFloat(activeReceipt.NetSalary).toLocaleString()}</div>
-                                <p className="text-[10px] text-slate-400 uppercase font-bold mt-4 tracking-widest relative z-10 border-t border-slate-800 pt-4">Institutional Disbursement Advice</p>
-                            </div>
-                        </div>
-
-                        <div className="mb-16">
-                            <h4 className="text-[10px] font-black uppercase text-slate-500 mb-6 border-b-2 border-slate-100 pb-1 w-fit pr-10">Earnings & Deductions</h4>
-                            <table className="w-full text-left text-[14px]">
-                                <thead className="text-slate-400 uppercase text-[11px] font-black">
-                                    <tr className="border-b-2 border-slate-900">
-                                        <th className="py-3">Line Description</th>
-                                        <th className="py-3 text-right">Metric</th>
-                                        <th className="py-3 text-right pr-4">Subtotal (Rs.)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className="border-b border-slate-100">
-                                        <td className="py-5 font-bold text-slate-800">Contractual Base Salary</td>
-                                        <td className="py-5 text-right font-bold text-slate-400 italic">Full Month</td>
-                                        <td className="py-5 text-right pr-4 font-bold text-slate-900">Rs. {parseFloat(activeReceipt.BasicSalary).toLocaleString()}</td>
-                                    </tr>
-                                    <tr className="border-b border-slate-100">
-                                        <td className="py-5 font-bold text-slate-800">Attendance Adjusted Pay</td>
-                                        <td className="py-5 text-right text-success-600 font-extrabold italic uppercase text-[11px] tracking-tight">{activeReceipt.PresentDays}P, {activeReceipt.LateDays}L, {activeReceipt.HalfDays}H</td>
-                                        <td className="py-5 text-right pr-4 font-bold text-slate-900">Rs. {parseFloat(activeReceipt.AttendanceSalary).toLocaleString()}</td>
-                                    </tr>
-                                    <tr className="border-b border-slate-100">
-                                        <td className="py-5 font-bold text-slate-800 italic">Institutional Performance Bonus</td>
-                                        <td className="py-5 text-right text-success-600 font-black uppercase text-[10px]">+ Institutional</td>
-                                        <td className="py-5 text-right pr-4 font-black text-success-600">Rs. {parseFloat(activeReceipt.Bonus || 0).toLocaleString()}</td>
-                                    </tr>
-                                    <tr className="border-b border-slate-100">
-                                        <td className="py-5 font-bold text-slate-800 italic">Tax & Standard Deductions</td>
-                                        <td className="py-5 text-right text-rose-600 font-black uppercase text-[10px]">- Institutional</td>
-                                        <td className="py-5 text-right pr-4 font-black text-rose-600">(Rs. {parseFloat(activeReceipt.Deductions || 0).toLocaleString()})</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr className="bg-slate-50 border-t-4 border-slate-900">
-                                        <td colSpan="2" className="py-6 px-10 font-black uppercase text-[13px] tracking-[0.2em] italic">Total Disbursed Amount</td>
-                                        <td className="py-6 pr-10 text-right font-black text-3xl italic text-slate-900">Rs. {parseFloat(activeReceipt.NetSalary).toLocaleString()}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-24 pt-16 mt-auto">
-                            <div className="text-center">
-                                <div className="border-b border-slate-300 pb-3 mb-3 italic text-slate-300 text-[12px]">Approved By</div>
-                                <p className="text-[11px] font-black uppercase text-slate-900 tracking-widest">Director of Finance</p>
-                                <p className="text-[9px] text-slate-400 mt-1 uppercase font-bold tracking-tighter">Verified Electronic Entry</p>
-                            </div>
-                            <div className="text-center">
-                                <div className="border-b border-slate-300 pb-3 mb-3 italic text-slate-300 text-[12px]">Employee Signature</div>
-                                <p className="text-[11px] font-black uppercase text-slate-900 tracking-widest">{activeReceipt.FirstName} {activeReceipt.LastName}</p>
-                                <p className="text-[9px] text-slate-400 mt-1 uppercase font-bold tracking-tighter">Recipient Acknowledgment</p>
-                            </div>
-                        </div>
-
-                        <div className="mt-24 border-t-2 border-dashed border-slate-200 pt-8 flex justify-between items-center opacity-40 grayscale group">
-                            <div className="text-[10px] font-black uppercase tracking-tighter text-slate-400">System Audit: {moment().format('YYYYMMDD-HHmmss')} • IP: {window.location.hostname}</div>
-                            <div className="text-[10px] font-black uppercase tracking-tighter text-slate-400">Edunex ERP Cloud Document • ID: {activeReceipt.PayrollID}</div>
-                        </div>
-                    </div>
+                    <SalaryReceipt data={activeReceipt} />
                 </ReportViewer>
             )}
         </div>
